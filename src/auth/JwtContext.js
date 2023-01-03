@@ -113,13 +113,13 @@ export function AuthProvider({ children }) {
 
   // LOGIN
   const login = useCallback(async (email, password) => {
-    const response = await axios.post('/api/account/login', {
+    const response = await axios.post('login', {
       email,
       password,
     });
-    const { accessToken, user } = response.data;
+    const { access_token, user } = response.data;
 
-    setSession(accessToken);
+    setSession(access_token);
 
     dispatch({
       type: 'LOGIN',
@@ -130,12 +130,12 @@ export function AuthProvider({ children }) {
   }, []);
 
   // REGISTER
-  const register = useCallback(async (email, password, firstName, lastName) => {
-    const response = await axios.post('/api/account/register', {
+  const register = useCallback(async (email, password, confirmPassword, firstName, lastName) => {
+    const response = await axios.post('register', {
+      name: `${firstName} ${lastName}`,
       email,
       password,
-      firstName,
-      lastName,
+      password_confirmation: confirmPassword,
     });
     const { accessToken, user } = response.data;
 
@@ -150,11 +150,19 @@ export function AuthProvider({ children }) {
   }, []);
 
   // LOGOUT
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await axios.post('logout', {});
+
     setSession(null);
     dispatch({
       type: 'LOGOUT',
     });
+  }, []);
+
+  const resetPassword = useCallback(async ({ email }) => {
+    await axios.post('reset-password', { email })
+
+    sessionStorage.setItem('email-recovery', email);
   }, []);
 
   const memoizedValue = useMemo(
@@ -166,8 +174,9 @@ export function AuthProvider({ children }) {
       login,
       register,
       logout,
+      resetPassword,
     }),
-    [state.isAuthenticated, state.isInitialized, state.user, login, logout, register]
+    [state.isAuthenticated, state.isInitialized, state.user, login, logout, register, resetPassword]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

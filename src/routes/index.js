@@ -16,24 +16,43 @@ import {
   PageFour,
   PageFive,
   LoginPage,
+  RegisterPage,
+  ResetPasswordPage,
   PageThree,
 } from './elements';
+import { PATH_AUTH } from './paths';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   return useRoutes([
     {
-      path: '/',
+      path: PATH_AUTH.root,
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         {
-          path: 'login',
+          path: PATH_AUTH.login,
           element: (
             <GuestGuard>
               <LoginPage />
             </GuestGuard>
           ),
+        },
+        {
+          path: PATH_AUTH.register,
+          element: (
+            <GuestGuard>
+              <RegisterPage />
+            </GuestGuard>
+          ),
+        },
+        {
+          element: <CompactLayout />,
+          children: [
+            { path: 'reset-password', element: <ResetPasswordPage /> },
+            // { path: 'new-password', element: <NewPasswordPage /> },
+            // { path: 'verify', element: <VerifyCodePage /> },
+          ],
         },
       ],
     },
