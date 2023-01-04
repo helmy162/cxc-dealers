@@ -27,7 +27,7 @@ import { PATH_AUTH } from './paths';
 export default function Router() {
   return useRoutes([
     {
-      path: PATH_AUTH.root,
+      path: '/',
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         {
