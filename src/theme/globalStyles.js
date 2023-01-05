@@ -48,6 +48,9 @@ export default function GlobalStyles() {
           margin: 0,
           padding: 0,
         },
+        'filter-item': {
+          padding: '31px 38px',
+        }
       }}
     />
   );

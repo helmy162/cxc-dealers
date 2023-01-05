@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
-import { Container } from '@mui/material'
+import {
+  Container
+} from '@mui/material'
 
-import CarCard from '../components/CarCard';
+import Filters from './Filters';
+import CarsList from './CarsList';
 
-import CarImg from '../assets/illustrations/car.jpg'
+import CarImg from '../../assets/illustrations/car.jpg'
 
 const cars = [
   {
@@ -42,16 +45,14 @@ export default function CarsListingPage() {
         <title>Cars</title>
       </Helmet>
 
-      <Container>
-        {cars.map((car) => (
-          <CarCard
-            key={car.id}
-            data={car}
-            sx={{
-              marginBottom: '20px'
-            }}
-          />
-        ))}
+      <Container
+        sx={{
+          display: 'flex',
+          padding: '10px'
+        }}
+      >
+        <Filters />
+        <CarsList cars={cars} />
       </Container>
     </>
   )
