@@ -14,16 +14,17 @@ export default function CarCard({
 }) {
   return (
     <Card sx={{
+      ...sx,
       maxWidth: 797,
       minHeight: 254,
       p: '20px',
       position: 'relative',
-      ...sx
     }}>
       <Box sx={{
         display: 'flex',
-        alignItems: 'center',
+        alignItems: { xs: 'flex-start', md: 'center' },
         justifyContent: 'space-between',
+        flexDirection: { xs: 'column', md: 'row' }
       }}>
         <Typography variant="h4">
           {data.name}

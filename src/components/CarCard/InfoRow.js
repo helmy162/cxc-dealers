@@ -8,14 +8,16 @@ export default function InfoRow({ data }) {
     <Box
       sx={{
         mt: '10px',
-        display: 'flex'
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' }
       }}
     >
       <img
         src={data.imageUrl}
         alt="car"
         style={{
-          marginRight: '20px'
+          marginRight: '20px',
+          maxWidth: { xs: '100%', md: '265px' }
         }}
       />
       <Box sx={{
@@ -23,7 +25,8 @@ export default function InfoRow({ data }) {
       }}>
         <Box sx={{
           display: 'flex',
-          fontSize: '18px'
+          fontSize: '18px',
+          marginTop: { xs: '20px', md: 0 }
         }}>
           <Typography
             color="#8184A3"
@@ -43,21 +46,25 @@ export default function InfoRow({ data }) {
             flexWrap: 'wrap',
             gap: '10px',
             width: '100%',
-            marginTop: '24px'
+            marginTop: '24px',
+            paddingBottom: { xs: '51px', md: 0 }
           }}
         >
           {data.specs.map((spec, specIndex) => (
             <Box
               key={specIndex}
               sx={{
-                width: '33%',
-                maxWidth: '150px',
+                width: { xs: '48%', md: '33%' },
+                maxWidth: { xs: '100%', md: '150px' },
                 height: '30px',
                 background: '#E8F2F8',
                 fontSize: '14px',
                 padding: '4px 10px',
                 borderRadius: '4px',
-                color: '#8184A3'
+                color: '#8184A3',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden'
               }}
             >{spec}</Box>
           ))}
