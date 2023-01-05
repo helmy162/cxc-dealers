@@ -25,8 +25,6 @@ export default function CarCardTimer({ time }) {
           <Typography
             variant="string"
             color="#E32519"
-            sx={{
-            }}
           >
             {`${formatted.hours}:${formatted.minutes}:${formatted.seconds}`}
           </Typography>
