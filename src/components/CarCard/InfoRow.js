@@ -3,8 +3,6 @@ import {
   Typography
 } from "@mui/material";
 
-const specs = ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'];
-
 export default function InfoRow({ data }) {
   return (
     <Box

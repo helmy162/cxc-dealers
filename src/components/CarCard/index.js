@@ -28,7 +28,7 @@ export default function CarCard({
         <Typography variant="h4">
           {data.name}
         </Typography>
-        <Timer />
+        <Timer time={data.auctionEndTime} />
       </Box>
       <InfoRow data={data} />
       <Status status={data.status} />

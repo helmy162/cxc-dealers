@@ -12,7 +12,8 @@ const cars = [
     imageUrl: CarImg,
     highestBid: '230,224',
     status: 'live',
-    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White']
+    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
+    auctionEndTime: Date.now() + 50000
   },
   {
     id: 2,
@@ -20,7 +21,8 @@ const cars = [
     imageUrl: CarImg,
     highestBid: '230,224',
     status: 'expired',
-    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White']
+    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
+    auctionEndTime: Date.now() + 10000
   },
   {
     id: 3,
@@ -28,7 +30,8 @@ const cars = [
     imageUrl: CarImg,
     highestBid: '230,224',
     status: 'live',
-    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White']
+    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
+    auctionEndTime: Date.now() + 10000
   },
 ]
 

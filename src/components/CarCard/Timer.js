@@ -2,15 +2,14 @@ import {
   Box,
   Typography
 } from '@mui/material'
+import Countdown from 'react-countdown';
 
-export default function CarCardTimer({
-  theme,
-  time,
-}) {
+export default function CarCardTimer({ time }) {
   return (
     <Box
       sx={{
-        fontWeight: 500
+        fontWeight: 500,
+        minWidth: '187px'
       }}
     >
       <Typography
@@ -20,12 +19,19 @@ export default function CarCardTimer({
       >
         Auction ends in
       </Typography>
-      <Typography
-        variant="string"
-        color="#E32519"
-      >
-        00:00:31
-      </Typography>
+      <Countdown
+        date={time}
+        renderer={({ formatted }) => (
+          <Typography
+            variant="string"
+            color="#E32519"
+            sx={{
+            }}
+          >
+            {`${formatted.hours}:${formatted.minutes}:${formatted.seconds}`}
+          </Typography>
+        )}
+      />
     </Box>
   )
 }
