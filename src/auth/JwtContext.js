@@ -71,19 +71,21 @@ export function AuthProvider({ children }) {
   const initialize = useCallback(async () => {
     try {
       const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
+      const userId = storageAvailable ? localStorage.getItem('userId') : '';
 
-      if (accessToken && isValidToken(accessToken)) {
-        setSession(accessToken);
+      if (accessToken && userId && isValidToken(accessToken)) {
+        setSession(accessToken, userId);
 
-        const response = await axios.get('/api/account/my-account');
+        const response = await axios.get(`admin/users/${userId}`);
 
-        const { user } = response.data;
+        const user = response.data;
+        console.log({...user.data, role: user.UserType })
 
         dispatch({
           type: 'INITIAL',
           payload: {
             isAuthenticated: true,
-            user,
+            user: {...user.data, role: user.UserType },
           },
         });
       } else {
@@ -119,7 +121,7 @@ export function AuthProvider({ children }) {
     });
     const { access_token, user } = response.data;
 
-    setSession(access_token);
+    setSession(access_token, user?.id);
 
     dispatch({
       type: 'LOGIN',
@@ -153,7 +155,7 @@ export function AuthProvider({ children }) {
   const logout = useCallback(async () => {
     await axios.post('logout', {});
 
-    setSession(null);
+    setSession(null, '');
     dispatch({
       type: 'LOGOUT',
     });
