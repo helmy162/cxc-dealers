@@ -19,6 +19,7 @@ import {
   RegisterPage,
   ResetPasswordPage,
   PageThree,
+  CarsListingPage
 } from './elements';
 import { PATH_AUTH } from './paths';
 
@@ -78,6 +79,10 @@ export default function Router() {
           ],
         },
       ],
+    },
+    {
+      path: 'dealer/cars',
+      element: <CarsListingPage />,
     },
     {
       element: <CompactLayout />,
