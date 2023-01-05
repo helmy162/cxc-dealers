@@ -9,7 +9,7 @@ export default function InfoRow({ data }) {
       sx={{
         mt: '10px',
         display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' }
+        flexDirection: { xs: 'column', sm: 'row' }
       }}
     >
       <img
@@ -17,7 +17,7 @@ export default function InfoRow({ data }) {
         alt="car"
         style={{
           marginRight: '20px',
-          maxWidth: { xs: '100%', md: '265px' }
+          maxWidth: { xs: '100%', sm: '265px' }
         }}
       />
       <Box sx={{
@@ -26,7 +26,7 @@ export default function InfoRow({ data }) {
         <Box sx={{
           display: 'flex',
           fontSize: '18px',
-          marginTop: { xs: '20px', md: 0 }
+          marginTop: { xs: '20px', sm: 0 }
         }}>
           <Typography
             color="#8184A3"
@@ -47,15 +47,15 @@ export default function InfoRow({ data }) {
             gap: '10px',
             width: '100%',
             marginTop: '24px',
-            paddingBottom: { xs: '51px', md: 0 }
+            paddingBottom: { xs: '51px', sm: 0 }
           }}
         >
           {data.specs.map((spec, specIndex) => (
             <Box
               key={specIndex}
               sx={{
-                width: { xs: '48%', md: '33%' },
-                maxWidth: { xs: '100%', md: '150px' },
+                width: { xs: '48%', sm: 'auto', md: '33%' },
+                maxWidth: { xs: '100%', sm: 'auto', md: '150px' },
                 height: '30px',
                 background: '#E8F2F8',
                 fontSize: '14px',

@@ -22,9 +22,9 @@ export default function CarCard({
     }}>
       <Box sx={{
         display: 'flex',
-        alignItems: { xs: 'flex-start', md: 'center' },
+        alignItems: { xs: 'flex-start', sm: 'center' },
         justifyContent: 'space-between',
-        flexDirection: { xs: 'column', md: 'row' }
+        flexDirection: { xs: 'column', sm: 'row' }
       }}>
         <Typography variant="h4">
           {data.name}
