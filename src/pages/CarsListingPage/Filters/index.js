@@ -1,8 +1,10 @@
 import { Box } from '@mui/material';
 
 import ResultsCount from './ResultsCount';
+import CarSpecs from './CarSpecs';
 
 export default function CarsListingFilters() {
+
   return (
     <Box
       sx={{
@@ -11,9 +13,11 @@ export default function CarsListingFilters() {
         border: 'solid #DFDFDF 1px',
         borderRadius: '8px',
         marginRight: '31px',
+        overflow: 'hidden'
       }}
     >
       <ResultsCount />
+      <CarSpecs />
     </Box>
   )
 }

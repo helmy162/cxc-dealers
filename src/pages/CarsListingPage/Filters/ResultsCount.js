@@ -11,7 +11,7 @@ export default function ResultsCount() {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        border: '1px solid #DFDFDF',
+        borderBottom: '1px solid #DFDFDF',
         padding: '31px 38px',
       }}
     >
