@@ -1,7 +1,10 @@
-import { useState, useMemo } from 'react';
+import {
+  useState,
+} from 'react';
 import { Box } from '@mui/material';
 
-import Select from './Select';
+import Select from '../Select';
+import YearsSelect from './YearsSelect';
 
 const makeOptions = [
   'All',
@@ -28,12 +31,6 @@ export default function CarSpecFilters({
   const [model, setModel] = useState(modelOptions[0]);
   const [variant, setVariant] = useState(variants[0]);
 
-  const years = useMemo(() => {
-    const range = (min, max) => Array.from({ length: max - min + 1 }, (_, i) => min + i);
-
-    return range(1980, 2023);
-  }, [])
-
   return (
     <Box>
       <Select
@@ -54,6 +51,7 @@ export default function CarSpecFilters({
         options={variants}
         onChange={(value) => setVariant(value)}
       />
+      <YearsSelect />
     </Box>
   )
 }
