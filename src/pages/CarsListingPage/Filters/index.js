@@ -8,7 +8,7 @@ export default function CarsListingFilters() {
   return (
     <Box
       sx={{
-        minWidth: '358px',
+        maxWidth: '358px',
         background: 'white',
         border: 'solid #DFDFDF 1px',
         borderRadius: '8px',

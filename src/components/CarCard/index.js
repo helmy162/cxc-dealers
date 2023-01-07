@@ -19,6 +19,7 @@ export default function CarCard({
       minHeight: 254,
       p: '20px',
       position: 'relative',
+      paddingBottom: '50px'
     }}>
       <Box sx={{
         display: 'flex',

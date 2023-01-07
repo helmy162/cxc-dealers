@@ -16,7 +16,7 @@ export default function FilterSelect({
       fullWidth
       sx={{
         padding: '15px 32px',
-        borderBottom: '1px solid #DFDFDF'
+        borderBottom: '1px solid #DFDFDF',
       }}
     >
       <FormLabel
