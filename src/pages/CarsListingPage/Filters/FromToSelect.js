@@ -62,7 +62,10 @@ export default function FilterFromToSelect({
           sx={{
             background: '#F8FBFD',
             width: '49%',
-            maxWidth: '139px'
+            maxWidth: {
+              xs: '100%',
+              md: '139px'
+            }
           }}
         >
           {options.from.map((option, optionIndex) => (
@@ -79,7 +82,10 @@ export default function FilterFromToSelect({
           inputProps={{ 'aria-label': 'Without label' }}
           sx={{
             width: '49%',
-            maxWidth: '139px'
+            maxWidth: {
+              xs: '100%',
+              md: '139px'
+            }
           }}
         >
           {options.to.map((option, optionIndex) => (

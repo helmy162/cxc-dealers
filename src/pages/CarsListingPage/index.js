@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
   Box,
-  Container
+  Container,
+  Button
 } from '@mui/material';
 
 import Filters from './Filters';
@@ -43,6 +45,11 @@ const cars = [
 ]
 
 export default function CarsListingPage() {
+  const [isFilterVisible, setFilterVisible] = useState(false);
+
+  const toggleFilter = () => {
+    setFilterVisible((oldValue) => !oldValue);
+  }
 
   return (
     <Box
@@ -57,12 +64,44 @@ export default function CarsListingPage() {
       <Container
         sx={{
           display: 'flex',
+          flexDirection: {
+            xs: 'column',
+            md: 'row'
+          },
           padding: '10px'
         }}
       >
-        <Filters />
+        <Filters
+          sx={{
+            display: {
+              xs: 'none',
+              md: 'block'
+            }
+          }}
+        />
         <Box>
-          <OffersCount count="237" />
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+            }}
+          >
+            <OffersCount count="237" />
+            <Button
+              variant="contained"
+              sx={{
+                display: {
+                  xs: 'block',
+                  md: 'none'
+                }
+              }}
+              onClick={toggleFilter}
+            >
+              Filter
+            </Button>
+          </Box>
+          {isFilterVisible && <Filters sx={{ marginBottom: '20px' }} />}
           <AppliedFilters />
           <CarsList cars={cars} />
         </Box>
