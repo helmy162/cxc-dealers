@@ -3,8 +3,8 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
+console.log(PATH_DASHBOARD)
 // ----------------------------------------------------------------------
-
 const icon = (name) => (
   <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
 );
@@ -14,19 +14,10 @@ const ICONS = {
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
+  car: icon('ic_car'),
 };
 
 const navConfig = [
-  // GENERAL
-  // ----------------------------------------------------------------------
-  {
-    subheader: 'general v4.1.0',
-    items: [
-      { title: 'One', path: PATH_DASHBOARD.one, icon: ICONS.dashboard },
-      { title: 'Two', path: PATH_DASHBOARD.two, icon: ICONS.ecommerce },
-      { title: 'Three', path: PATH_DASHBOARD.three, icon: ICONS.analytics },
-    ],
-  },
 
   // MANAGEMENT
   // ----------------------------------------------------------------------
@@ -34,14 +25,14 @@ const navConfig = [
     subheader: 'management',
     items: [
       {
-        title: 'user',
-        path: PATH_DASHBOARD.user.root,
+        title: 'users',
+        path: PATH_DASHBOARD.user.list,
         icon: ICONS.user,
-        children: [
-          { title: 'Four', path: PATH_DASHBOARD.user.four },
-          { title: 'Five', path: PATH_DASHBOARD.user.five },
-          { title: 'Six', path: PATH_DASHBOARD.user.six },
-        ],
+      },
+      {
+        title: 'cars',
+        path: PATH_DASHBOARD.car.list,
+        icon: ICONS.car,
       },
     ],
   },

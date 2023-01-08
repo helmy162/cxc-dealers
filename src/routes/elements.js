@@ -17,11 +17,21 @@ export const LoginPage = Loadable(lazy(() => import('../pages/auth/LoginPage')))
 export const RegisterPage = Loadable(lazy(() => import('../pages/auth/RegisterPage')));
 export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/ResetPasswordPage')));
 
-export const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
-export const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
-export const PageThree = Loadable(lazy(() => import('../pages/PageThree')));
-export const PageFour = Loadable(lazy(() => import('../pages/PageFour')));
-export const PageFive = Loadable(lazy(() => import('../pages/PageFive')));
-export const PageSix = Loadable(lazy(() => import('../pages/PageSix')));
+export const UserListPage = Loadable(lazy(() => import('../pages/dashboard/UserListPage')));
+export const UserCreatePage = Loadable(lazy(() => import('../pages/dashboard/UserCreatePage')));
+export const UserAccountPage = Loadable(lazy(() => import('../pages/dashboard/UserAccountPage')));
+export const UserEditPage = Loadable(lazy(() => import('../pages/dashboard/UserEditPage')));
 
+export const EcommerceProductListPage = Loadable(
+  lazy(() => import('../pages/dashboard/EcommerceProductListPage'))
+);
+export const EcommerceProductCreatePage = Loadable(
+  lazy(() => import('../pages/dashboard/EcommerceProductCreatePage'))
+);
+export const EcommerceProductDetailsPage = Loadable(
+  lazy(() => import('../pages/dashboard/EcommerceProductDetailsPage'))
+);
+export const EcommerceProductEditPage = Loadable(
+  lazy(() => import('../pages/dashboard/EcommerceProductEditPage'))
+);
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
