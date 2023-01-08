@@ -1,10 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 import {
+  Box,
   Container
-} from '@mui/material'
+} from '@mui/material';
 
 import Filters from './Filters';
 import CarsList from './CarsList';
+import OffersCount from './OffersCount';
+import AppliedFilters from './AppliedFilters';
+
 
 import CarImg from '../../assets/illustrations/car.jpg'
 
@@ -39,8 +43,13 @@ const cars = [
 ]
 
 export default function CarsListingPage() {
+
   return (
-    <>
+    <Box
+      sx={{
+        backgroundColor: '#F8FBFD',
+      }}
+    >
       <Helmet>
         <title>Cars</title>
       </Helmet>
@@ -52,8 +61,12 @@ export default function CarsListingPage() {
         }}
       >
         <Filters />
-        <CarsList cars={cars} />
+        <Box>
+          <OffersCount count="237" />
+          <AppliedFilters />
+          <CarsList cars={cars} />
+        </Box>
       </Container>
-    </>
+    </Box>
   )
 }

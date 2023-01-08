@@ -11,6 +11,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { RecoilRoot } from 'recoil';
 // routes
 import Router from './routes';
 // theme
@@ -42,7 +43,9 @@ export default function App() {
                 <ThemeSettings>
                   <ThemeLocalization>
                     <SnackbarProvider>
-                      <Router />
+                      <RecoilRoot>
+                        <Router />
+                      </RecoilRoot>
                     </SnackbarProvider>
                   </ThemeLocalization>
                 </ThemeSettings>

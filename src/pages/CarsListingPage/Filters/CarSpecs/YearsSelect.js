@@ -13,7 +13,9 @@ import {
 } from '@mui/material';
 
 
-export default function YearsSelect() {
+export default function YearsSelect({
+  onChange
+}) {
   const [range, setRange] = useState(7);
   const [selectedDates, setSelectedDate] = useState([]);
   const years = useMemo(() => {
@@ -30,14 +32,17 @@ export default function YearsSelect() {
   }, [setRange, years])
 
   const onYearSelect = useCallback((year) => {
-    setSelectedDate((oldValue) => {
-      const newValue = [...oldValue];
+    let newValue = [];
 
+    setSelectedDate((oldValue) => {
+      newValue = [...oldValue]
       newValue.push(year);
 
       return newValue;
     })
-  }, [setSelectedDate])
+
+    onChange(newValue);
+  }, [setSelectedDate, onChange])
 
   return (
     <FormControl
