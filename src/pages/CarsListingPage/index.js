@@ -10,6 +10,7 @@ import Filters from './Filters';
 import CarsList from './CarsList';
 import OffersCount from './OffersCount';
 import AppliedFilters from './AppliedFilters';
+import Header from '../../layouts/dashboard/header';
 
 
 import CarImg from '../../assets/illustrations/car.jpg'
@@ -61,6 +62,8 @@ export default function CarsListingPage() {
         <title>Cars</title>
       </Helmet>
 
+      <Header />
+
       <Container
         sx={{
           display: 'flex',
@@ -68,7 +71,8 @@ export default function CarsListingPage() {
             xs: 'column',
             md: 'row'
           },
-          padding: '10px'
+          padding: '10px',
+          paddingTop: '110px'
         }}
       >
         <Filters
