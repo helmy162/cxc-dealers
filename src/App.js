@@ -12,6 +12,10 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { RecoilRoot } from 'recoil';
+import { Provider as ReduxProvider } from 'react-redux';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+// redux
+import { store, persistor } from './redux/store';
 // routes
 import Router from './routes';
 // theme
@@ -35,24 +39,28 @@ export default function App() {
   return (
     <AuthProvider>
       <HelmetProvider>
-        <SettingsProvider>
-          <BrowserRouter>
-            <ScrollToTop />
-            <MotionLazyContainer>
-              <ThemeProvider>
-                <ThemeSettings>
-                  <ThemeLocalization>
-                    <SnackbarProvider>
-                      <RecoilRoot>
-                        <Router />
-                      </RecoilRoot>
-                    </SnackbarProvider>
-                  </ThemeLocalization>
-                </ThemeSettings>
-              </ThemeProvider>
-            </MotionLazyContainer>
-          </BrowserRouter>
-        </SettingsProvider>
+        <ReduxProvider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <SettingsProvider>
+              <BrowserRouter>
+                <ScrollToTop />
+                <MotionLazyContainer>
+                  <ThemeProvider>
+                    <ThemeSettings>
+                      <ThemeLocalization>
+                        <SnackbarProvider>
+                          <RecoilRoot>
+                            <Router />
+                          </RecoilRoot>
+                        </SnackbarProvider>
+                      </ThemeLocalization>
+                    </ThemeSettings>
+                  </ThemeProvider>
+                </MotionLazyContainer>
+              </BrowserRouter>
+            </SettingsProvider>
+          </PersistGate>
+        </ReduxProvider>
       </HelmetProvider>
     </AuthProvider>
   );

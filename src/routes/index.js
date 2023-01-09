@@ -10,16 +10,18 @@ import { PATH_AFTER_LOGIN } from '../config-global';
 //
 import {
   Page404,
-  PageOne,
-  PageTwo,
-  PageSix,
-  PageFour,
-  PageFive,
   LoginPage,
   RegisterPage,
   ResetPasswordPage,
-  PageThree,
-  CarsListingPage
+  CarsListingPage,
+  UserListPage,
+  UserCreatePage,
+  UserAccountPage,
+  UserEditPage,
+  EcommerceProductListPage,
+  EcommerceProductCreatePage,
+  EcommerceProductEditPage,
+  EcommerceProductDetailsPage
 } from './elements';
 import { PATH_AUTH } from './paths';
 
@@ -66,16 +68,24 @@ export default function Router() {
       ),
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-        { path: 'one', element: <PageOne /> },
-        { path: 'two', element: <PageTwo /> },
-        { path: 'three', element: <PageThree /> },
+        {
+          path: 'car',
+          children: [
+            { element: <Navigate to="/dashboard/car/list" replace />, index: true },
+            { path: 'list', element: <EcommerceProductListPage /> },
+            { path: 'new', element: <EcommerceProductCreatePage /> },
+            { path: ':name/edit', element: <EcommerceProductEditPage /> },
+            { path: ':name', element: <EcommerceProductDetailsPage /> },
+          ],
+        },
         {
           path: 'user',
           children: [
-            { element: <Navigate to="/dashboard/user/four" replace />, index: true },
-            { path: 'four', element: <PageFour /> },
-            { path: 'five', element: <PageFive /> },
-            { path: 'six', element: <PageSix /> },
+            { element: <Navigate to="/dashboard/user/list" replace />, index: true },
+            { path: 'new', element: <UserCreatePage /> },
+            { path: ':name/edit', element: <UserEditPage /> },
+            { path: 'list', element: <UserListPage /> },
+            { path: ':name/account', element: <UserAccountPage /> },
           ],
         },
       ],
