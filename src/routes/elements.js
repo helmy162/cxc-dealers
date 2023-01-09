@@ -5,18 +5,20 @@ import LoadingScreen from '../components/loading-screen';
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) => (props) =>
-  (
-    <Suspense fallback={<LoadingScreen />}>
-      <Component {...props} />
-    </Suspense>
-  );
+(
+  <Suspense fallback={<LoadingScreen />}>
+    <Component {...props} />
+  </Suspense>
+);
 
 // ----------------------------------------------------------------------
+
 
 export const LoginPage = Loadable(lazy(() => import('../pages/auth/LoginPage')));
 export const RegisterPage = Loadable(lazy(() => import('../pages/auth/RegisterPage')));
 export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/ResetPasswordPage')));
 
+export const CarsListingPage = Loadable(lazy(() => import('../pages/CarsListingPage')));
 export const UserListPage = Loadable(lazy(() => import('../pages/dashboard/UserListPage')));
 export const UserCreatePage = Loadable(lazy(() => import('../pages/dashboard/UserCreatePage')));
 export const UserAccountPage = Loadable(lazy(() => import('../pages/dashboard/UserAccountPage')));

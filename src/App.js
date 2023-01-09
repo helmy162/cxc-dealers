@@ -11,6 +11,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { RecoilRoot } from 'recoil';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 // redux
@@ -39,24 +40,26 @@ export default function App() {
     <AuthProvider>
       <HelmetProvider>
         <ReduxProvider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <SettingsProvider>
-                <BrowserRouter>
-                  <ScrollToTop />
-                  <MotionLazyContainer>
-                    <ThemeProvider>
-                      <ThemeSettings>
-                        <ThemeLocalization>
-                          <SnackbarProvider>
+          <PersistGate loading={null} persistor={persistor}>
+            <SettingsProvider>
+              <BrowserRouter>
+                <ScrollToTop />
+                <MotionLazyContainer>
+                  <ThemeProvider>
+                    <ThemeSettings>
+                      <ThemeLocalization>
+                        <SnackbarProvider>
+                          <RecoilRoot>
                             <Router />
-                          </SnackbarProvider>
-                        </ThemeLocalization>
-                      </ThemeSettings>
-                    </ThemeProvider>
-                  </MotionLazyContainer>
-                </BrowserRouter>
-              </SettingsProvider>
-            </PersistGate>
+                          </RecoilRoot>
+                        </SnackbarProvider>
+                      </ThemeLocalization>
+                    </ThemeSettings>
+                  </ThemeProvider>
+                </MotionLazyContainer>
+              </BrowserRouter>
+            </SettingsProvider>
+          </PersistGate>
         </ReduxProvider>
       </HelmetProvider>
     </AuthProvider>
