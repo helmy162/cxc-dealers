@@ -79,7 +79,6 @@ export function AuthProvider({ children }) {
         const response = await axios.get(`admin/users/${userId}`);
 
         const user = response.data;
-        console.log({...user.data, role: user.UserType })
 
         dispatch({
           type: 'INITIAL',

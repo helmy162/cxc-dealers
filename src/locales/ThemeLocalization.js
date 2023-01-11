@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 //
 import useLocales from './useLocales';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // ----------------------------------------------------------------------
 
@@ -17,5 +19,7 @@ export default function ThemeLocalization({ children }) {
 
   const theme = createTheme(outerTheme, currentLang.systemValue);
 
-  return <ThemeProvider theme={theme}> {children} </ThemeProvider>;
+  return <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ThemeProvider theme={theme}> {children} </ThemeProvider>;
+    </LocalizationProvider>
 }

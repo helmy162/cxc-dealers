@@ -19,9 +19,9 @@ import {
   UserAccountPage,
   UserEditPage,
   EcommerceProductListPage,
-  EcommerceProductCreatePage,
   EcommerceProductEditPage,
-  EcommerceProductDetailsPage
+  EcommerceProductDetailsPage,
+  AddCarPage,
 } from './elements';
 import { PATH_AUTH } from './paths';
 
@@ -73,7 +73,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/car/list" replace />, index: true },
             { path: 'list', element: <EcommerceProductListPage /> },
-            { path: 'new', element: <EcommerceProductCreatePage /> },
+            { path: 'new', element: <AddCarPage /> },
             { path: ':name/edit', element: <EcommerceProductEditPage /> },
             { path: ':name', element: <EcommerceProductDetailsPage /> },
           ],

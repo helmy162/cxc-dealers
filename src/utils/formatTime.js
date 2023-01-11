@@ -1,4 +1,4 @@
-import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { format, getTime, formatDistanceToNow, getYear } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
@@ -24,4 +24,8 @@ export function fToNow(date) {
         addSuffix: true,
       })
     : '';
+}
+
+export function fYear(date) {
+  return date ? getYear(new Date(date)) : '';
 }

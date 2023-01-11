@@ -3,7 +3,6 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
-console.log(PATH_DASHBOARD)
 // ----------------------------------------------------------------------
 const icon = (name) => (
   <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />

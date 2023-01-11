@@ -23,9 +23,10 @@ RHFSelect.propTypes = {
   children: PropTypes.node,
   helperText: PropTypes.node,
   maxHeight: PropTypes.number,
+  SelectProp: PropTypes.any,
 };
 
-export function RHFSelect({ name, native, children, helperText, maxHeight = 220, ...other }) {
+export function RHFSelect({ name, native, children, helperText, maxHeight = 220, SelectProps, ...other }) {
   const { control } = useFormContext();
 
   return (
@@ -56,6 +57,7 @@ export function RHFSelect({ name, native, children, helperText, maxHeight = 220,
               },
             },
             sx: { textTransform: 'capitalize' },
+            ...SelectProps,
           }}
           error={!!error}
           helperText={error ? error?.message : helperText}

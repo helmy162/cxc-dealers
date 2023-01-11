@@ -1,6 +1,6 @@
 export * from './RHFSelect';
 export * from './RHFCheckbox';
-export * from './RHFUpload';    
+export * from './RHFUpload';
 
 export { default } from './FormProvider';
 
@@ -11,3 +11,4 @@ export { default as RHFTextField } from './RHFTextField';
 export { default as RHFRadioGroup } from './RHFRadioGroup';
 export { default as RHFAutocomplete } from './RHFAutocomplete';
 export { default as RHFEditor } from './RHFEditor';
+export { default as RHFDatePicker } from './RHFDatePicker';

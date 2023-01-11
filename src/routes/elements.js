@@ -23,6 +23,7 @@ export const UserListPage = Loadable(lazy(() => import('../pages/dashboard/UserL
 export const UserCreatePage = Loadable(lazy(() => import('../pages/dashboard/UserCreatePage')));
 export const UserAccountPage = Loadable(lazy(() => import('../pages/dashboard/UserAccountPage')));
 export const UserEditPage = Loadable(lazy(() => import('../pages/dashboard/UserEditPage')));
+export const AddCarPage = Loadable(lazy(() => import('../pages/dashboard/AddCarPage')));
 
 export const EcommerceProductListPage = Loadable(
   lazy(() => import('../pages/dashboard/EcommerceProductListPage'))
