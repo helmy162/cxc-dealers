@@ -17,7 +17,7 @@ const DEFECTS_OPTIONS = [
 
 
 export const ExteriorConditionSchema = Yup.object().shape({
-  defect: Yup.string().nullable().required('Year is required'),
+  defect: Yup.string().nullable(),
 });
 
 export const ExteriorConditionDefaultValues = {
@@ -87,7 +87,7 @@ export default function ExteriorCondition({ watch }) {
           { submittedMerkers.map((marker, key) => <MarkerRow onDeleteButtonClick={onDeleteMarker} marker={marker} key={key} id={key} />)}
         </List>
         {activeMarker && <Paper variant="outlined" sx={{ borderRadius: 2, borderColor: 'divider', padding: '1rem' }}>
-          <RHFSelect name="defect" label="Defect" sx={{marginBottom: '1rem'}}>
+          <RHFSelect name="defect" label="Defect" value="Scratch" sx={{marginBottom: '1rem'}}>
             {DEFECTS_OPTIONS.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)}
           </RHFSelect>
           <Upload file={file} onDrop={handleDropSingleFile} onDelete={() => setFile(null)} sx={{marginBottom: '1rem'}} />

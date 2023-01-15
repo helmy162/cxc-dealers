@@ -37,7 +37,7 @@ function useAddCarAutocompletes ({ year, make, model, trim }) {
         const formattedYear = fYear(year);
         const params = { make, model, year: formattedYear }
         const trims = await RapidApi.fetchTrims(params);
-        setTrims(trims);
+        setTrims([...new Set(trims.map(trim => trim.name))]);
         if (trim) {
           const engines = await RapidApi.fetchEngines({ ...params, trim });
           setEngines(engines);

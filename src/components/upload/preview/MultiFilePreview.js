@@ -26,7 +26,7 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
 
   return (
     <AnimatePresence initial={false}>
-      {files.map((file) => {
+      {files.map((file, idx) => {
         const { key, name = '', size = 0 } = fileData(file);
 
         const isNotFormatFile = typeof file === 'string';
@@ -62,7 +62,7 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
               {onRemove && (
                 <IconButton
                   size="small"
-                  onClick={() => onRemove(file)}
+                  onClick={() => onRemove(file, idx)}
                   sx={{
                     top: 4,
                     right: 4,

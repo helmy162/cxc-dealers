@@ -1,12 +1,13 @@
 import * as Yup from 'yup';
 // @mui
-import { Stack, Alert, Box, Typography, MenuItem } from '@mui/material';
+import { Stack, Alert, Box, MenuItem, Typography } from '@mui/material';
 
-import { RHFAutocomplete, RHFDatePicker, RHFSelect, RHFSwitch, RHFTextField } from '../../components/hook-form';
+import { RHFAutocomplete, RHFCheckbox, RHFDatePicker, RHFSelect, RHFSwitch, RHFTextField } from '../../../components/hook-form';
 import useAddCarAutocompletes from 'src/hooks/useAddCarAutocompletes';
-import isOptionEqualToValue from 'src/utils/forms';
+import { isOptionEqualToValue, renderAddCarSelect } from 'src/utils/forms';
 import { fYear } from 'src/utils/formatTime';
 import EngineCard from './EngineCard';
+import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS } from '../constants';
 
 // ----------------------------------------------------------------------
 
@@ -17,9 +18,23 @@ export const SummarySchema = Yup.object().shape({
   year: Yup.string().nullable().required('Year is required'),
   make: Yup.object().nullable().required('Make is required'),
   model: Yup.object().nullable().required('Model is required'),
-  trim: Yup.object().nullable().required('Trim is required'),
+  trim: Yup.string().nullable().required('Trim is required'),
   mileage: Yup.number('Should be a number').nullable().required('Mileage is required'),
   engine: Yup.object().nullable().required('Engine options are required'),
+  body_type: Yup.string(),
+  exterior_color: Yup.string().nullable(),
+  interior_color: Yup.string().nullable(),
+  interior_type: Yup.string(),
+  specification: Yup.string(),
+  is_new: Yup.boolean(),
+  first_owner: Yup.boolean(),
+  keys: Yup.string(),
+  service_history: Yup.string(),
+  manuals: Yup.string(),
+  warranty: Yup.boolean(),
+  accident_history: Yup.string(),
+  bank_finance: Yup.boolean(),
+  additional_info: Yup.string(),
 });
 
 export const SummaryDefaultValues = {
@@ -28,20 +43,27 @@ export const SummaryDefaultValues = {
   model: null,
   trim: null,
   mileage: 0,
-  registeredEmirates: "",
+  registered_emirates: "",
   engine: "",
-  exteriorColor: null,
-  interiorColor: null,
-  interiorType: "",
+  body_type: "",
+  exterior_color: null,
+  interior_color: null,
+  interior_type: "",
   specification: "",
-  isNew: true,
-  firstOwner: false,
+  is_new: true,
+  first_owner: false,
   keys: "",
+  service_history: "",
+  manuals: "",
+  warranty: true,
+  accident_history: "",
+  bank_finance: false,
+  additional_info: "",
 };
 
 const mapFormDataToApi = (values) => ( values ? {
   make: values.make?.name || '',
-  trim: values.trim?.name || '',
+  trim: values.trim || '',
   model: values.model?.name || '',
   year: values.year,
 }: {})
@@ -90,27 +112,16 @@ export default function SummaryStep({ errors, watch }) {
           name="trim"
           label="Trim"
           options={trims}
-          isOptionEqualToValue={isOptionEqualToValue}
-          renderOption={(option, obj) =>
-            <Box key={obj.id} {...option} flexWrap="wrap">
-              <Typography variant="subtitle2" gutterBottom>{obj.name}</Typography>
-              <Typography variant="caption" display="block" gutterBottom>{obj.description}</Typography>
-            </Box>
-          }
-          getOptionLabel={option => option.name}
         />
-
         <RHFTextField
           name="mileage"
           label="Mileage (km)"
           type="number"
         />
-
         <RHFTextField
-          name="registeredEmirates"
+          name="registered_emirates"
           label="Registered Emirates"
         />
-
         <RHFSelect
           disabled={!values?.model && !values?.make}
           name="engine"
@@ -120,6 +131,13 @@ export default function SummaryStep({ errors, watch }) {
           }}
         >
           {engines.map(engine => <MenuItem key={engine.id} value={engine}><EngineCard obj={engine} /></MenuItem>)}
+        </RHFSelect>
+        <RHFSelect
+          disabled={!values?.model && !values?.make}
+          name="body_type"
+          label="Body Type"
+        >
+          {BODY_TYPES_OPTIONS.map(bodyType => <MenuItem key={bodyType.value} value={bodyType.value}>{bodyType.label}</MenuItem>)}
         </RHFSelect>
         <RHFSelect
           disabled={!values?.model && !values?.make}
@@ -137,7 +155,7 @@ export default function SummaryStep({ errors, watch }) {
         </RHFSelect>
         <RHFSelect
           disabled={!values?.model && !values?.make}
-          name="interiorType"
+          name="interior_type"
           label="Interior Type"
         >
           {INTERIOR_TYPES.map(key => <MenuItem key={key} value={key}>{key}</MenuItem>)}
@@ -145,20 +163,37 @@ export default function SummaryStep({ errors, watch }) {
 
         <RHFAutocomplete
           disabled={!values?.model && !values?.make && !values?.trim}
-          name="exteriorColor"
+          name="exterior_color"
           label="Exterior Color"
           options={exteriorColors}
         />
 
         <RHFAutocomplete
           disabled={!values?.model && !values?.make && !values?.trim}
-          name="interiorColor"
+          name="interior_color"
           label="Interior Color"
           options={interiorColors}
         />
-        <RHFSwitch name="isNew" label="Is new" />
-        <RHFSwitch name="firstOwner" label="First owner" />
+        <RHFSwitch name="is_new" label="Is new" />
+        <RHFSwitch name="first_owner" label="First owner" />
       </Box>
-
+      <Typography variant="h3">Car history</Typography>
+      <Box
+        rowGap={2}
+        columnGap={3}
+        display="grid"
+        gridTemplateColumns={{
+          sm: 'repeat(1, 1fr)',
+          md: 'repeat(3, 1fr)',
+        }}
+        sx={{marginBottom: '1rem'}}
+      >
+        { renderAddCarSelect({ name: 'service_history', label: 'Service History', options: SERVICE_HISTORY_OPTIONS }) }
+        { renderAddCarSelect({ name: 'manuals', label: 'Manuals', options: MANUALS_OPTIONS })}
+        <RHFCheckbox name="warranty" label="Warranty" />
+        { renderAddCarSelect({ name: 'accident_history', label: 'Accident History', options: ACCIDENT_HISTORY_OPTIONS })}
+        <RHFCheckbox name="bank_finance" label="Mortgage/Bank Finance" />
+        <RHFTextField name="additional_info" label="Additional Information" multiline />
+      </Box>
   </Stack>);
 }
