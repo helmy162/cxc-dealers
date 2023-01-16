@@ -22,6 +22,7 @@ import TyresStep, { TyresDefaultValues, TyresSchema } from './TyresStep';
 import CarApi from '../../utils/api/CarApi';
 import PhotosStep, { PhotosDefaultValues, PhotosSchema } from './PhotosStep';
 import { ADD_CAR_STEPS, STEPS_QUEUE } from './constants';
+import { usePrompt } from 'src/hooks/useBlocker';
 
 const formSteps = {
   [ADD_CAR_STEPS.SUMMARY]: {
@@ -92,8 +93,10 @@ export default function AddCar() {
     setValue,
     watch,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = methods;
+
+  usePrompt( 'You have unsaved changes. Are you sure ou want to leave?', isDirty );
 
   const onSubmit = useCallback(async(data) => {
     const response = await formSteps[STEPS_QUEUE[step]]?.method({ ...data, carId });
