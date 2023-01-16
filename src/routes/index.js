@@ -93,6 +93,13 @@ export default function Router() {
       ],
     },
     {
+      path: ':name/inspection',
+      element: 
+        <div className='max-w-[1200px] p-[12px] m-auto'>
+          <CarDetails />
+        </div>,
+    },
+    {
       path: 'dealer/cars',
       element: <CarsListingPage />,
     },
