@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.car-details .last-row{
+   border-bottom-width: 0;
+}
+@media (max-width: 640px) {
+    .car-details li:nth-child(2n) {
+        border-right-width: 0;
+    }
+}
+.car-details li:nth-child(4n) {
+    border-right-width: 0;
+}
+
+
+.car-details li{
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+}
+
+.MuiAccordion-root:before {
+    display: none;
+}
+
+
+
+
+  

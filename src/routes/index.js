@@ -22,6 +22,7 @@ import {
   EcommerceProductEditPage,
   EcommerceProductDetailsPage,
   AddCarPage,
+  CarDetails
 } from './elements';
 import { PATH_AUTH } from './paths';
 
@@ -76,6 +77,7 @@ export default function Router() {
             { path: 'new', element: <AddCarPage /> },
             { path: ':name/edit', element: <EcommerceProductEditPage /> },
             { path: ':name', element: <EcommerceProductDetailsPage /> },
+            { path: ':name/details', element: <CarDetails /> },
           ],
         },
         {

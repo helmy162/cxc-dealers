@@ -4,6 +4,16 @@ import './locales/i18n';
 // scroll bar
 import 'simplebar/src/simplebar.css';
 
+// lightbox
+/* eslint-disable import/no-unresolved */
+import 'yet-another-react-lightbox/styles.css';
+import 'yet-another-react-lightbox/plugins/captions.css';
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
+
+// slick-carousel
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 // lazy image
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
