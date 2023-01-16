@@ -100,7 +100,7 @@ export default function AddCar() {
 
   const onSubmit = useCallback(async(data) => {
     const response = await formSteps[STEPS_QUEUE[step]]?.method({ ...data, carId });
-    response?.car_id && setCarId(response?.car_id);
+    response?.id && setCarId(response?.id);
     reset(formSteps[STEPS_QUEUE[step + 1]]?.defaultValues);
     !isLastStep && setFormStep(step + 1);
   }, [step, isLastStep, reset, carId]);

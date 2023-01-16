@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { Stack, Alert, Box, MenuItem } from '@mui/material';
 import { renderAddCarSelect, renderAddCarSwitch } from 'src/utils/forms';
 import { RHFSelect, RHFSwitch, RHFTextField } from 'src/components/hook-form';
+import { ENGINE_AND_TRANSMISSION_OPTIONS } from '../constants';
 
 // ----------------------------------------------------------------------
 export const CarSpecsSchema = Yup.object().shape({
@@ -155,7 +156,7 @@ export default function CarSpecsStep({ errors }) {
           <MenuItem value='not_available'>Not available</MenuItem>
         </RHFSelect>
         { moreClickBoxes.map(field => renderAddCarSwitch({...field })) }
-        { renderAddCarSelect({ name: 'Drives', label: 'Drives' })}
+        { renderAddCarSelect({ name: 'Drives', label: 'Drives', options: ENGINE_AND_TRANSMISSION_OPTIONS })}
         <RHFSelect name='Sunroof_Type' label='Sunroof Type'>
           <MenuItem value='sunroof'>Sunroof</MenuItem>
           <MenuItem value='panorama'>Panorama</MenuItem>

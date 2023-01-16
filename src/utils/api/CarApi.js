@@ -1,11 +1,11 @@
 import axiosInstance from "../axios";
 import { fYear } from "../formatTime";
 
-const mapSummaryToApiRequest = ({ make, model, trim, engine, ...rest }) => ({
+const mapSummaryToApiRequest = ({ make, model, trim, engine, year, carId, ...rest }) => ({
   ...rest,
-  car_name: `${make.name} ${model.name}`,
   model: model.name,
   make: make.name,
+  year: fYear(year),
   trim,
   engine: {
     type: engine.type,
@@ -45,7 +45,7 @@ const mapExteriorConditionToApi = ({ carId, markers }) => ({
 
 const generateInfo = async (form) => {
   const { data } = await axiosInstance.post('inspector/add/car/general-info', mapSummaryToApiRequest(form));
-  return data;
+  return data?.car || {};
 };
 const saveEngineAndTransmission = (data) => axiosInstance.post('inspector/add/car/engine-transmission', mapCarDataToApiRequest(data));
 const saveSSA = (data) => axiosInstance.post('inspector/add/car/steering-suspension-brakes', mapCarDataToApiRequest(data));
