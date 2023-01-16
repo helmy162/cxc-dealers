@@ -40,7 +40,6 @@ export default function PhotosStep ({ errors, watch, setValue }) {
         rowGap={2}
         columnGap={3}
         display="grid"
-        sx={{marginBottom: '1rem'}}
         gridTemplateColumns={{
           xs: 'repeat(1, 1fr)',
         }}

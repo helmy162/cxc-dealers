@@ -29,38 +29,36 @@ const mapTiresDataToApiRequest = ({ carId, FrontLeft, FrontRight, RearLeft, Rear
   return {
     car_id: carId,
     inputs: {
-      Front_Left: {
-        Year: fYear(FrontLeft),
-      },
-      Front_Right: {
-        Year: fYear(FrontRight),
-      },
-      Rear_Left: {
-        Year: fYear(RearLeft),
-      },
-      Rear_Right: {
-        Year: fYear(RearRight),
-      }
+      Front_Left_Year: fYear(FrontLeft),
+      Front_Right_Year: fYear(FrontRight),
+      Rear_Left_Year: fYear(RearLeft),
+      Rear_Right_Year: fYear(RearRight),
     },
-    SpareTyre,
+    Spare_Tyre: SpareTyre,
   }
-}
+};
+
+const mapExteriorConditionToApi = ({ carId, markers }) => ({
+  car_id: carId,
+  markers: markers.map(marker => ({ defect: marker.defect, y: marker.top, x: marker.left })),
+});
 
 const generateInfo = async (form) => {
-  const { data } = await axiosInstance.post('inspecter/generate-info', mapSummaryToApiRequest(form));
+  const { data } = await axiosInstance.post('inspector/add/car/general-info', mapSummaryToApiRequest(form));
   return data;
 };
-const saveEngineAndTransmission = (data) => axiosInstance.post('inspecter/engine-transmissions', mapCarDataToApiRequest(data));
-const saveSSA = (data) => axiosInstance.post('inspecter/ssa', mapCarDataToApiRequest(data));
-const saveIEAC = (data) => axiosInstance.post('inspecter/ieac', mapCarDataToApiRequest(data));
-const saveCarSpecs = (data) => axiosInstance.post('inspecter/car-spaces', mapCarDataToApiRequest(data));
-const saveTyres = (data) => axiosInstance.post('inspecter/wheels', mapTiresDataToApiRequest(data))
+const saveEngineAndTransmission = (data) => axiosInstance.post('inspector/add/car/engine-transmission', mapCarDataToApiRequest(data));
+const saveSSA = (data) => axiosInstance.post('inspector/add/car/steering-suspension-brakes', mapCarDataToApiRequest(data));
+const saveIEAC = (data) => axiosInstance.post('inspector/add/car/interior-electricals-AC', mapCarDataToApiRequest(data));
+const saveCarSpecs = (data) => axiosInstance.post('inspector/add/car/specs', mapCarDataToApiRequest(data));
+const saveTyres = (data) => axiosInstance.post('inspector/add/car/wheels', mapTiresDataToApiRequest(data));
 const uploadPhotos = (data) => { 
   const bodyFormData = new FormData();
   (data?.images || []).map(image => bodyFormData.append('images[]', image));
   bodyFormData.append('car_id', 31); 
-  axiosInstance.post('inspecter/cars/images', bodyFormData);
-}
+  axiosInstance.post('inspecter/add/cars/images', bodyFormData);
+};
+const saveExteriorCondition = (data) => axiosInstance.post('inspector/add/car/exterior-condition', mapExteriorConditionToApi(data));
 
 const methods = {
   generateInfo,
@@ -70,6 +68,7 @@ const methods = {
   saveCarSpecs,
   saveTyres,
   uploadPhotos,
+  saveExteriorCondition,
 };
 
 export default methods;

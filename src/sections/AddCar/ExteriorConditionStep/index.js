@@ -5,30 +5,24 @@ import { Grid, Paper, Alert, MenuItem, Button, List } from '@mui/material';
 import { RHFSelect } from 'src/components/hook-form';
 import MarkerRow from './MarkerRow';
 import { Upload } from 'src/components/upload';
+import { DEFECTS_OPTIONS } from './constants';
 // ----------------------------------------------------------------------
-
-const DEFECTS_OPTIONS = [
-  "Scratch",
-  "Cosmetic Paint",
-  "Dent",
-  "Repainted",
-  "Repair"
-];
-
 
 export const ExteriorConditionSchema = Yup.object().shape({
   defect: Yup.string().nullable(),
+  markers: Yup.array(),
 });
 
 export const ExteriorConditionDefaultValues = {
   defect: "",
+  markers: [],
 };
 
-export default function ExteriorCondition({ watch }) {
+export default function ExteriorCondition({ watch, setValue }) {
   const [defect] = watch(['defect']);
   const [markers, setMarkers] = useState([]);
   const [activeMarker, setActiveMarker] = useState(null);
-  const [submittedMerkers, setSubmittedMarkers] = useState([]);
+  const [submittedMarkers, setSubmittedMarkers] = useState([]);
   const [isErrorDisplayed, setIsErrorDisplayed] = useState(false);
 
   const [file, setFile] = useState(null);
@@ -57,9 +51,11 @@ export default function ExteriorCondition({ watch }) {
 
   const onSubmitButton = useCallback(() => {
     const lastMarker = markers[markers.length - 1];
-    setSubmittedMarkers([...submittedMerkers, { ...lastMarker, defect }]);
+    const newSubmittedMarkers = [...submittedMarkers, { ...lastMarker, defect }];
+    setSubmittedMarkers(newSubmittedMarkers);
+    setValue('markers', newSubmittedMarkers);
     setActiveMarker(null)
-  }, [defect, markers, submittedMerkers]);
+  }, [defect, markers, submittedMarkers]);
 
   const handleDropSingleFile = useCallback((acceptedFiles) => {
     const newFile = acceptedFiles[0];
@@ -84,10 +80,10 @@ export default function ExteriorCondition({ watch }) {
       <Grid item sm={6}>
         { isErrorDisplayed && <Alert severity='warning'>You should describe the previous mark first</Alert>}
         <List>
-          { submittedMerkers.map((marker, key) => <MarkerRow onDeleteButtonClick={onDeleteMarker} marker={marker} key={key} id={key} />)}
+          { submittedMarkers.map((marker, key) => <MarkerRow onDeleteButtonClick={onDeleteMarker} marker={marker} key={key} id={key} />)}
         </List>
         {activeMarker && <Paper variant="outlined" sx={{ borderRadius: 2, borderColor: 'divider', padding: '1rem' }}>
-          <RHFSelect name="defect" label="Defect" value="Scratch" sx={{marginBottom: '1rem'}}>
+          <RHFSelect name="defect" label="Defect" sx={{marginBottom: '1rem'}}>
             {DEFECTS_OPTIONS.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)}
           </RHFSelect>
           <Upload file={file} onDrop={handleDropSingleFile} onDelete={() => setFile(null)} sx={{marginBottom: '1rem'}} />

@@ -143,7 +143,6 @@ export default function CarSpecsStep({ errors }) {
         rowGap={2}
         columnGap={3}
         display="grid"
-        sx={{marginBottom: '1rem'}}
         gridTemplateColumns={{
           sm: 'repeat(1, 1fr)',
           md: 'repeat(3, 1fr)',

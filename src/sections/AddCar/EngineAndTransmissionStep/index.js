@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { Stack, Alert, Box } from '@mui/material';
 import { ENGINE_AND_TRANSMISSION_OPTIONS, ENGINE_SMOKE_OPTIONS, ENGINE_NOISE_OPTIONS } from '../constants';
 import { renderAddCarSelect } from 'src/utils/forms';
+import { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ export const EngineAndTransmissionSchema = Yup.object().shape({
   Engine_Idling: Yup.string(),
   Gear_Shifting: Yup.string(),
   Silencer: Yup.string(),
+  Extra_Comments: Yup.string(),
 });
 
 export const EngineAndTransmissionDefaultValues = {
@@ -38,6 +40,7 @@ export const EngineAndTransmissionDefaultValues = {
   Engine_Idling: 'no_visible_fault',
   Gear_Shifting: 'no_visible_fault',
   Silencer: 'no_visible_fault',
+  Extra_Comments: '',
 };
 
 const fields = [
@@ -68,9 +71,9 @@ export default function EngineAndTransmissionStep({ errors }) {
           sm: 'repeat(1, 1fr)',
           md: 'repeat(2, 1fr)',
         }}
-        sx={{marginBottom: '1rem'}}
       >
         { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
+        <RHFTextField name="Extra_Comments" label="Comments" multiline />
       </Box>
   </Stack>);
 }

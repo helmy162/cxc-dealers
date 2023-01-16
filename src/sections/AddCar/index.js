@@ -33,7 +33,7 @@ const formSteps = {
   },
   [ADD_CAR_STEPS.EXTERIOR_CONDITION]: {
     component: ExteriorCondition,
-    method: () => {},
+    method: CarApi.saveExteriorCondition,
     validationSchema: ExteriorConditionSchema,
     defaultValues: ExteriorConditionDefaultValues,
   },
@@ -119,6 +119,7 @@ export default function AddCar() {
             loading={isSubmitting}
             sx={{
             bgcolor: 'text.primary',
+            marginTop: '1rem',
             color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
             '&:hover': {
                 bgcolor: 'text.primary',

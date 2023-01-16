@@ -27,7 +27,7 @@ export const IEACSchema = Yup.object().shape({
   AC_Cooling: Yup.string(),
   Convertible_Operations: Yup.string(),
   AC_Heating: Yup.string(),
-  Comments: Yup.string(),
+  Extra_Comments: Yup.string(),
 });
 
 export const IEACDefaultValues = {
@@ -51,7 +51,7 @@ export const IEACDefaultValues = {
   AC_Cooling: "no_visible_fault",
   Convertible_Operations: "no_visible_fault",
   AC_Heating: "no_visible_fault",
-  Comments: "",
+  Extra_Comments: "",
 };
 
 const fields = [
@@ -85,14 +85,13 @@ export default function SSAStep({ errors }) {
         rowGap={2}
         columnGap={3}
         display="grid"
-        sx={{marginBottom: '1rem'}}
         gridTemplateColumns={{
           sm: 'repeat(1, 1fr)',
           md: 'repeat(3, 1fr)',
         }}
       >
         { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
-        <RHFTextField name="Comments" label="Comments" multiline />
+        <RHFTextField name="Extra_Comments" label="Comments" multiline />
       </Box>
 
   </Stack>);

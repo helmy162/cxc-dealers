@@ -15,7 +15,7 @@ export const SSASchema = Yup.object().shape({
   Steering_Operation: Yup.string(),
   Steering_Alignment: Yup.string(),
   Wheel_Alignment: Yup.string(),
-  Comments: Yup.string(),
+  Extra_Comments: Yup.string(),
 });
 
 export const SSADefaultValues = {
@@ -27,7 +27,7 @@ export const SSADefaultValues = {
   Steering_Operation: "no_visible_fault",
   Steering_Alignment: "no_visible_fault",
   Wheel_Alignment: "no_visible_fault",
-  Comments: "",
+  Extra_Comments: "",
 };
 
 const fields = [
@@ -49,14 +49,13 @@ export default function SSAStep({ errors }) {
         rowGap={2}
         columnGap={3}
         display="grid"
-        sx={{marginBottom: '1rem'}}
         gridTemplateColumns={{
           sm: 'repeat(1, 1fr)',
           md: 'repeat(3, 1fr)',
         }}
       >
         { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
-        <RHFTextField name="Comments" label="Comments" multiline />
+        <RHFTextField name="Extra_Comments" label="Comments" multiline />
       </Box>
   </Stack>);
 }

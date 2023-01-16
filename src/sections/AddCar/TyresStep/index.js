@@ -35,7 +35,6 @@ export default function TyresStep({ errors }) {
         rowGap={2}
         columnGap={3}
         display="grid"
-        sx={{marginBottom: '1rem'}}
         gridTemplateColumns={{
           sm: 'repeat(1, 1fr)',
           md: 'repeat(2, 1fr)',
