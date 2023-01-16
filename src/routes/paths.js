@@ -40,6 +40,7 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/car/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/car/${name}/edit`),
     view: (name) => path(ROOTS_DASHBOARD, `/car/${name}`),
+    details: (name) => path(ROOTS_DASHBOARD, `/car/${name}/details`),
     // shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),
     // checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
     // demoEdit: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),

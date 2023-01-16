@@ -1,11 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Route } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack,
   Table,
   Button,
+  Link,
   Tooltip,
   TableBody,
   IconButton,
@@ -45,7 +47,8 @@ import {
 import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
 
 import { cars } from '../../_mock/assets/cars';
-
+import CarPDF from './CarPDF.js';
+import CarDetails from './CarDetails.js';
 
 
 // ----------------------------------------------------------------------
@@ -80,6 +83,8 @@ const SUMMARY = [
 // ----------------------------------------------------------------------
 
 export default function EcommerceProductDetailsPage() {
+
+
   const {
     dense,
     page,
@@ -158,13 +163,6 @@ export default function EcommerceProductDetailsPage() {
     }
   }, [dispatch, name]);
 
-  const handleAddCart = (newProduct) => {
-    dispatch(addToCart(newProduct));
-  };
-
-  const handleGotoStep = (step) => {
-    dispatch(gotoStep(step));
-  };
 
   const TABS = [
     {
@@ -200,7 +198,7 @@ export default function EcommerceProductDetailsPage() {
       `} /> : null,
     }
   ];
-
+  const [pdfOpen, setPdfOpen] = useState(false);
   return (
     <>
       <Helmet>
@@ -224,6 +222,7 @@ export default function EcommerceProductDetailsPage() {
           <>
             <div style={{fontSize:'36px', fontWeight:'700', marginBottom:'50px', display:'flex', alignItems:'center', gap:'20px'}}>
               #{product?.id}
+
               <Label
                 variant="soft"
                 color={
@@ -235,6 +234,14 @@ export default function EcommerceProductDetailsPage() {
               >
                 {product?.auction ? sentenceCase(product?.auction) : ''}
               </Label>
+
+              <Link
+                href={PATH_DASHBOARD.car.details(name)}
+                sx={{ display: 'table' }}
+              >
+                View Details
+              </Link>
+              
             </div>
             <Card style={{marginBottom:'50px'}}>
               <Tabs
@@ -345,11 +352,15 @@ export default function EcommerceProductDetailsPage() {
             
           </>
         )}
+        {pdfOpen && (
+          <CarDetails car={product} onClose={() => setPdfOpen(false)} />
+        )}
 
         {isLoading && <SkeletonProductDetails />}
       </Container>
     </>
   );
+  
 }
 
 // ----------------------------------------------------------------------

@@ -3,7 +3,7 @@ import { PATH_AUTH } from '../routes/paths';
 // utils
 import axios from '../utils/axios';
 
-const MOCKED_TOKEN_EXP = 259200;
+const MOCKED_TOKEN_EXP = 2592000;
 
 // ----------------------------------------------------------------------
 
