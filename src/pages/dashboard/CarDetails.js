@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import ListItem from './ListItem';
 import { useRef, useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
@@ -60,90 +61,96 @@ export default function CarDetails({ }) {
         ];
 
     return(
-        <section className='flex flex-col gap-[10px] details-section'>
-            <h2 className="text-[24px] font-semibold capitalize mb-3">
-                {car.make} {car.model} {car.year} - Insepction Report
-            </h2>
-            
-            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                    <h2 className="text-[24px] font-semibold capitalize mb-3">
-                        Car Images
-                    </h2>
-                </AccordionSummary>
-                <AccordionDetails className='max-w-[800px] m-auto'>
-                    <ProductDetailsCarousel product={car} />
-                </AccordionDetails>
-            </Accordion>
-
-            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                    <h2 className="text-[24px] font-semibold capitalize mb-3">
-                        Car Details
-                    </h2>
-                </AccordionSummary>
-                <AccordionDetails>
-                <ul className="flex flex-wrap justify-between text-left">
-                    {carDetails}
-                </ul>
-                </AccordionDetails>
-            </Accordion>
-            
-            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                    <div className="secondary-heading block">
+        <>
+            <Helmet>
+                <title> {car.make} {car.model} {car.year} - Insepction Report</title>
+            </Helmet>
+            <section className='flex flex-col gap-[10px] details-section'>
+                <h2 className="text-[24px] font-semibold capitalize mb-3">
+                    {car.make} {car.model} {car.year} - Insepction Report
+                </h2>
+                
+                <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+                    <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
                         <h2 className="text-[24px] font-semibold capitalize mb-3">
-                            Car History
+                            Car Images
                         </h2>
-                    </div>
-                </AccordionSummary>
-                <AccordionDetails>
+                    </AccordionSummary>
+                    <AccordionDetails className='max-w-[800px] m-auto'>
+                        <ProductDetailsCarousel product={car} />
+                    </AccordionDetails>
+                </Accordion>
+
+                <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+                    <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                        <h2 className="text-[24px] font-semibold capitalize mb-3">
+                            Car Details
+                        </h2>
+                    </AccordionSummary>
+                    <AccordionDetails>
                     <ul className="flex flex-wrap justify-between text-left">
-                        <li className='flex flex-wrap items-center justify-between basis-[49%] border-[1px] rounded-md px-[16px] py-[10px] min-w-[100%] sm:min-w-0 mb-[10px] '>
-                            <div className='flex font-normal text-[#545252] basis-[50%] text-[14px]'>
-                                Radiator Condition
-                            </div>
-                            <div className='flex font-semibold justify-end basis-[50%] text-[#5AC35A] text-[14px]'>
-                                No Visible Fault
-                            </div>
-                        </li>
-                        <li className='flex flex-wrap items-center justify-between basis-[49%] border-[1px] rounded-md px-[16px] py-[10px] min-w-[100%] sm:min-w-0 mb-[10px] '>
-                            <div className='flex font-normal text-[#545252] basis-[50%] text-[14px]'>
-                                Engine Noise
-                            </div>
-                            <div className='flex font-semibold justify-end basis-[50%] text-[#FD4353] text-[14px]'>
-                            Tappet Noise
-                            </div>
-                        </li>
+                        {carDetails}
                     </ul>
-                </AccordionDetails>
-            </Accordion>
+                    </AccordionDetails>
+                </Accordion>
+                
+                <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+                    <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                        <div className="secondary-heading block">
+                            <h2 className="text-[24px] font-semibold capitalize mb-3">
+                                Car History
+                            </h2>
+                        </div>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <ul className="flex flex-wrap justify-between text-left">
+                            <li className='flex flex-wrap items-center justify-between basis-[49%] border-[1px] rounded-md px-[16px] py-[10px] min-w-[100%] sm:min-w-0 mb-[10px] '>
+                                <div className='flex font-normal text-[#545252] basis-[50%] text-[14px]'>
+                                    Radiator Condition
+                                </div>
+                                <div className='flex font-semibold justify-end basis-[50%] text-[#5AC35A] text-[14px]'>
+                                    No Visible Fault
+                                </div>
+                            </li>
+                            <li className='flex flex-wrap items-center justify-between basis-[49%] border-[1px] rounded-md px-[16px] py-[10px] min-w-[100%] sm:min-w-0 mb-[10px] '>
+                                <div className='flex font-normal text-[#545252] basis-[50%] text-[14px]'>
+                                    Engine Noise
+                                </div>
+                                <div className='flex font-semibold justify-end basis-[50%] text-[#FD4353] text-[14px]'>
+                                Tappet Noise
+                                </div>
+                            </li>
+                        </ul>
+                    </AccordionDetails>
+                </Accordion>
 
-            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                    <div className="secondary-heading block">
-                        <h2 className="text-[24px] font-semibold capitalize mb-3">
-                            Exterior Condition
-                        </h2>
+                <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+                    <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                        <div className="secondary-heading block">
+                            <h2 className="text-[24px] font-semibold capitalize mb-3">
+                                Exterior Condition
+                            </h2>
+                        </div>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                    <div className='relative max-h-[75vh] w-fit m-auto' >
+                        <img src="/assets/illustrations/CarSkeleton.png" alt="Markers" className='w-auto max-h-[75vh]'/>
+                        {points.map((point, index) => (
+                            <Tooltip key={index} title={point.title} arrow>
+                                <div className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.top, left: point.left}}>
+                                    {point.number}
+                                </div>
+                            </Tooltip>
+                        ))}
                     </div>
-                </AccordionSummary>
-                <AccordionDetails>
-                <div className='relative max-h-[75vh] w-fit m-auto' >
-                    <img src="/assets/illustrations/CarSkeleton.png" alt="Markers" className='w-auto max-h-[75vh]'/>
-                    {points.map((point, index) => (
-                        <Tooltip key={index} title={point.title} arrow>
-                            <div className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.top, left: point.left}}>
-                                {point.number}
-                            </div>
-                        </Tooltip>
-                    ))}
-                </div>
-                    {/* <div>
-                        <img src="/assets/illustrations/CarSkeleton.png" className='m-auto '/>
-                    </div> */}
-                </AccordionDetails>
-            </Accordion>
-        </section>
+                        {/* <div>
+                            <img src="/assets/illustrations/CarSkeleton.png" className='m-auto '/>
+                        </div> */}
+                    </AccordionDetails>
+                </Accordion>
+            </section>
+        </>
+        
 
     )
 }
