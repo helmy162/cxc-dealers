@@ -65,18 +65,18 @@ export default function CarDetails({ }) {
                 {car.make} {car.model} {car.year} - Insepction Report
             </h2>
             
-            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)'}} defaultExpanded>
+            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
                 <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
                     <h2 className="text-[24px] font-semibold capitalize mb-3">
                         Car Images
                     </h2>
                 </AccordionSummary>
-                <AccordionDetails className='w-[30%] m-auto'>
+                <AccordionDetails className='max-w-[800px] m-auto'>
                     <ProductDetailsCarousel product={car} />
                 </AccordionDetails>
             </Accordion>
 
-            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)'}}>
+            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
                 <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
                     <h2 className="text-[24px] font-semibold capitalize mb-3">
                         Car Details
@@ -89,7 +89,7 @@ export default function CarDetails({ }) {
                 </AccordionDetails>
             </Accordion>
             
-            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} >
+            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
                 <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
                     <div className="secondary-heading block">
                         <h2 className="text-[24px] font-semibold capitalize mb-3">
@@ -119,7 +119,7 @@ export default function CarDetails({ }) {
                 </AccordionDetails>
             </Accordion>
 
-            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}}>
+            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
                 <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
                     <div className="secondary-heading block">
                         <h2 className="text-[24px] font-semibold capitalize mb-3">
