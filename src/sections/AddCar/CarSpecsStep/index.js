@@ -38,7 +38,7 @@ export const CarSpecsSchema = Yup.object().shape({
   Power_Steering: Yup.boolean(),
   Triptronic_Gears: Yup.string(),
   Carbon_Fiber_Interior: Yup.boolean(),
-  Lane_Change_Assist: Yup.boolean,
+  Lane_Change_Assist: Yup.boolean(),
   Park_Assist: Yup.boolean(),
   Adaptive_Suspension: Yup.boolean(),
   Height_Control: Yup.boolean(),
@@ -48,7 +48,7 @@ export const CarSpecsSchema = Yup.object().shape({
   Wheels_Type: Yup.string(),
   Side_Steps: Yup.boolean(),
   Convertible: Yup.string(),
-  Other_features: Yup.string(),
+  Other_Features: Yup.string(),
 });
 
 export const CarSpecsDefaultValues = {
@@ -93,7 +93,7 @@ export const CarSpecsDefaultValues = {
   Wheels_Type: '4wd',
   Side_Steps: true,
   Convertible: 'false',
-  Other_features: ''
+  Other_Features: ''
 };
 
 const clickBoxes = [

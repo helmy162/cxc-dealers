@@ -55,7 +55,7 @@ export default function ExteriorCondition({ watch, setValue }) {
     setSubmittedMarkers(newSubmittedMarkers);
     setValue('markers', newSubmittedMarkers);
     setActiveMarker(null)
-  }, [defect, markers, submittedMarkers]);
+  }, [defect, markers, submittedMarkers, setValue]);
 
   const handleDropSingleFile = useCallback((acceptedFiles) => {
     const newFile = acceptedFiles[0];

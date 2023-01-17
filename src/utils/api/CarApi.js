@@ -28,12 +28,10 @@ const mapCarDataToApiRequest = ({ carId, ...rest }) => {
 const mapTiresDataToApiRequest = ({ carId, FrontLeft, FrontRight, RearLeft, RearRight, SpareTyre}) => {
   return {
     car_id: carId,
-    inputs: {
-      Front_Left_Year: fYear(FrontLeft),
-      Front_Right_Year: fYear(FrontRight),
-      Rear_Left_Year: fYear(RearLeft),
-      Rear_Right_Year: fYear(RearRight),
-    },
+    Front_Left_Year: fYear(FrontLeft),
+    Front_Right_Year: fYear(FrontRight),
+    Rear_Left_Year: fYear(RearLeft),
+    Rear_Right_Year: fYear(RearRight),
     Spare_Tyre: SpareTyre,
   }
 };
@@ -52,11 +50,11 @@ const saveSSA = (data) => axiosInstance.post('inspector/add/car/steering-suspens
 const saveIEAC = (data) => axiosInstance.post('inspector/add/car/interior-electricals-AC', mapCarDataToApiRequest(data));
 const saveCarSpecs = (data) => axiosInstance.post('inspector/add/car/specs', mapCarDataToApiRequest(data));
 const saveTyres = (data) => axiosInstance.post('inspector/add/car/wheels', mapTiresDataToApiRequest(data));
-const uploadPhotos = (data) => { 
+const uploadPhotos = ({ carId, ...data }) => { 
   const bodyFormData = new FormData();
   (data?.images || []).map(image => bodyFormData.append('images[]', image));
-  bodyFormData.append('car_id', 31); 
-  axiosInstance.post('inspecter/add/cars/images', bodyFormData);
+  bodyFormData.append('car_id', carId); 
+  axiosInstance.post('inspector/add/car/images', bodyFormData);
 };
 const saveExteriorCondition = (data) => axiosInstance.post('inspector/add/car/exterior-condition', mapExteriorConditionToApi(data));
 

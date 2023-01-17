@@ -5,7 +5,7 @@ import { RHFCheckbox, RHFDatePicker } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 export const TyresSchema = Yup.object().shape({
-  FronLeft: Yup.string(),
+  FrontLeft: Yup.string(),
   FrontRight: Yup.string(),
   RearLeft: Yup.string(),
   RearRight: Yup.string(),
