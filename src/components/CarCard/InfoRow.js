@@ -1,9 +1,16 @@
+import { useMemo } from "react";
 import {
   Box,
   Typography
 } from "@mui/material";
 
+import SpecItem from './SpecItem';
+
 export default function InfoRow({ data }) {
+  const image = useMemo(() => {
+    return data.images && data?.images[0] ? `https://api.carsxchange.com/${data.images[0]}` : ''
+  }, [data])
+
   return (
     <Box
       sx={{
@@ -12,14 +19,19 @@ export default function InfoRow({ data }) {
         flexDirection: { xs: 'column', sm: 'row' }
       }}
     >
-      <img
-        src={data.imageUrl}
-        alt="car"
-        style={{
-          marginRight: '20px',
-          maxWidth: { xs: '100%', sm: '265px' }
-        }}
-      />
+      <Box sx={{
+        marginRight: '20px',
+        maxWidth: { xs: '100%', sm: '265px' }
+      }}>
+        <img
+          src={image}
+          alt="car"
+          style={{
+            width: '100%',
+            borderRadius: '8px'
+          }}
+        />
+      </Box>
       <Box sx={{
         width: '100%'
       }}>
@@ -50,24 +62,15 @@ export default function InfoRow({ data }) {
             paddingBottom: { xs: '51px', sm: 0 }
           }}
         >
-          {data.specs.map((spec, specIndex) => (
-            <Box
-              key={specIndex}
-              sx={{
-                width: { xs: '48%', sm: 'auto', md: '33%' },
-                maxWidth: { xs: '100%', sm: 'auto', md: '150px' },
-                height: '30px',
-                background: '#E8F2F8',
-                fontSize: '14px',
-                padding: '4px 10px',
-                borderRadius: '4px',
-                color: '#8184A3',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden'
-              }}
-            >{spec}</Box>
-          ))}
+          <SpecItem>
+            {data.mileage}
+          </SpecItem>
+          <SpecItem>
+            {data.engine.transmission}
+          </SpecItem>
+          <SpecItem>
+            {data.exterior_color}
+          </SpecItem>
         </Box>
       </Box>
     </Box>

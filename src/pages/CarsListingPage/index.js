@@ -12,41 +12,46 @@ import OffersCount from './OffersCount';
 import AppliedFilters from './AppliedFilters';
 import Header from '../../layouts/dashboard/header';
 
+import useCarsListingPage from './useCarsListingPage';
 
 import CarImg from '../../assets/illustrations/car.jpg'
 
-const cars = [
-  {
-    id: 1,
-    name: 'Audi R8 2018',
-    imageUrl: CarImg,
-    highestBid: '230,224',
-    status: 'live',
-    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
-    auctionEndTime: Date.now() + 50000
-  },
-  {
-    id: 2,
-    name: 'Audi R8 2018',
-    imageUrl: CarImg,
-    highestBid: '230,224',
-    status: 'expired',
-    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
-    auctionEndTime: Date.now() + 10000
-  },
-  {
-    id: 3,
-    name: 'Audi R8 2018',
-    imageUrl: CarImg,
-    highestBid: '230,224',
-    status: 'live',
-    specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
-    auctionEndTime: Date.now() + 10000
-  },
-]
+// const cars = [
+//   {
+//     id: 1,
+//     name: 'Audi R8 2018',
+//     imageUrl: CarImg,
+//     highestBid: '230,224',
+//     status: 'live',
+//     specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
+//     auctionEndTime: Date.now() + 50000
+//   },
+//   {
+//     id: 2,
+//     name: 'Audi R8 2018',
+//     imageUrl: CarImg,
+//     highestBid: '230,224',
+//     status: 'expired',
+//     specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
+//     auctionEndTime: Date.now() + 10000
+//   },
+//   {
+//     id: 3,
+//     name: 'Audi R8 2018',
+//     imageUrl: CarImg,
+//     highestBid: '230,224',
+//     status: 'live',
+//     specs: ['59,900 km', 'Automatic', 'V10', 'Parchery repainted', 'GCC', 'White'],
+//     auctionEndTime: Date.now() + 10000
+//   },
+// ]
 
 export default function CarsListingPage() {
   const [isFilterVisible, setFilterVisible] = useState(false);
+
+  const {
+    cars,
+  } = useCarsListingPage();
 
   const toggleFilter = () => {
     setFilterVisible((oldValue) => !oldValue);
@@ -83,7 +88,9 @@ export default function CarsListingPage() {
             }
           }}
         />
-        <Box>
+        <Box sx={{
+          width: '100%'
+        }}>
           <Box
             sx={{
               display: 'flex',
