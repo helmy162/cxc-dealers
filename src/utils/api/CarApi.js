@@ -36,10 +36,17 @@ const mapTiresDataToApiRequest = ({ carId, FrontLeft, FrontRight, RearLeft, Rear
   }
 };
 
-const mapExteriorConditionToApi = ({ carId, markers }) => ({
-  car_id: carId,
-  markers: markers.map(marker => ({ defect: marker.defect, y: marker.top, x: marker.left })),
-});
+const mapExteriorConditionToApi = ({ carId, markers }) => { 
+  console.log(markers)
+  const bodyFormData = new FormData();
+  bodyFormData.append('car_id', carId);
+  markers.map(marker =>  {
+    bodyFormData.append('images[]', marker.file);
+    bodyFormData.append('markers[]', { x: marker.left, y: marker.top, defect: marker.defect })
+  });
+
+  return bodyFormData;
+};
 
 const generateInfo = async (form) => {
   const { data } = await axiosInstance.post('inspector/add/car/general-info', mapSummaryToApiRequest(form));

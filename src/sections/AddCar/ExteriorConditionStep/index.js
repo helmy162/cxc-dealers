@@ -20,6 +20,7 @@ export const ExteriorConditionDefaultValues = {
 
 export default function ExteriorCondition({ watch, setValue }) {
   const [defect] = watch(['defect']);
+
   const [markers, setMarkers] = useState([]);
   const [activeMarker, setActiveMarker] = useState(null);
   const [submittedMarkers, setSubmittedMarkers] = useState([]);
@@ -51,11 +52,11 @@ export default function ExteriorCondition({ watch, setValue }) {
 
   const onSubmitButton = useCallback(() => {
     const lastMarker = markers[markers.length - 1];
-    const newSubmittedMarkers = [...submittedMarkers, { ...lastMarker, defect }];
+    const newSubmittedMarkers = [...submittedMarkers, { ...lastMarker, defect, file }];
     setSubmittedMarkers(newSubmittedMarkers);
     setValue('markers', newSubmittedMarkers);
     setActiveMarker(null)
-  }, [defect, markers, submittedMarkers, setValue]);
+  }, [defect, markers, submittedMarkers, setValue, file]);
 
   const handleDropSingleFile = useCallback((acceptedFiles) => {
     const newFile = acceptedFiles[0];
@@ -86,12 +87,12 @@ export default function ExteriorCondition({ watch, setValue }) {
           <RHFSelect name="defect" label="Defect" sx={{marginBottom: '1rem'}}>
             {DEFECTS_OPTIONS.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)}
           </RHFSelect>
-          <Upload file={file} onDrop={handleDropSingleFile} onDelete={() => setFile(null)} sx={{marginBottom: '1rem'}} />
+          <Upload file={file} name={submittedMarkers.length} onDrop={handleDropSingleFile} onDelete={() => setFile(null)} sx={{marginBottom: '1rem'}} />
           <Button
             type="button"
             onClick={onSubmitButton} 
             variant="outlined"
-            disabled={!defect}
+            disabled={!defect || !file}
           >
             Add marker</Button>
         </Paper>}

@@ -61,6 +61,7 @@ export default function Upload({
   onRemove,
   onRemoveAll,
   sx,
+  name,
   ...other
 }) {
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
@@ -97,7 +98,7 @@ export default function Upload({
           }),
         }}
       >
-        <input {...getInputProps()} />
+        <input name={name} {...getInputProps()} />
 
         <Placeholder
           sx={{

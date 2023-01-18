@@ -15,10 +15,10 @@ export const CarSpecsSchema = Yup.object().shape({
   Dual_Exhaust: Yup.boolean(),
   Alarm: Yup.boolean(),
   Rear_Video: Yup.boolean(),
-  Premium_Sound_System: Yup.boolean(),
+  Premium_Sound: Yup.boolean(),
   Heads_Up_Display: Yup.boolean(),
-  Aux_Audio_In: Yup.boolean(),
-  Bluetooth_System: Yup.boolean(),
+  Aux_Audio: Yup.boolean(),
+  Bluetooth: Yup.boolean(),
   Climate_Control: Yup.boolean(),
   Keyless_Entry: Yup.boolean(),
   Keyless_Start: Yup.boolean(),
@@ -33,19 +33,19 @@ export const CarSpecsSchema = Yup.object().shape({
   Memory_Seats: Yup.boolean(),
   View_Camera: Yup.boolean(),
   Blind_Spot_Indicator: Yup.boolean(),
-  Anti_Lock_Brakes_ABS: Yup.boolean(),
-  Adaptive_Cruise_Control: Yup.boolean(),
+  Anti_Lock: Yup.boolean(),
+  Cruise_Control: Yup.boolean(),
   Power_Steering: Yup.boolean(),
-  Triptronic_Gears: Yup.string(),
+  	Trip_Gears: Yup.string(),
   Carbon_Fiber_Interior: Yup.boolean(),
-  Lane_Change_Assist: Yup.boolean(),
+  Line_Change_Assist: Yup.boolean(),
   Park_Assist: Yup.boolean(),
   Adaptive_Suspension: Yup.boolean(),
   Height_Control: Yup.boolean(),
   Navigation_System: Yup.boolean(),
   Drives: Yup.string(),
   Sunroof_Type: Yup.string(),
-  Wheels_Type: Yup.string(),
+  Wheel_Type: Yup.string(),
   Side_Steps: Yup.boolean(),
   Convertible: Yup.string(),
   Other_Features: Yup.string(),
@@ -60,10 +60,10 @@ export const CarSpecsDefaultValues = {
   Dual_Exhaust: true,
   Alarm: true,
   Rear_Video: true,
-  Premium_Sound_System: true,
+  Premium_Sound: true,
   Heads_Up_Display: true,
-  Aux_Audio_In: true,
-  Bluetooth_System: true,
+  Aux_Audio: true,
+  Bluetooth: true,
   Climate_Control: true,
   Keyless_Entry: true,
   Keyless_Start: true,
@@ -78,19 +78,19 @@ export const CarSpecsDefaultValues = {
   Memory_Seats: true,
   View_Camera: true,
   Blind_Spot_Indicator: true,
-  Anti_Lock_Brakes_ABS: true,
-  Adaptive_Cruise_Control: true,
+  Anti_Lock: true,
+  Cruise_Control: true,
   Power_Steering: true,
-  Triptronic_Gears: 'working',
+  	Trip_Gears: 'working',
   Carbon_Fiber_Interior: true,
-  Lane_Change_Assist: true,
+  Line_Change_Assist: true,
   Park_Assist: true,
   Adaptive_Suspension: true,
   Height_Control: true,
   Navigation_System: true,
   Drives: 'no_visible_fault',
   Sunroof_Type: 'sunroof',
-  Wheels_Type: '4wd',
+  Wheel_Type: '4wd',
   Side_Steps: true,
   Convertible: 'false',
   Other_Features: ''
@@ -105,10 +105,10 @@ const clickBoxes = [
   { name: 'Dual_Exhaust', label: 'Dual Exhaust'},
   { name: 'Alarm', label: 'Alarm/Anti-heft system'},
   { name: 'Rear_Video', label: 'Rear video entertainment system'},
-  { name: 'Premium_Sound_System', label: 'Premium Sound system'},
+  { name: 'Premium_Sound', label: 'Premium Sound system'},
   { name: 'Heads_Up_Display', label: 'Heads Up Display'},
-  { name: 'Aux_Audio_In', label: 'Aux Audio In'},
-  { name: 'Bluetooth_System', label: 'Bluetooth'},
+  { name: 'Aux_Audio', label: 'Aux Audio In'},
+  { name: 'Bluetooth', label: 'Bluetooth'},
   { name: 'Climate_Control', label: 'Climate Control'},
   { name: 'Keyless_Entry', label: 'Keyless Entry'},
   { name: 'Keyless_Start', label: 'Keyless Start'},
@@ -123,14 +123,14 @@ const clickBoxes = [
   { name: 'Memory_Seats', label: 'Memory Seats'},
   { name: 'View_Camera', label: 'View Camera'},
   { name: 'Blind_Spot_Indicator', label: 'Blind Spot Indicator'},
-  { name: 'Anti_Lock_Brakes_ABS', label: 'Anti Lock Brakes/ABS'},
-  { name: 'Adaptive_Cruise_Control', label: 'Adaptive Cruise Control'},
+  { name: 'Anti_Lock', label: 'Anti Lock Brakes/ABS'},
+  { name: 'Cruise_Control', label: 'Adaptive Cruise Control'},
   { name: 'Power_Steering', label: 'Power Steering'},
 ];
 
 const moreClickBoxes = [
   { name: 'Carbon_Fiber_Interior', label: 'Carbon Fiber Interior'},
-  { name: 'Lane_Change_Assist', label: 'Lane Change Assist'},
+  { name: 'Line_Change_Assist', label: 'Line Change Assist'},
   { name: 'Park_Assist', label: 'Park Assist'},
   { name: 'Adaptive_Suspension', label: 'Adaptive Suspension'},
   { name: 'Height_Control', label: 'Height Control'},
@@ -150,7 +150,7 @@ export default function CarSpecsStep({ errors }) {
         }}
       >
         { clickBoxes.map(field => renderAddCarSwitch({...field })) }
-        <RHFSelect name='Triptronic_Gears' label='Triptronic Gears'>
+        <RHFSelect name='	Trip_Gears' label='Triptronic Gears'>
           <MenuItem value='working'>Working</MenuItem>
           <MenuItem value='not_working'>Not working</MenuItem>
           <MenuItem value='not_available'>Not available</MenuItem>
@@ -162,7 +162,7 @@ export default function CarSpecsStep({ errors }) {
           <MenuItem value='panorama'>Panorama</MenuItem>
           <MenuItem value='moonroof'>Moonroof</MenuItem>
         </RHFSelect>
-        <RHFSelect name='Wheels_Type' label='Wheels Type'>
+        <RHFSelect name='Wheel_Type' label='Wheels Type'>
           <MenuItem value='2wd'>2wd</MenuItem>
           <MenuItem value='4wd'>4wd</MenuItem>
         </RHFSelect>

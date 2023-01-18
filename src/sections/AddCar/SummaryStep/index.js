@@ -23,7 +23,7 @@ export const SummarySchema = Yup.object().shape({
   engine: Yup.object().nullable().required('Engine options are required'),
   body_type: Yup.string(),
   exterior_color: Yup.string().nullable(),
-  interior_color: Yup.string().nullable(),
+  interios_Color: Yup.string().nullable(),
   interior_type: Yup.string(),
   specification: Yup.string(),
   is_new: Yup.boolean(),
@@ -47,7 +47,7 @@ export const SummaryDefaultValues = {
   engine: "",
   body_type: "",
   exterior_color: null,
-  interior_color: null,
+  interios_Color: null,
   interior_type: "",
   specification: "",
   is_new: true,
@@ -170,7 +170,7 @@ export default function SummaryStep({ errors, watch }) {
 
         <RHFAutocomplete
           disabled={!values?.model && !values?.make && !values?.trim}
-          name="interior_color"
+          name="interios_Color"
           label="Interior Color"
           options={interiorColors}
         />
