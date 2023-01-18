@@ -37,12 +37,11 @@ const mapTiresDataToApiRequest = ({ carId, FrontLeft, FrontRight, RearLeft, Rear
 };
 
 const mapExteriorConditionToApi = ({ carId, markers }) => { 
-  console.log(markers)
   const bodyFormData = new FormData();
   bodyFormData.append('car_id', carId);
-  markers.map(marker =>  {
-    bodyFormData.append('images[]', marker.file);
-    bodyFormData.append('markers[]', { x: marker.left, y: marker.top, defect: marker.defect })
+  markers.map((marker, idx) =>  {
+    bodyFormData.append(`images[${idx}]`, marker.file);
+    bodyFormData.append('markers[]', JSON.stringify({ x: marker.left, y: marker.top, defect: marker.defect, photo: idx }))
   });
 
   return bodyFormData;
