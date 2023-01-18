@@ -195,8 +195,9 @@ export function getProducts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('https://api-dev-minimal-v4.vercel.app/api/products');  //needs to be changed
-      dispatch(slice.actions.getProductsSuccess(response.data.products));
+      
+      const response = await axios.get('https://api.carsxchange.com/api/v1/inspector/cars/all');  //needs to be changed
+      dispatch(slice.actions.getProductsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -209,10 +210,9 @@ export function getProduct(name) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/products/product', {
-        params: { name },
-      });
-      dispatch(slice.actions.getProductSuccess(response.data.product));
+      const response = await axios.get(`https://api.carsxchange.com/api/v1/inspector/cars/all`);
+      console.log("test")
+      dispatch(slice.actions.getProductSuccess(response.data.find(product=> product.id == name)));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));

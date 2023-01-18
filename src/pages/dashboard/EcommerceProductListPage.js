@@ -54,7 +54,7 @@ const TABLE_HEAD = [
 
 const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
-  { value: 'wait_auction', label: 'Wait Auction' },
+  { value: 'pending', label: 'Pending' },
   { value: 'expired', label: 'Expired' },
 ];
 
@@ -100,15 +100,15 @@ export default function EcommerceProductListPage() {
 
   //uncomment when the endpoint is ready with the same data structure
 
-  // useEffect(() => {
-  //   dispatch(getProducts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (products.length) {
-  //     setTableData(products);
-  //   }
-  // }, [products]);
+  useEffect(() => {
+    if (products && products.length) {
+      setTableData(products);
+    }
+  }, [products]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -173,17 +173,19 @@ export default function EcommerceProductListPage() {
   };
 
   const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.car.edit(paramCase(id)));
+    navigate(PATH_DASHBOARD.car.edit(id));
   };
 
   const handleViewRow = (id) => {
-    navigate(PATH_DASHBOARD.car.view(paramCase(id)));
+    navigate(PATH_DASHBOARD.car.view(id));
   };
 
   const handleResetFilter = () => {
     setFilterName('');
     setFilterStatus([]);
   };
+
+  console.log(useSelector((state) => state.product));
 
   return (
     <>
@@ -361,7 +363,7 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
   }
 
   if (filterStatus.length) {
-    inputData = inputData.filter((product) => filterStatus.includes(product.auction));
+    inputData = inputData.filter((product) => filterStatus.includes(product.status));
   }
 
   return inputData;
