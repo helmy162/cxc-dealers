@@ -41,7 +41,7 @@ export default function ProductTableRow({
   onEditRow,
   onViewRow,
 }) {
-  const { id, make, model, year, seller_name, auction } = row;
+  const { id, make, model, year, seller_name, status } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -87,19 +87,20 @@ export default function ProductTableRow({
         <TableCell>{make}</TableCell>
         <TableCell>{model}</TableCell>
         <TableCell>{year}</TableCell>
-        <TableCell>{seller_name}</TableCell>
+        {/* Missing Seller Name */}
+        <TableCell>{seller_name}</TableCell> 
 
         <TableCell align="center">
           <Label
             variant="soft"
             color={
-              (auction === 'expired' && 'error') ||
-              (auction === 'wait_auction' && 'warning') ||
-              (auction === 'active' && 'success') || 'success'
+              (status === 'expired' && 'error') ||
+              (status === 'pending' && 'warning') ||
+              (status === 'active' && 'success') || 'success'
             }
             sx={{ textTransform: 'capitalize', minWidth:'100px'}}
           >
-            {auction ? sentenceCase(auction) : ''}
+            {status ? sentenceCase(status) : ''}
           </Label>
         </TableCell>
 
