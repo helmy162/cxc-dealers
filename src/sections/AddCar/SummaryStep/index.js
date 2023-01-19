@@ -76,19 +76,19 @@ export default function SummaryStep({ errors, watch, setValue }) {
   // clear the fields of their dependencies has been changed
   useEffect(() => {
     setValue('model', null);
+    setValue('year', null);
     setValue('trim', null);
-    setValue('year', "");
     setValue('engine', "");
   }, [values.make, setValue]);
   useEffect(() => {
+    setValue('year', null);
     setValue('trim', null);
-    setValue('year', "");
     setValue('engine', "");
   }, [values.model, setValue]);
   useEffect(() => {
-    setValue('year', "");
+    setValue('trim', null);
     setValue('engine', "");
-  }, [values.trim, setValue]);
+  }, [values.year, setValue]);
   useEffect(() => {
     setValue('engine', "");
   }, [values.year, setValue]);
