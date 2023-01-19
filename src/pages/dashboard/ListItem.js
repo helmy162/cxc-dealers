@@ -8,9 +8,10 @@ let headingbasis = isSpecs ? "100%" : "50%";
 
 return (
     <li
-    className={`flex flex-wrap items-center justify-between basis-[${libasis}] border-[1px] rounded-md px-[16px] py-[10px] min-w-[100%] sm:min-w-0 mb-[10px]`}
+    className={`flex flex-wrap items-center justify-between border-[1px] rounded-md px-[16px] py-[10px] min-w-[100%] sm:min-w-0 mb-[10px]`}
+    style={{ flexBasis: libasis}}
     >
-    <div className={`flex font-normal text-[#545252] basis-[${headingbasis}] text-[14px]`}>
+    <div className={`flex font-normal text-[#545252] text-[14px]`} style={{flexBasis: headingbasis}}>
         {heading}
     </div>
     {!isSpecs && (
