@@ -1,5 +1,5 @@
 // @mui
-import { Stack, Typography, Link } from '@mui/material';
+import { Stack, Typography, Link, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import { useCallback, useState, createElement, useEffect } from 'react';
@@ -92,6 +92,7 @@ export default function AddCar() {
   const {
     handleSubmit,
     setValue,
+    setError,
     watch,
     reset,
     formState: { errors, isSubmitting, isDirty },
@@ -100,26 +101,36 @@ export default function AddCar() {
   usePrompt( 'You have unsaved changes. Are you sure ou want to leave?', isDirty );
 
   const onSubmit = useCallback(async(data) => {
-    const response = await formSteps[STEPS_QUEUE[step]]?.method({ ...data, carId });
-    response?.id && setCarId(response?.id);
-    reset(formSteps[STEPS_QUEUE[step + 1]]?.defaultValues);
-    if (!isLastStep) {
-      setFormStep(step + 1);
-    } else {
-      setShowFinishMessage(true);
+    try {
+      const response = await formSteps[STEPS_QUEUE[step]]?.method({ ...data, carId });
+      response?.id && setCarId(response?.id);
+      reset(formSteps[STEPS_QUEUE[step + 1]]?.defaultValues);
+      if (!isLastStep) {
+        setFormStep(step + 1);
+      } else {
+        setShowFinishMessage(true);
+      }
+    } catch (error) {
+      reset();
+
+      setError('afterSubmit', {
+        message: error,
+      });
     }
+    
   }, [step, isLastStep, reset, carId]);
 
   return (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
         { !showFinishMessage && <Typography variant="h5">{[STEPS_QUEUE[step]]}</Typography> }
+        {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
         {showFinishMessage ? <>
           <Typography variant="h5">You've created a car</Typography>
           <Link variant="subtitle2" href={PATH_DASHBOARD.car.root }>Go to dashboard</Link>
         </>
         : <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             {createElement(formSteps[STEPS_QUEUE[step]]?.component ?? <div>something went wrong</div>,
-              { errors, setValue, watch }) }
+              { setValue, watch }) }
             <LoadingButton
               color="inherit"
               size="large"

@@ -135,10 +135,9 @@ const clickBoxes = [
   { name: 'Navigation_System', label: 'Navigation System'},
 ];
 
-export default function CarSpecsStep({ errors }) {
+export default function CarSpecsStep() {
   return (
     <Stack spacing={3}>
-      {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
       <Box
         rowGap={2}
         columnGap={3}

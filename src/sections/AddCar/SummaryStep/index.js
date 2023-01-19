@@ -94,7 +94,6 @@ export default function SummaryStep({ errors, watch, setValue }) {
   }, [values.year, setValue]);
   return (
     <Stack spacing={3}>
-      {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
       <Box
         rowGap={2}
         columnGap={3}
