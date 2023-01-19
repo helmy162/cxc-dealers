@@ -117,7 +117,7 @@ export default function CarDetails({ }) {
         return(
             <>
                 <Helmet>
-                    <title> {product.make} Insepction Report</title>
+                    <title> {`${product.make} ${product.model} ${product.year} Insepction Report`} </title>
                 </Helmet>
                 <section className='flex flex-col gap-[10px] details-section'>
                     <h2 className="text-[24px] font-semibold capitalize mb-3">
