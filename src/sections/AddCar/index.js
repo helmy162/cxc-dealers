@@ -112,7 +112,7 @@ export default function AddCar() {
 
   return (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-        <Typography variant="h5">{[STEPS_QUEUE[step]]}</Typography>
+        { !showFinishMessage && <Typography variant="h5">{[STEPS_QUEUE[step]]}</Typography> }
         {showFinishMessage ? <>
           <Typography variant="h5">You've created a car</Typography>
           <Link variant="subtitle2" href={PATH_DASHBOARD.car.root }>Go to dashboard</Link>

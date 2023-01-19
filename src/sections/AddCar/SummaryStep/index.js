@@ -8,6 +8,7 @@ import { isOptionEqualToValue, renderAddCarSelect } from 'src/utils/forms';
 import { fYear } from 'src/utils/formatTime';
 import EngineCard from './EngineCard';
 import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS } from '../constants';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -68,10 +69,29 @@ const mapFormDataToApi = (values) => ( values ? {
   year: values.year,
 }: {})
 
-export default function SummaryStep({ errors, watch }) {
+export default function SummaryStep({ errors, watch, setValue }) {
   const values = watch();
   const { makes, models, years, trims, engines, exteriorColors, interiorColors } = useAddCarAutocompletes(mapFormDataToApi(values))
 
+  // clear the fields of their dependencies has been changed
+  useEffect(() => {
+    setValue('model', null);
+    setValue('trim', null);
+    setValue('year', "");
+    setValue('engine', "");
+  }, [values.make, setValue]);
+  useEffect(() => {
+    setValue('trim', null);
+    setValue('year', "");
+    setValue('engine', "");
+  }, [values.model, setValue]);
+  useEffect(() => {
+    setValue('year', "");
+    setValue('engine', "");
+  }, [values.trim, setValue]);
+  useEffect(() => {
+    setValue('engine', "");
+  }, [values.year, setValue]);
   return (
     <Stack spacing={3}>
       {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
@@ -104,7 +124,7 @@ export default function SummaryStep({ errors, watch }) {
           views={['year']}
           label="Year"
           openTo="year"
-          disableFuture
+          className='add-car-datepicker'
           shouldDisableYear={year => years.indexOf(fYear(year)) === -1}
         />
         <RHFAutocomplete
@@ -192,8 +212,8 @@ export default function SummaryStep({ errors, watch }) {
         { renderAddCarSelect({ name: 'manuals', label: 'Manuals', options: MANUALS_OPTIONS })}
         <RHFCheckbox name="warranty" label="Warranty" />
         { renderAddCarSelect({ name: 'accident_history', label: 'Accident History', options: ACCIDENT_HISTORY_OPTIONS })}
-        <RHFCheckbox name="bank_finance" label="Mortgage/Bank Finance" />
         <RHFTextField name="additional_info" label="Additional Information" multiline />
+        <RHFCheckbox name="bank_finance" label="Mortgage/Bank Finance" />
       </Box>
   </Stack>);
 }
