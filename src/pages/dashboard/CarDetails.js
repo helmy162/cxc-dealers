@@ -3,7 +3,9 @@ import ListItem from './ListItem';
 import { useRef, useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import { useSettingsContext } from '../../components/settings';
+import LoadingScreen from '../../components/loading-screen';
 import { cars } from '../../_mock/assets/cars';
+import Lightbox from '../../components/lightbox';
 import {
     Box,
     Stack,
@@ -27,7 +29,7 @@ export default function CarDetails({ }) {
     const dispatch = useDispatch();
 
     const { product, isLoading, checkout } = useSelector((state) => state.product);
-    console.log(useSelector((state) => state.product));
+
     let accordions = [];
     const [test, setTest]= useState([]);
     useEffect(() => {
@@ -35,16 +37,18 @@ export default function CarDetails({ }) {
           dispatch(getProducts());
     }, [dispatch, name]);
     
-      useEffect(() => {
-        if(product){
-            console.log(product);
+    const [defectImages, setDefectImages] = useState([]);
+
+    useEffect(() => {
+        if(product && !isLoading){
             if (product) {
+                setDefectImages(product.exterior.markers.map(marker => 'https://api.carsxchange.com'+ marker.photo));
                 Object.keys(product).forEach(key => {
                     if (typeof product[key] === 'object' && key !== 'exterior' && key !== 'images') {
                         let listItems = []
                         for (let subKey in product[key]) {
-                            if (product[key].hasOwnProperty(subKey)) {
-                                listItems.push(<ListItem key={subKey} heading={formatString(subKey)} value={product[key][subKey]} />)
+                            if (product[key].hasOwnProperty(subKey) && product[key][subKey] !== null && product[key][subKey] !== "") {
+                                listItems.push(<ListItem key={subKey} heading={formatString(subKey)} value={product[key][subKey]} isSpecs={key=='specs'} />)
                             }
                         }
                         accordions.push(
@@ -64,9 +68,26 @@ export default function CarDetails({ }) {
                     }
                 });
             }
-          }
-          setTest(accordions);
-        }, [product]);
+        }
+        setTest(accordions);
+    }, [product, isLoading]);
+
+
+    
+      const imagesLightbox = defectImages.map((img) => ({ src: img }));
+      const [currentIndex, setCurrentIndex] = useState(0);
+
+      const [selectedImage, setSelectedImage] = useState(-1);
+    
+      const handleOpenLightbox = (imageUrl) => {
+        const imageIndex = imagesLightbox.findIndex((image) => image.src === imageUrl);
+        setSelectedImage(imageIndex);
+      };
+    
+      const handleCloseLightbox = () => {
+        setSelectedImage(-1);
+      };
+    
     
     
     // screen width
@@ -92,75 +113,76 @@ export default function CarDetails({ }) {
       }
     }, []);
 
-    return(
-        <>
-            {/* <Helmet>
-                {
-                    console.log(product)
-                }
-                <title> {product.make} {product.model} {product.year} - Insepction Report</title>
-            </Helmet> */}
-            <section className='flex flex-col gap-[10px] details-section'>
-                <h2 className="text-[24px] font-semibold capitalize mb-3">
-                     Insepction Report
-                </h2>
-                
-                <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                    <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                        <h2 className="text-[24px] font-semibold capitalize mb-3">
-                            Car Images
-                        </h2>
-                    </AccordionSummary>
-                    <AccordionDetails className='max-w-[800px] m-auto'>
-                        <ProductDetailsCarousel product={product} />
-                    </AccordionDetails>
-                </Accordion>
-
-                {test}
-                {/* <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                    <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                        <h2 className="text-[24px] font-semibold capitalize mb-3">
-                            Car Details
-                        </h2>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                    <ul className="flex flex-wrap justify-between text-left">
-                        {carDetails}
-                    </ul>
-                    </AccordionDetails>
-                </Accordion> */}
-                
-                <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                    <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                        <div className="secondary-heading block">
+    if (!isLoading && product) {
+        return(
+            <>
+                <Helmet>
+                    <title> {product.make} Insepction Report</title>
+                </Helmet>
+                <section className='flex flex-col gap-[10px] details-section'>
+                    <h2 className="text-[24px] font-semibold capitalize mb-3">
+                        {product.make} {product.model} {product.year} - Insepction Report
+                    </h2>
+            
+                    <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+                        <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
                             <h2 className="text-[24px] font-semibold capitalize mb-3">
-                                Exterior Condition
+                                Car Images
                             </h2>
-                        </div>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                    <div className='relative max-h-[75vh] w-fit m-auto' >
-                        <img src="/assets/illustrations/CarSkeleton.png" alt="Markers" className='w-auto max-h-[75vh]'/>
-                        {product && product.exterior.markers.map((point, index) => {
-                    
-                            
-                            return(
-                            <Tooltip key={index} title={point.defect} arrow>
-                                <div className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
-                                    {index+1}
-                                </div>
-                            </Tooltip>
-                        )
-                        })}
-                    </div>
-                        {/* <div>
-                            <img src="/assets/illustrations/CarSkeleton.png" className='m-auto '/>
-                        </div> */}
-                    </AccordionDetails>
-                </Accordion>
-            </section>
-        </>
-        
+                        </AccordionSummary>
+                        <AccordionDetails className='max-w-[800px] m-auto'>
+                            <ProductDetailsCarousel product={product} />
+                        </AccordionDetails>
+                    </Accordion>
 
-    )
+                    {test}
+                
+                    
+                    <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+                        <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                            <div className="secondary-heading block">
+                                <h2 className="text-[24px] font-semibold capitalize mb-3">
+                                    Exterior Condition
+                                </h2>
+                            </div>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                        <div className='relative max-h-[75vh] w-fit m-auto' >
+                            <img src="/assets/illustrations/CarSkeleton.png" alt="Markers" className='w-auto max-h-[75vh]'/>
+                            {product && product.exterior.markers.map((point, index) => {
+                        
+                                
+                                return(
+                                <Tooltip key={index} title={point.defect} arrow onClick={() => handleOpenLightbox('https://api.carsxchange.com'+ point.photo)}>
+                                    <div  className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
+                                        {index+1}
+                                    </div>
+                                </Tooltip>
+                                
+                            )
+                            })}
+                        </div>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    <Lightbox
+                        index={selectedImage}
+                        slides={imagesLightbox}
+                        open={selectedImage >= 0}
+                        close={handleCloseLightbox}
+                        onGetCurrentIndex={(index) => setCurrentIndex(index)}
+                    />
+                </section>
+            </>
+            
+
+        )
+    }
+    else{
+        return(
+            <div className='h-[80vh] flex justify-center items-center'>
+                <LoadingScreen />
+            </div>
+        )
+    }
 }

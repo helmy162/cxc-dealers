@@ -96,7 +96,6 @@ export default function EcommerceProductDetailsPage() {
 
   const { product, isLoading, checkout } = useSelector((state) => state.product);
 
-  console.log(useSelector((state) => state.product));
   
   // const product= cars.find(item => item.id===name)
 
@@ -216,18 +215,19 @@ export default function EcommerceProductDetailsPage() {
                   (product?.status === 'pending' && 'warning') ||
                   (product?.status === 'active' && 'success') || 'success'
                 }
-                sx={{ textTransform: 'capitalize', minWidth:'100px', fontSize:'24px', minHeight:'fit-content', height:'unset', lineHeight:'unset'}}
+                sx={{ textTransform: 'capitalize', minWidth:'100px', fontSize:'18px', fontWeight:'600', padding:'6px 16px', minHeight:'fit-content', height:'unset', lineHeight:'unset',}}
               >
                 {product?.status ? sentenceCase(product?.status) : ''}
               </Label>
 
-              <Link
-                href={PATH_DASHBOARD.car.details(name)}
-                sx={{ display: 'table' }}
-                replace
+              <Button
+              component={RouterLink}
+              to={PATH_DASHBOARD.car.details(name)} // need to edit
+              variant="contained"
+              startIcon={<Iconify icon="eva:file-text-outline" />}
               >
                 View Details
-              </Link>
+              </Button>
               
             </div>
             <Card style={{marginBottom:'50px'}}>

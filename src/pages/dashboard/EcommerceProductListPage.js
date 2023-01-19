@@ -185,8 +185,6 @@ export default function EcommerceProductListPage() {
     setFilterStatus([]);
   };
 
-  console.log(useSelector((state) => state.product));
-
   return (
     <>
       <Helmet>
@@ -350,12 +348,11 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
     inputData = inputData.filter( function(product){
       if 
       (
-         product.id.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-      || product.id.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+         product.id.toString().indexOf(filterName.toLowerCase()) !== -1
       || product.make.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
       || product.model.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.year.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.seller_name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      || product.year.toString().indexOf(filterName.toLowerCase()) !== -1 
+      // || product.seller_name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 // uncomment when seller_name is ready
       )
         return true;
       return false;

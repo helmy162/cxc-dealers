@@ -211,7 +211,6 @@ export function getProduct(name) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`https://api.carsxchange.com/api/v1/inspector/cars/all`);
-      console.log("test")
       dispatch(slice.actions.getProductSuccess(response.data.find(product=> product.id == name)));
     } catch (error) {
       console.error(error);
