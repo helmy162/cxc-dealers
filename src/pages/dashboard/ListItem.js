@@ -14,7 +14,7 @@ return (
     className={`flex flex-wrap items-center justify-between border-[1px] rounded-md px-[16px] py-[10px] min-w-[100%] sm:min-w-0 mb-[10px] `}
     style={{ flexBasis: libasis}}
     >
-    <div className={`flex font-normal text-[#545252] text-[14px] items-center gap-1`} style={{flexBasis: headingbasis}}>
+    <div className={`flex font-normal text-[14px] items-center gap-1`} style={{flexBasis: headingbasis}}>
         {isSpecs?
              <Iconify icon="eva:star-outline" width={16} />
              :
