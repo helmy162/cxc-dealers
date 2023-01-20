@@ -60,7 +60,7 @@ const saveTyres = async (data) => await axiosInstance.post('inspector/add/car/wh
 const uploadPhotos = async ({ carId, ...data }) => { 
   const bodyFormData = new FormData();
   (data?.images || []).map(image => bodyFormData.append('images[]', image));
-  bodyFormData.append('car_id', 2); 
+  bodyFormData.append('car_id', carId); 
   return await axiosInstance.post('inspector/add/car/images', bodyFormData);
 };
 const saveExteriorCondition = (data) => axiosInstance.post('inspector/add/car/exterior-condition', mapExteriorConditionToApi(data));
