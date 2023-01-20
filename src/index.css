@@ -26,6 +26,14 @@
     display: none;
 }
 
+.PrivatePickersYear-yearButton.Mui-disabled {
+    display: none;
+}
+
+.PrivatePickersYear-root {
+    flex-basis: auto !important;
+}
+
 
 
 

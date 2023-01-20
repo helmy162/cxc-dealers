@@ -73,16 +73,16 @@ const generateInfo = async (form) => {
   const { data } = await axiosInstance.post('inspector/add/car/general-info', mapSummaryToApiRequest(form));
   return data?.car || {};
 };
-const saveEngineAndTransmission = (data) => axiosInstance.post('inspector/add/car/engine-transmission', mapCarDataToApiRequest(data));
-const saveSSA = (data) => axiosInstance.post('inspector/add/car/steering-suspension-brakes', mapCarDataToApiRequest(data));
-const saveIEAC = (data) => axiosInstance.post('inspector/add/car/interior-electricals-AC', mapCarDataToApiRequest(data));
-const saveCarSpecs = (data) => axiosInstance.post('inspector/add/car/specs', mapCarDataToApiRequest(data));
-const saveTyres = (data) => axiosInstance.post('inspector/add/car/wheels', mapTiresDataToApiRequest(data));
-const uploadPhotos = ({ carId, ...data }) => { 
+const saveEngineAndTransmission = async (data) => await axiosInstance.post('inspector/add/car/engine-transmission', mapCarDataToApiRequest(data));
+const saveSSA = async (data) => await axiosInstance.post('inspector/add/car/steering-suspension-brakes', mapCarDataToApiRequest(data));
+const saveIEAC = async (data) => await axiosInstance.post('inspector/add/car/interior-electricals-AC', mapCarDataToApiRequest(data));
+const saveCarSpecs = async (data) => await axiosInstance.post('inspector/add/car/specs', mapCarDataToApiRequest(data));
+const saveTyres = async (data) => await axiosInstance.post('inspector/add/car/wheels', mapTiresDataToApiRequest(data));
+const uploadPhotos = async ({ carId, ...data }) => { 
   const bodyFormData = new FormData();
   (data?.images || []).map(image => bodyFormData.append('images[]', image));
-  bodyFormData.append('car_id', carId); 
-  axiosInstance.post('inspector/add/car/images', bodyFormData);
+  bodyFormData.append('car_id', 2); 
+  return await axiosInstance.post('inspector/add/car/images', bodyFormData);
 };
 const saveExteriorCondition = (data) => axiosInstance.post('inspector/add/car/exterior-condition', mapExteriorConditionToApi(data));
 

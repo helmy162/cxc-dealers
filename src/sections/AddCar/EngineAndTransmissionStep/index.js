@@ -59,10 +59,9 @@ const fields = [
   { name: 'Silencer', label: 'Silencer'},
 ];
 
-export default function EngineAndTransmissionStep({ errors }) {
+export default function EngineAndTransmissionStep() {
   return (
     <Stack spacing={3}>
-      {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
       <Box
         rowGap={2}
         columnGap={3}

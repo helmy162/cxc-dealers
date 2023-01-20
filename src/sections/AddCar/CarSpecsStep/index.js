@@ -126,20 +126,18 @@ const clickBoxes = [
   { name: 'Anti_Lock', label: 'Anti Lock Brakes/ABS'},
   { name: 'Cruise_Control', label: 'Adaptive Cruise Control'},
   { name: 'Power_Steering', label: 'Power Steering'},
-];
-
-const moreClickBoxes = [
+  { name: 'Side_Steps', label: 'Side Steps'},
   { name: 'Carbon_Fiber_Interior', label: 'Carbon Fiber Interior'},
   { name: 'Line_Change_Assist', label: 'Line Change Assist'},
   { name: 'Park_Assist', label: 'Park Assist'},
   { name: 'Adaptive_Suspension', label: 'Adaptive Suspension'},
   { name: 'Height_Control', label: 'Height Control'},
   { name: 'Navigation_System', label: 'Navigation System'},
-]
-export default function CarSpecsStep({ errors }) {
+];
+
+export default function CarSpecsStep() {
   return (
     <Stack spacing={3}>
-      {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
       <Box
         rowGap={2}
         columnGap={3}
@@ -150,13 +148,12 @@ export default function CarSpecsStep({ errors }) {
         }}
       >
         { clickBoxes.map(field => renderAddCarSwitch({...field })) }
+        { renderAddCarSelect({ name: 'Drives', label: 'Drives', options: ENGINE_AND_TRANSMISSION_OPTIONS })}
         <RHFSelect name='	Trip_Gears' label='Triptronic Gears'>
           <MenuItem value='working'>Working</MenuItem>
           <MenuItem value='not_working'>Not working</MenuItem>
           <MenuItem value='not_available'>Not available</MenuItem>
         </RHFSelect>
-        { moreClickBoxes.map(field => renderAddCarSwitch({...field })) }
-        { renderAddCarSelect({ name: 'Drives', label: 'Drives', options: ENGINE_AND_TRANSMISSION_OPTIONS })}
         <RHFSelect name='Sunroof_Type' label='Sunroof Type'>
           <MenuItem value='sunroof'>Sunroof</MenuItem>
           <MenuItem value='panorama'>Panorama</MenuItem>
@@ -166,7 +163,6 @@ export default function CarSpecsStep({ errors }) {
           <MenuItem value='2wd'>2wd</MenuItem>
           <MenuItem value='4wd'>4wd</MenuItem>
         </RHFSelect>
-        <RHFSwitch name='Side_Steps' label='Side Steps' />
         <RHFSelect name='Convertible' label='Convertible'>
           <MenuItem value='false'>No</MenuItem>
           <MenuItem value='hard_top'>Hard top</MenuItem>
