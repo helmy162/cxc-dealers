@@ -192,7 +192,7 @@ export default function EcommerceProductDetailsPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Product Details"
+          heading="Car Details"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
@@ -226,7 +226,7 @@ export default function EcommerceProductDetailsPage() {
               variant="contained"
               startIcon={<Iconify icon="eva:file-text-outline" />}
               >
-                View Details
+                View Inspection
               </Button>
               
             </div>
