@@ -23,7 +23,7 @@ export const SummarySchema = Yup.object().shape({
   engine: Yup.object().nullable().required('Engine options are required'),
   body_type: Yup.string(),
   exterior_color: Yup.string().nullable(),
-  interios_Color: Yup.string().nullable(),
+  interior_color: Yup.string().nullable(),
   interior_type: Yup.string(),
   specification: Yup.string(),
   is_new: Yup.boolean(),
@@ -34,7 +34,7 @@ export const SummarySchema = Yup.object().shape({
   warranty: Yup.boolean(),
   accident_history: Yup.string(),
   bank_finance: Yup.boolean(),
-  additional_info: Yup.string(),
+  car_history_comment: Yup.string(),
 });
 
 export const SummaryDefaultValues = {
@@ -47,7 +47,7 @@ export const SummaryDefaultValues = {
   engine: "",
   body_type: "",
   exterior_color: null,
-  interios_Color: null,
+  interior_color: null,
   interior_type: "",
   specification: "",
   is_new: true,
@@ -58,7 +58,7 @@ export const SummaryDefaultValues = {
   warranty: true,
   accident_history: "",
   bank_finance: false,
-  additional_info: "",
+  car_history_comment: "",
 };
 
 const mapFormDataToApi = (values) => ( values ? {
@@ -170,7 +170,7 @@ export default function SummaryStep({ errors, watch }) {
 
         <RHFAutocomplete
           disabled={!values?.model && !values?.make && !values?.trim}
-          name="interios_Color"
+          name="interior_color"
           label="Interior Color"
           options={interiorColors}
         />
@@ -193,7 +193,7 @@ export default function SummaryStep({ errors, watch }) {
         <RHFCheckbox name="warranty" label="Warranty" />
         { renderAddCarSelect({ name: 'accident_history', label: 'Accident History', options: ACCIDENT_HISTORY_OPTIONS })}
         <RHFCheckbox name="bank_finance" label="Mortgage/Bank Finance" />
-        <RHFTextField name="additional_info" label="Additional Information" multiline />
+        <RHFTextField name="car_history_comment" label="Additional Information" multiline />
       </Box>
   </Stack>);
 }

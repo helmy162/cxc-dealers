@@ -195,7 +195,6 @@ export function getProducts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      
       const response = await axios.get('https://api.carsxchange.com/api/v1/inspector/cars/all');  //needs to be changed
       dispatch(slice.actions.getProductsSuccess(response.data));
     } catch (error) {

@@ -31,7 +31,7 @@ export default function CarDetails({ }) {
     const { product, isLoading, checkout } = useSelector((state) => state.product);
 
     let accordions = [];
-    const [test, setTest]= useState([]);
+    const [allAccordions, setAllAccordions]= useState([]);
     useEffect(() => {
           dispatch(getProduct(name));
           dispatch(getProducts());
@@ -47,14 +47,14 @@ export default function CarDetails({ }) {
                     if (typeof product[key] === 'object' && key !== 'exterior' && key !== 'images') {
                         let listItems = []
                         for (let subKey in product[key]) {
-                            if (product[key].hasOwnProperty(subKey) && product[key][subKey] !== null && product[key][subKey] !== "") {
-                                listItems.push(<ListItem key={subKey} heading={formatString(subKey)} value={product[key][subKey]} isSpecs={key=='specs'} />)
+                            if (product[key].hasOwnProperty(subKey) && product[key][subKey] !== null && product[key][subKey] !== "" && subKey !== 'engine') {
+                                listItems.push(<ListItem key={subKey} heading={formatString(subKey)} value={formatString(product[key][subKey].toString())} isSpecs={key=='specs'} />)
                             }
                         }
                         accordions.push(
                             <Accordion key={key} style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
                                 <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                                    <h2 className="text-[24px] font-semibold capitalize mb-3">
+                                    <h2 className="text-[20px] font-semibold capitalize mb-3">
                                         {formatString(key)}
                                     </h2>
                                 </AccordionSummary>
@@ -69,7 +69,7 @@ export default function CarDetails({ }) {
                 });
             }
         }
-        setTest(accordions);
+        setAllAccordions(accordions);
     }, [product, isLoading]);
 
 
@@ -117,16 +117,16 @@ export default function CarDetails({ }) {
         return(
             <>
                 <Helmet>
-                    <title> {`${product.make} ${product.model} ${product.year} Insepction Report`} </title>
+                    <title> {`${product.details.make} ${product.details.model} ${product.details.year} Insepction Report`} </title>
                 </Helmet>
                 <section className='flex flex-col gap-[10px] details-section'>
-                    <h2 className="text-[24px] font-semibold capitalize mb-3">
-                        {product.make} {product.model} {product.year} - Insepction Report
+                    <h2 className="text-[24px] font-semibold capitalize mb-3 text-center">
+                        {product.details.make} {product.details.model} {product.details.year} - Insepction Report
                     </h2>
             
                     <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
                         <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                            <h2 className="text-[24px] font-semibold capitalize mb-3">
+                            <h2 className="text-[20px] font-semibold capitalize mb-3">
                                 Car Images
                             </h2>
                         </AccordionSummary>
@@ -135,13 +135,13 @@ export default function CarDetails({ }) {
                         </AccordionDetails>
                     </Accordion>
 
-                    {test}
+                    {allAccordions}
                 
                     
                     <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
                         <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
                             <div className="secondary-heading block">
-                                <h2 className="text-[24px] font-semibold capitalize mb-3">
+                                <h2 className="text-[20px] font-semibold capitalize mb-3">
                                     Exterior Condition
                                 </h2>
                             </div>
