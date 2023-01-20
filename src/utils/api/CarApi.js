@@ -1,41 +1,19 @@
 import axiosInstance from "../axios";
 import { fYear } from "../formatTime";
 
-const mapSummaryToApiRequest = ({ make, model, trim, engine, year, carId,interior_type, body_type, 
-  specification, exterior_color, interior_color, registered_emirates, keys, is_new, first_owner, mileage, service_history,
-  manuals, warranty, accident_history, bank_finance, car_history_comment, ...rest }) => ({
+const mapSummaryToApiRequest = ({ make, model, trim, engine, year, carId, ...rest }) => ({
   ...rest,
-  details:{
-    model: model.name,
-    make: make.name,
-    year: fYear(year),
-    trim,
-    mileage,
-    engine: {
-      type: engine.type,
-      size: engine.size,
-      cylindres: engine.cylindres,
-      horsepower_hp: engine.horsepower_hp,
-      transmission: engine.transmission,
-      fuel_type: engine.fuel_type
-    },
-    registered_emirates,
-    interior_type,
-    body_type,
-    specification,
-    exterior_color,
-    interior_color,
-    keys,
-    is_new,
-    first_owner,
-  },
-  history:{
-    service_history,
-    manuals,
-    warranty,
-    accident_history,
-    bank_finance,
-    car_history_comment,
+  model: model.name,
+  make: make.name,
+  year: fYear(year),
+  trim,
+  engine: {
+    type: engine.type,
+    size: engine.size,
+    cylindres: engine.cylindres,
+    horsepower_hp: engine.horsepower_hp,
+    transmission: engine.transmission,
+    fuel_type: engine.fuel_type
   }
 });
 
@@ -70,6 +48,7 @@ const mapExteriorConditionToApi = ({ carId, markers }) => {
 };
 
 const generateInfo = async (form) => {
+  console.log(form);
   const { data } = await axiosInstance.post('inspector/add/car/general-info', mapSummaryToApiRequest(form));
   return data?.car || {};
 };
