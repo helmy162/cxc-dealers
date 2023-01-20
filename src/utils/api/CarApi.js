@@ -48,7 +48,6 @@ const mapExteriorConditionToApi = ({ carId, markers }) => {
 };
 
 const generateInfo = async (form) => {
-  console.log(form);
   const { data } = await axiosInstance.post('inspector/add/car/general-info', mapSummaryToApiRequest(form));
   return data?.car || {};
 };

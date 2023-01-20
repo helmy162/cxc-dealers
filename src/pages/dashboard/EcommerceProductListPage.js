@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import axiosInstance from 'src/utils/axios';
 // @mui
 import {
   Card,
@@ -143,22 +144,40 @@ export default function EcommerceProductListPage() {
     setFilterStatus(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
+  const handleDeleteRow = async (id) => {
+    try {
+        const response = await axiosInstance.delete(`admin/cars/${id}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+            const deleteRow = tableData.filter((row) => row.id !== id);
+            setSelected([]);
+            setTableData(deleteRow);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
       }
     }
-  };
+};
 
-  const handleDeleteRows = (selectedRows) => {
+  const handleDeleteRows = async (selectedRows) => {
     const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
+    selectedRows.forEach(async row => {
+      try {
+        const response = await axiosInstance.delete(`admin/cars/${row}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+          setSelected([]);
+          setTableData(deleteRows);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
 
     if (page > 0) {
       if (selectedRows.length === dataInPage.length) {

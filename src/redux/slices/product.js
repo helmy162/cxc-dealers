@@ -195,7 +195,7 @@ export function getProducts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('https://api.carsxchange.com/api/v1/inspector/cars/all');  //needs to be changed
+      const response = await axios.get('cars/all');  //needs to be changed
       dispatch(slice.actions.getProductsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -209,7 +209,7 @@ export function getProduct(name) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`https://api.carsxchange.com/api/v1/inspector/cars/all`);
+      const response = await axios.get(`cars/all`);
       dispatch(slice.actions.getProductSuccess(response.data.find(product=> product.id == name)));
     } catch (error) {
       console.error(error);
