@@ -188,17 +188,17 @@ export default function EcommerceProductListPage() {
   return (
     <>
       <Helmet>
-        <title> Cars: Product List | CarsXchange</title>
+        <title> Cars List | CarsXchange</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Product List"
+          heading="Cars List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
-              href: PATH_DASHBOARD.user.root, // need to edit
+              name: 'Cars',
+              href: PATH_DASHBOARD.car.list, // need to edit
             },
             { name: 'List' },
           ]}
@@ -209,7 +209,7 @@ export default function EcommerceProductListPage() {
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
             >
-              New Product
+              New Car
             </Button>
           }
         />
