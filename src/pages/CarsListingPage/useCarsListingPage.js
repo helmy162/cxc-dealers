@@ -6,7 +6,7 @@ import {
 import axios from 'axios';
 
 const endpoints = {
-  GET_CARS: `${process.env.REACT_APP_HOST_API_KEY}inspector/cars`
+  GET_CARS: `${process.env.REACT_APP_HOST_API_KEY}cars`
 }
 
 export default function useCarsListingPage() {

@@ -63,13 +63,22 @@ export default function InfoRow({ data }) {
           }}
         >
           <SpecItem>
-            {data.mileage}
+            {data.details.mileage} km
           </SpecItem>
           <SpecItem>
-            {data.engine.transmission}
+            {data.details.engine.transmission}
           </SpecItem>
           <SpecItem>
-            {data.exterior_color}
+            {data.details.exterior_color}
+          </SpecItem>
+          <SpecItem>
+            {data.details.year} year
+          </SpecItem>
+          <SpecItem>
+            {data.details.ggc}
+          </SpecItem>
+          <SpecItem>
+            {data.details.engine.horsepower_hp} HP
           </SpecItem>
         </Box>
       </Box>
