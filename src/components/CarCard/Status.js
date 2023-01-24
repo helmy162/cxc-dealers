@@ -8,7 +8,7 @@ const statusColors = {
 }
 
 export default function CarCardStatus({ status }) {
-  const backgroundColor = useMemo(() => statusColors[status.toLocaleLowerCase()], [status])
+  const backgroundColor = useMemo(() => statusColors[status?.toLocaleLowerCase()], [status])
   return (
     <Box
       sx={{

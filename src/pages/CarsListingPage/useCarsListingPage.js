@@ -1,6 +1,7 @@
 import {
   useState,
-  useEffect
+  useMemo,
+  useEffect,
 } from 'react';
 
 import axios from 'axios';
@@ -11,23 +12,52 @@ const endpoints = {
 
 export default function useCarsListingPage() {
   const [cars, setCars] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [isLoading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const getCars = async () => {
+  const isLoadMoreButtonVisible = useMemo(() => {
+    return cars?.length !== total;
+  }, [cars, total])
+
+  const getCars = async (page) => {
     try {
-      const { data: response } = await axios.get(endpoints.GET_CARS);
-      console.log(response);
-      setCars(response.data);
+      setLoading(true);
+      const url = `${endpoints.GET_CARS}?page=${page}`
+
+      const { data: response } = await axios.get(url);
+
+      if (!total) {
+        setTotal(response.total);
+      }
+
+      setCars((oldCars) => ([
+        ...oldCars,
+        ...response.data
+      ]));
+      setLoading(false);
     } catch (error) {
       console.error('getCars error:', error);
+      setLoading(false);
     }
   }
 
+  const loadMore = () => {
+    setCurrentPage(currentPage + 1);
+    getCars(currentPage + 1);
+  }
+
   useEffect(() => {
-    getCars();
+    if (!cars.length) {
+      getCars(currentPage);
+    }
   }, []);
 
   return {
+    isLoading,
     cars,
-    setCars
+    total,
+    isLoadMoreButtonVisible,
+    loadMore,
   }
 }

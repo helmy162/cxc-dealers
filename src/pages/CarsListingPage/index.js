@@ -3,8 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import {
   Box,
   Container,
-  Button
+  Button,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 import Filters from './Filters';
 import CarsList from './CarsList';
@@ -50,7 +51,10 @@ export default function CarsListingPage() {
   const [isFilterVisible, setFilterVisible] = useState(false);
 
   const {
+    isLoading,
     cars,
+    isLoadMoreButtonVisible,
+    loadMore
   } = useCarsListingPage();
 
   const toggleFilter = () => {
@@ -89,7 +93,7 @@ export default function CarsListingPage() {
           }}
         />
         <Box sx={{
-          width: '100%'
+          width: '100%',
         }}>
           <Box
             sx={{
@@ -115,6 +119,20 @@ export default function CarsListingPage() {
           {isFilterVisible && <Filters sx={{ marginBottom: '20px' }} />}
           <AppliedFilters />
           <CarsList cars={cars} />
+          <Box sx={{ display: 'flex' }}>
+            {isLoadMoreButtonVisible && (
+              <LoadingButton
+                sx={{
+                  margin: 'auto'
+                }}
+                loading={isLoading}
+                variant="contained"
+                onClick={loadMore}
+              >
+                Load More
+              </LoadingButton>
+            )}
+          </Box>
         </Box>
       </Container>
     </Box>
