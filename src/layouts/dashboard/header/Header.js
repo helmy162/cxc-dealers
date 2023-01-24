@@ -59,7 +59,7 @@ export default function Header({ onOpenNav }) {
         spacing={{ xs: 0.5, sm: 1.5 }}
       >
 
-        <NotificationsPopover />
+        {/* <NotificationsPopover /> */}
 
         <AccountPopover />
       </Stack>

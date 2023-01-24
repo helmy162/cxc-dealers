@@ -84,14 +84,8 @@ export default function ProductDetailsCarousel({ product }) {
 
   const [selectedImage, setSelectedImage] = useState(-1);
 
-  const mockImages = [
-    'https://i.ibb.co/yS4n4t1/gallerymain.jpg',
-    'https://i.ibb.co/41GgSx1/gallerymain-2.jpg',
-    'https://i.ibb.co/BBzfzcK/gallerymain-3.jpg',
-    'https://i.ibb.co/k9T5XZ0/gallerymain-1.jpg'
-];
-
-  const imagesLightbox = mockImages.map((img) => ({ src: img }));
+  const mainImages = product.images.map((img) => ('https://api.carsxchange.com'+ img));
+  const imagesLightbox = mainImages.map((img) => ({ src: img }));
 
   const handleOpenLightbox = (imageUrl) => {
     const imageIndex = imagesLightbox.findIndex((image) => image.src === imageUrl);
@@ -120,7 +114,7 @@ export default function ProductDetailsCarousel({ product }) {
     focusOnSelect: true,
     variableWidth: true,
     centerPadding: '0px',
-    slidesToShow: mockImages.length > 3 ? 3 : mockImages.length,
+    slidesToShow: mainImages.length > 3 ? 3 : mainImages.length,
   };
 
   useEffect(() => {
@@ -147,7 +141,7 @@ export default function ProductDetailsCarousel({ product }) {
   const renderLargeImg = (
     <Box sx={{ mb: 3, borderRadius: 2, overflow: 'hidden', position: 'relative' }}>
       <Carousel {...carouselSettings1} asNavFor={nav2} ref={carousel1}>
-        {mockImages.map((img) => (
+        {mainImages.map((img) => (
           <Image
             key={img}
             alt="product"
@@ -161,7 +155,7 @@ export default function ProductDetailsCarousel({ product }) {
 
       <CarouselArrowIndex
         index={currentIndex}
-        total={mockImages.length}
+        total={mainImages.length}
         onNext={handleNext}
         onPrevious={handlePrev}
       />
@@ -169,9 +163,9 @@ export default function ProductDetailsCarousel({ product }) {
   );
 
   const renderThumbnails = (
-    <StyledThumbnailsContainer length={mockImages.length}>
+    <StyledThumbnailsContainer length={mainImages.length}>
       <Carousel {...carouselSettings2} asNavFor={nav1} ref={carousel2}>
-        {mockImages.map((img, index) => (
+        {mainImages.map((img, index) => (
           <Image
             key={img}
             disabledEffect

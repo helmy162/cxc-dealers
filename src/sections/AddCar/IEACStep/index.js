@@ -27,7 +27,7 @@ export const IEACSchema = Yup.object().shape({
   AC_Cooling: Yup.string(),
   Convertible_Operations: Yup.string(),
   AC_Heating: Yup.string(),
-  Extra_Comments: Yup.string(),
+  Interior_Comment: Yup.string(),
 });
 
 export const IEACDefaultValues = {
@@ -51,7 +51,7 @@ export const IEACDefaultValues = {
   AC_Cooling: "no_visible_fault",
   Convertible_Operations: "no_visible_fault",
   AC_Heating: "no_visible_fault",
-  Extra_Comments: "",
+  Interior_Comment: "",
 };
 
 const fields = [
@@ -77,10 +77,9 @@ const fields = [
   { name: 'AC_Heating', label: 'AC Heating'},
 ];
 
-export default function SSAStep({ errors }) {
+export default function SSAStep() {
   return (
     <Stack spacing={3}>
-      {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
       <Box
         rowGap={2}
         columnGap={3}
@@ -91,7 +90,7 @@ export default function SSAStep({ errors }) {
         }}
       >
         { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
-        <RHFTextField name="Extra_Comments" label="Comments" multiline />
+        <RHFTextField name="Interior_Comment" label="Comments" multiline />
       </Box>
 
   </Stack>);

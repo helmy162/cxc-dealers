@@ -28,7 +28,7 @@ import Label from '../../components/label';
 import Scrollbar from '../../components/scrollbar';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct, addToCart, gotoStep } from '../../redux/slices/product';
+import { getProduct, getProducts, addToCart, gotoStep } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -62,24 +62,6 @@ const TABLE_HEAD = [
 ];
 
 
-const SUMMARY = [
-  {
-    title: '100% Original',
-    description: 'Chocolate bar candy canes ice cream toffee cookie halvah.',
-    icon: 'ic:round-verified',
-  },
-  {
-    title: '10 Day Replacement',
-    description: 'Marshmallow biscuit donut dragée fruitcake wafer.',
-    icon: 'eva:clock-fill',
-  },
-  {
-    title: 'Year Warranty',
-    description: 'Cotton candy gingerbread cake I love sugar sweet.',
-    icon: 'ic:round-verified-user',
-  },
-];
-
 // ----------------------------------------------------------------------
 
 export default function EcommerceProductDetailsPage() {
@@ -112,13 +94,15 @@ export default function EcommerceProductDetailsPage() {
 
   const dispatch = useDispatch();
 
-  const { isLoading, checkout } = useSelector((state) => state.product);
+  const { product, isLoading, checkout } = useSelector((state) => state.product);
+
   
-  const product= cars.find(item => item.id===name)
+  // const product= cars.find(item => item.id===name)
 
   const [currentTab, setCurrentTab] = useState('inspection');
 
-  const [tableData, setTableData] = useState([...product.bidders]);
+  // const [tableData, setTableData] = useState([...product.bidders]);
+  const [tableData, setTableData] = useState([]);
 
   const [filterName, setFilterName] = useState('');
 
@@ -160,6 +144,7 @@ export default function EcommerceProductDetailsPage() {
   useEffect(() => {
     if (name) {
       dispatch(getProduct(name));
+      dispatch(getProducts());
     }
   }, [dispatch, name]);
 
@@ -207,7 +192,7 @@ export default function EcommerceProductDetailsPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Product Details"
+          heading="Car Details"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
@@ -226,21 +211,23 @@ export default function EcommerceProductDetailsPage() {
               <Label
                 variant="soft"
                 color={
-                  (product?.auction === 'expired' && 'error') ||
-                  (product?.auction === 'wait_auction' && 'warning') ||
-                  (product?.auction === 'active' && 'success') || 'success'
+                  (product?.status === 'expired' && 'error') ||
+                  (product?.status === 'pending' && 'warning') ||
+                  (product?.status === 'active' && 'success') || 'success'
                 }
-                sx={{ textTransform: 'capitalize', minWidth:'100px', fontSize:'24px', minHeight:'fit-content', height:'unset', lineHeight:'unset'}}
+                sx={{ textTransform: 'capitalize', minWidth:'100px', fontSize:'18px', fontWeight:'600', padding:'6px 16px', minHeight:'fit-content', height:'unset', lineHeight:'unset',}}
               >
-                {product?.auction ? sentenceCase(product?.auction) : ''}
+                {product?.status ? sentenceCase(product?.status) : ''}
               </Label>
 
-              <Link
-                href={PATH_DASHBOARD.car.details(name)}
-                sx={{ display: 'table' }}
+              <Button
+              component={RouterLink}
+              to={PATH_DASHBOARD.car.details(name)} // need to edit
+              variant="contained"
+              startIcon={<Iconify icon="eva:file-text-outline" />}
               >
-                View Details
-              </Link>
+                View Inspection
+              </Button>
               
             </div>
             <Card style={{marginBottom:'50px'}}>
@@ -348,14 +335,8 @@ export default function EcommerceProductDetailsPage() {
               dense={dense}
               onChangeDense={onChangeDense}
             />
-
-            
           </>
         )}
-        {pdfOpen && (
-          <CarDetails car={product} onClose={() => setPdfOpen(false)} />
-        )}
-
         {isLoading && <SkeletonProductDetails />}
       </Container>
     </>

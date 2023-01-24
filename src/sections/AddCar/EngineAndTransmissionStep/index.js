@@ -22,7 +22,7 @@ export const EngineAndTransmissionSchema = Yup.object().shape({
   Engine_Idling: Yup.string(),
   Gear_Shifting: Yup.string(),
   Silencer: Yup.string(),
-  Extra_Comments: Yup.string(),
+  Engine_Comment: Yup.string(),
 });
 
 export const EngineAndTransmissionDefaultValues = {
@@ -40,7 +40,7 @@ export const EngineAndTransmissionDefaultValues = {
   Engine_Idling: 'no_visible_fault',
   Gear_Shifting: 'no_visible_fault',
   Silencer: 'no_visible_fault',
-  Extra_Comments: '',
+  Engine_Comment: '',
 };
 
 const fields = [
@@ -59,10 +59,9 @@ const fields = [
   { name: 'Silencer', label: 'Silencer'},
 ];
 
-export default function EngineAndTransmissionStep({ errors }) {
+export default function EngineAndTransmissionStep() {
   return (
     <Stack spacing={3}>
-      {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
       <Box
         rowGap={2}
         columnGap={3}
@@ -73,7 +72,7 @@ export default function EngineAndTransmissionStep({ errors }) {
         }}
       >
         { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
-        <RHFTextField name="Extra_Comments" label="Comments" multiline />
+        <RHFTextField name="Engine_Comment" label="Comments" multiline />
       </Box>
   </Stack>);
 }

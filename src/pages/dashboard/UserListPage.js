@@ -357,10 +357,6 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
     inputData = inputData.filter((user) => user.status === filterStatus);
   }
 
-  if (filterRole !== 'all') {
-    console.log(inputData)
-    inputData = inputData.filter((user) => user.role === filterRole);
-  }
 
   return inputData;
 }

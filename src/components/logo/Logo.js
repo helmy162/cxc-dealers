@@ -22,7 +22,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
     <Box
       component="img"
       src="/logo/logo_single_cropped.svg"
-      sx={{ width: 100, height: 100, cursor: 'pointer', margin:'auto', ...sx }}
+      sx={{ width: 50, height: 50, cursor: 'pointer', margin:'auto', ...sx }}
     />
   );
 

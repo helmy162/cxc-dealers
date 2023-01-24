@@ -10,7 +10,7 @@ export const PhotosDefaultValues = {
   images: []
 };
 
-export default function PhotosStep ({ errors, watch, setValue }) {
+export default function PhotosStep ({ watch, setValue }) {
   const images = watch('images');
 
   const handleDrop = useCallback(
@@ -35,7 +35,6 @@ export default function PhotosStep ({ errors, watch, setValue }) {
 
   return (
     <Stack spacing={3}>
-      {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
       <Box
         rowGap={2}
         columnGap={3}

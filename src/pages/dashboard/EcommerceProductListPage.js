@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import axiosInstance from 'src/utils/axios';
 // @mui
 import {
   Card,
@@ -54,7 +55,7 @@ const TABLE_HEAD = [
 
 const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
-  { value: 'wait_auction', label: 'Wait Auction' },
+  { value: 'pending', label: 'Pending' },
   { value: 'expired', label: 'Expired' },
 ];
 
@@ -100,15 +101,15 @@ export default function EcommerceProductListPage() {
 
   //uncomment when the endpoint is ready with the same data structure
 
-  // useEffect(() => {
-  //   dispatch(getProducts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (products.length) {
-  //     setTableData(products);
-  //   }
-  // }, [products]);
+  useEffect(() => {
+    if (products && products.length) {
+      setTableData(products);
+    }
+  }, [products]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -143,22 +144,40 @@ export default function EcommerceProductListPage() {
     setFilterStatus(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
+  const handleDeleteRow = async (id) => {
+    try {
+        const response = await axiosInstance.delete(`admin/cars/${id}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+            const deleteRow = tableData.filter((row) => row.id !== id);
+            setSelected([]);
+            setTableData(deleteRow);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
       }
     }
-  };
+};
 
-  const handleDeleteRows = (selectedRows) => {
+  const handleDeleteRows = async (selectedRows) => {
     const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
+    selectedRows.forEach(async row => {
+      try {
+        const response = await axiosInstance.delete(`admin/cars/${row}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+          setSelected([]);
+          setTableData(deleteRows);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
 
     if (page > 0) {
       if (selectedRows.length === dataInPage.length) {
@@ -173,11 +192,11 @@ export default function EcommerceProductListPage() {
   };
 
   const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.car.edit(paramCase(id)));
+    navigate(PATH_DASHBOARD.car.edit(id));
   };
 
   const handleViewRow = (id) => {
-    navigate(PATH_DASHBOARD.car.view(paramCase(id)));
+    navigate(PATH_DASHBOARD.car.view(id));
   };
 
   const handleResetFilter = () => {
@@ -188,17 +207,17 @@ export default function EcommerceProductListPage() {
   return (
     <>
       <Helmet>
-        <title> Cars: Product List | CarsXchange</title>
+        <title> Cars List | CarsXchange</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Product List"
+          heading="Cars List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
-              href: PATH_DASHBOARD.user.root, // need to edit
+              name: 'Cars',
+              href: PATH_DASHBOARD.car.list, // need to edit
             },
             { name: 'List' },
           ]}
@@ -209,7 +228,7 @@ export default function EcommerceProductListPage() {
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
             >
-              New Product
+              New Car
             </Button>
           }
         />
@@ -347,13 +366,12 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
   if (filterName) {
     inputData = inputData.filter( function(product){
       if 
-      (
-         product.id.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-      || product.id.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-      || product.make.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.model.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.year.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.seller_name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      ( 
+         product.id.toString().indexOf(filterName.toLowerCase()) !== -1
+      || product.details.make.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
+      || product.details.model.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
+      || product.details.year.toString().indexOf(filterName.toLowerCase()) !== -1 
+      // || product.seller_name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 // uncomment when seller_name is ready
       )
         return true;
       return false;
@@ -361,7 +379,7 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
   }
 
   if (filterStatus.length) {
-    inputData = inputData.filter((product) => filterStatus.includes(product.auction));
+    inputData = inputData.filter((product) => filterStatus.includes(product.status));
   }
 
   return inputData;
