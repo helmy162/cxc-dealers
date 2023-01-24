@@ -26,7 +26,11 @@ export default function AppliedFilters() {
         padding: '23px 30px',
         borderRadius: '8px',
         border: '1px solid #DFDFDF',
-        maxWidth: '797px'
+        maxWidth: '797px',
+        width: {
+          xs: '100%',
+          xl: '797px'
+        }
       }}
     >
       <Typography

@@ -3,12 +3,12 @@ import { Box } from '@mui/material';
 
 const statusColors = {
   expired: '#E32519',
-  live: '#1FD63C'
+  live: '#1FD63C',
+  pending: '#ffc400'
 }
 
 export default function CarCardStatus({ status }) {
-  const backgroundColor = useMemo(() => statusColors[status.toLocaleLowerCase()], [status])
-
+  const backgroundColor = useMemo(() => statusColors[status?.toLocaleLowerCase()], [status])
   return (
     <Box
       sx={{

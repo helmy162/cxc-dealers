@@ -28,9 +28,9 @@ export default function CarCard({
         flexDirection: { xs: 'column', sm: 'row' }
       }}>
         <Typography variant="h4">
-          {data.name}
+          {data.make}
         </Typography>
-        <Timer time={data.auctionEndTime} />
+        {/* <Timer time={data.auctionEndTime} /> */}
       </Box>
       <InfoRow data={data} />
       <Status status={data.status} />
