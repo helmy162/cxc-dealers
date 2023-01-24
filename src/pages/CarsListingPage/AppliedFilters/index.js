@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import {
   Box,
-  Typography
+  Typography,
+  Select,
+  MenuItem
 } from '@mui/material';
 
 import { useRecoilState } from 'recoil';
@@ -9,17 +12,23 @@ import FilterItem from './FilterItem'
 
 import filterAtom from '../FilterAtom';
 
+import './style.css'
+
 
 export default function AppliedFilters() {
   const [filters] = useRecoilState(filterAtom);
+  const [sortBy, setSortBy] = useState('Sort by');
+
+  console.log('sortBy', sortBy)
   console.log("🚀 ~ file: AppliedFilters.js:13 ~ AppliedFilters ~ filters", filters)
 
   return (
     <Box
+      className="filters"
       sx={{
         display: 'flex',
         alignItems: 'center',
-        flexWrap: 'wrap',
+        justifyContent: 'space-between',
         gap: '14px',
         marginBottom: '20px',
         background: 'white',
@@ -33,66 +42,90 @@ export default function AppliedFilters() {
         }
       }}
     >
-      <Typography
-        variant="span"
+      <Box
         sx={{
-          color: '#8184A3',
-          fontSize: '16px',
-          fontWeight: 500
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '14px',
         }}
       >
-        Filtering by: {' '}
-      </Typography>
-      {filters.make && (
-        <FilterItem>
-          {`Make: ${filters.make}`}
-        </FilterItem>
-      )}
-      {filters.model && (
-        <FilterItem>
-          {`Model: ${filters.model}`}
-        </FilterItem>
-      )}
-      {filters.variant && (
-        <FilterItem>
-          {`Variant: ${filters.variant}`}
-        </FilterItem>
-      )}
-      {filters?.years?.map((year) => (
-        <FilterItem key={`filter-item-year-${year}`}>
-          {`Year: ${year}`}
-        </FilterItem>
-      ))}
-      {filters.mileage && (
-        <>
+        <Typography
+          variant="span"
+          sx={{
+            color: '#8184A3',
+            fontSize: '16px',
+            fontWeight: 500
+          }}
+        >
+          Filtering by: {' '}
+        </Typography>
+        {filters.make && (
           <FilterItem>
-            {`Mileage from: ${filters.mileage.from}`}
+            {`Make: ${filters.make}`}
           </FilterItem>
+        )}
+        {filters.model && (
           <FilterItem>
-            {`Mileage to: ${filters.mileage.to}`}
+            {`Model: ${filters.model}`}
           </FilterItem>
-        </>
-      )}
-      {filters.bodyType && (
-        <FilterItem>
-          {`Body Type: ${filters.bodyType}`}
-        </FilterItem>
-      )}
-      {filters.color && (
-        <FilterItem>
-          {`Color: ${filters.color}`}
-        </FilterItem>
-      )}
-      {filters.sellersPrice && (
-        <>
+        )}
+        {filters.variant && (
           <FilterItem>
-            {`Seller's Price from: ${filters.sellersPrice.from}`}
+            {`Variant: ${filters.variant}`}
           </FilterItem>
+        )}
+        {filters?.years?.map((year) => (
+          <FilterItem key={`filter-item-year-${year}`}>
+            {`Year: ${year}`}
+          </FilterItem>
+        ))}
+        {filters.mileage && (
+          <>
+            <FilterItem>
+              {`Mileage from: ${filters.mileage.from}`}
+            </FilterItem>
+            <FilterItem>
+              {`Mileage to: ${filters.mileage.to}`}
+            </FilterItem>
+          </>
+        )}
+        {filters.bodyType && (
           <FilterItem>
-            {`Seller's Price to: ${filters.sellersPrice.to}`}
+            {`Body Type: ${filters.bodyType}`}
           </FilterItem>
-        </>
-      )}
+        )}
+        {filters.color && (
+          <FilterItem>
+            {`Color: ${filters.color}`}
+          </FilterItem>
+        )}
+        {filters.sellersPrice && (
+          <>
+            <FilterItem>
+              {`Seller's Price from: ${filters.sellersPrice.from}`}
+            </FilterItem>
+            <FilterItem>
+              {`Seller's Price to: ${filters.sellersPrice.to}`}
+            </FilterItem>
+          </>
+        )}
+      </Box>
+
+      <Select
+        value={sortBy}
+        onChange={(event) => setSortBy(event.target.value)}
+        label="Sort by"
+        sx={{
+          border: 'solid #127BBF 1.5px',
+          height: '40px'
+        }}
+      >
+        <MenuItem value="Sort by" disabled>Sort by</MenuItem>
+        {Object.entries(filters).map(([key, value]) => (
+          <MenuItem key={`${key}-${value}`} value={value}>{`${key} ${value}`}</MenuItem>
+        ))}
+      </Select>
     </Box>
   )
 }
