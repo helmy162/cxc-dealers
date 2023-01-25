@@ -138,7 +138,7 @@ export default function SummaryStep({ errors, watch, setValue }) {
           label="Year"
           openTo="year"
           className='add-car-datepicker'
-          shouldDisableYear={year => fYear(year) < values?.generation?.yearFrom || fYear(year) > values?.generation?.yearTo || fYear(year) > new Date().getFullYear()}
+          shouldDisableYear={year => fYear(year) < values?.generation?.yearFrom || fYear(year) > values?.generation?.yearTo}
         />
         <RHFSelect
           disabled={!values?.model && !values?.make}
