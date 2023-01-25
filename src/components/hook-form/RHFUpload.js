@@ -74,6 +74,30 @@ RHFUpload.propTypes = {
 export function RHFUpload({ name, multiple, helperText, ...other }) {
   const { control } = useFormContext();
 
+  const handleChange = (files) => {
+    let sizeError = false;
+    if (multiple) {
+      files = files.filter((file) => {
+        if (file.size > 4000000) {
+          sizeError = true;
+          return false;
+        }
+        return true;
+      });
+    } else {
+      if (files[0].size > 4000000) {
+        sizeError = true;
+        files = [];
+      }
+    }
+    control.setValue(name, files);
+    control.setError(name, {
+      type: "sizeError",
+      message: sizeError ? "File size can't be more than 4MB" : undefined
+    });
+  };
+  
+
   return (
     <Controller
       name={name}
@@ -85,6 +109,7 @@ export function RHFUpload({ name, multiple, helperText, ...other }) {
             accept={{ 'image/*': [] }}
             files={field.value}
             error={!!error}
+            onChange={handleChange}
             helperText={
               (!!error || helperText) && (
                 <FormHelperText error={!!error} sx={{ px: 2 }}>
@@ -99,6 +124,7 @@ export function RHFUpload({ name, multiple, helperText, ...other }) {
             accept={{ 'image/*': [] }}
             file={field.value}
             error={!!error}
+            onChange={handleChange}
             helperText={
               (!!error || helperText) && (
                 <FormHelperText error={!!error} sx={{ px: 2 }}>
@@ -113,3 +139,4 @@ export function RHFUpload({ name, multiple, helperText, ...other }) {
     />
   );
 }
+
