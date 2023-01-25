@@ -1,9 +1,24 @@
+import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
-import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
+// form
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, Route } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
+
+import { DatePicker, CalendarPicker } from '@mui/x-date-pickers';
+import {
+  TimePicker,
+  MobileTimePicker,
+  StaticTimePicker,
+  DesktopTimePicker,
+} from '@mui/x-date-pickers';
+import { LoadingButton } from '@mui/lab';
 import { Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack,
   Table,
   Button,
@@ -11,6 +26,8 @@ import { Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack,
   Tooltip,
   TableBody,
   IconButton,
+  InputAdornment,
+  TextField,
   TableContainer,} from '@mui/material';
 import {
   useTable,
@@ -23,6 +40,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from '../../components/table';
+import {RHFTextField, RHFAutocomplete } from '../../components/hook-form';
+import FormProvider from '../../components/hook-form';
 import { sentenceCase } from 'change-case';
 import Label from '../../components/label';
 import Scrollbar from '../../components/scrollbar';
@@ -49,6 +68,8 @@ import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
 import { cars } from '../../_mock/assets/cars';
 import CarPDF from './CarPDF.js';
 import CarDetails from './CarDetails.js';
+import { slideAnimationDuration } from '@mui/x-date-pickers/CalendarPicker/PickersSlideTransition';
+import { func } from 'prop-types';
 
 
 // ----------------------------------------------------------------------
@@ -95,7 +116,6 @@ export default function EcommerceProductDetailsPage() {
   const dispatch = useDispatch();
 
   const { product, isLoading, checkout } = useSelector((state) => state.product);
-
   
   // const product= cars.find(item => item.id===name)
 
@@ -148,6 +168,23 @@ export default function EcommerceProductDetailsPage() {
     }
   }, [dispatch, name]);
 
+  const auctionDurations = [
+    '1 Hour',
+    '2 Hours',
+    '3 Hours',
+    '6 Hours',
+    '12 Hours',
+    '24 Hours',
+    '48 Hours',
+    '72 Hours',
+  ];
+
+  const [auctionDate, setAuctionDate] = useState(new Date());
+  const [auctionTime, setAuctionTime] = useState(new Date());
+  const [duration, setDuration] = useState(auctionDurations[0]);
+  const [inputValue, setInputValue] = useState('')
+
+  
 
   const TABS = [
     {
@@ -183,7 +220,57 @@ export default function EcommerceProductDetailsPage() {
       `} /> : null,
     }
   ];
-  const [pdfOpen, setPdfOpen] = useState(false);
+
+  const NewProductSchema = Yup.object().shape({
+    start_price: Yup.number().moreThan(0, 'Price should not be $0.00'),
+    duration: Yup.string().required('Duration is required'),
+    auctionDate: Yup.date().required('Auction date is required'),
+    auctionTime: Yup.date().required('Auction time is required'),
+    auctionFullDate: Yup.date().required('Auction date is required'),
+  });
+
+  const defaultValues = useMemo(
+    () => ({
+      start_price: product?.start_price || 0,
+      duration: product?.duration || auctionDurations[0],
+      auctionDate: product?.auctionDate || new Date(),
+      auctionTime: product?.auctionTime || new Date(),
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [product]
+  );
+
+  const methods = useForm({
+    resolver: yupResolver(NewProductSchema),
+    defaultValues,
+  });
+
+  const {
+    reset,
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const onSubmit = async (data) => {
+    try {
+      const date = new Date(auctionDate.getFullYear(), auctionDate.getMonth(), auctionDate.getDate(), auctionTime.getHours(), auctionTime.getMinutes());
+      const duration = data.duration;
+      var parts = duration.split(" ");
+      var hours = parts[0];
+      var isoDuration = `PT${hours}H`;
+      const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price};
+      const res = await axios.post('http://your-endpoint.com', mergedDate);
+      console.log(res);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      // reset();
+      console.log('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -259,6 +346,86 @@ export default function EcommerceProductDetailsPage() {
                   )
               )}
             </Card>
+
+            <div style={{zIndex:'10000', marginBottom:'50px'}}>
+              <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} className="flex gap-4 items-center flex-wrap justify-center">
+                <RHFTextField
+                  name="start_price"
+                  className="!w-1/6 !min-w-[200px]"
+                  label="Start Price"
+                  placeholder="0.00"
+                  onChange={(event) =>
+                    setValue('start_price', Number(event.target.value), { shouldValidate: true })
+                  }
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="start">
+                        <Box component="span" sx={{ color: 'text.disabled' }}>
+                          AED
+                        </Box>
+                      </InputAdornment>
+                    ),
+                    type: 'number',
+                  }}
+                />
+
+                <DatePicker
+                  name="auctionDate"
+                  label="Auction Date"
+                  value={auctionDate}
+                  onChange={function (newValue) {
+                    setValue('auctionDate', newValue, { shouldValidate: true });
+                    setAuctionDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} className="!w-fit"/>}
+                  
+                />
+
+                <TimePicker
+                  name="auctionTime"
+                  ampm={false}
+                  label="Auction Time"
+                  value={auctionTime}
+                  onChange={function (newValue) {
+                    setValue('auctionTime', newValue, { shouldValidate: true });
+                    setAuctionTime(newValue);
+                  }}
+                  renderInput={(params) => <TextField  {...params} className="!w-fit" />}
+                />
+
+                <RHFAutocomplete
+                  className="!w-1/6 !min-w-[200px]"
+                  name="duration"
+                  label="Auction Duration"
+                  value={duration}
+                  onChange={function(_,newValue){
+                    setDuration(newValue)
+                    setValue('duration', newValue, { shouldValidate: true })
+                  }}         
+                  inputValue={inputValue}
+                  onInputChange={(_, newInputValue) => {
+                    setInputValue(newInputValue)
+                  }}     
+                  options={auctionDurations.map((option) => option)}
+                  ChipProps={{ size: 'small' }}
+                />
+
+                <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+                  Start Auction
+                </LoadingButton>
+
+              </FormProvider>
+            {/* <ModernDatepicker
+              date={auctionDate}
+              format={'DD-MM-YYYY'}
+              showBorder
+              onChange={date => setAuctionDate(date)}
+              placeholder={'Select a date'}
+              className="datePicker"
+            /> */}
+
+            </div>
             
             <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
               <TableSelectedAction
