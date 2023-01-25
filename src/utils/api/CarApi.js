@@ -1,19 +1,19 @@
 import axiosInstance from "../axios";
 import { fYear } from "../formatTime";
 
-const mapSummaryToApiRequest = ({ make, model, trim, engine, year, carId, ...rest }) => ({
+const mapSummaryToApiRequest = ({ make, model, trim, engine, year, carId, generation, ...rest }) => ({
   ...rest,
   model: model.name,
   make: make.name,
   year: fYear(year),
-  trim,
+  trim: trim.trim + ' ' + trim.series,
+  genration: generation.name,
   engine: {
-    type: engine.type,
-    size: engine.size,
-    cylindres: engine.cylindres,
-    horsepower_hp: engine.horsepower_hp,
+    type: engine.engineType,
+    size: engine.capacityCm3,
+    cylindres: engine.numberOfCylinders,
+    horsepower_hp: engine.engineHp,
     transmission: engine.transmission,
-    fuel_type: engine.fuel_type
   }
 });
 
