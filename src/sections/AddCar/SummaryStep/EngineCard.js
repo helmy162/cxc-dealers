@@ -12,16 +12,14 @@ export default function EngineCard ({ option, obj }) {
     {...option}
   >
     <Typography variant="caption" display="block">EngineCC</Typography>
-    <Typography variant="subtitle2">{obj.size}</Typography>
+    <Typography variant="subtitle2">{obj.capacityCm3}</Typography>
     <Typography variant="caption" display="block" >Cylinders</Typography>
-    <Typography variant="subtitle2" >{obj.cylinders}</Typography>
+    <Typography variant="subtitle2" >{obj.numberOfCylinders}</Typography>
     <Typography variant="caption" display="block" >Engine Type</Typography>
-    <Typography variant="subtitle2" >{obj.engine_type}</Typography>
+    <Typography variant="subtitle2" >{obj.engineType}</Typography>
     <Typography variant="caption" display="block" >Horsepower (in BHP)</Typography>
-    <Typography variant="subtitle2" >{obj.horsepower_hp}</Typography>
-    <Typography variant="caption" display="block" >Transmission type</Typography>
-    <Typography variant="subtitle2" >{obj.transmission}</Typography>
-    <Typography variant="caption" display="block" >Fuel Type</Typography>
-    <Typography variant="subtitle2" >{obj.fuel_type}</Typography>
+    <Typography variant="subtitle2" >{obj.engineHp}</Typography>
+    <Typography variant="caption" display="block" >Number of Gears</Typography>
+    <Typography variant="subtitle2" >{obj.numberOfGears}</Typography>
   </Box>
 }

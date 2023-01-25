@@ -8,12 +8,13 @@ FormProvider.propTypes = {
   children: PropTypes.node,
   methods: PropTypes.object,
   onSubmit: PropTypes.func,
+  className: PropTypes.string,
 };
 
-export default function FormProvider({ children, onSubmit, methods }) {
+export default function FormProvider({ children, onSubmit, methods, className }) {
   return (
     <Form {...methods}>
-      <form onSubmit={onSubmit}>{children}</form>
+      <form onSubmit={onSubmit} className={className}>{children}</form>
     </Form>
   );
 }
