@@ -1,28 +1,28 @@
+import { set } from 'lodash';
 import { useState, useEffect } from 'react';
 import RapidApi from 'src/utils/api/rapidapi';
 import { fYear } from 'src/utils/formatTime';
 
-function useAddCarAutocompletes ({ year, make, model, trim }) {
+function useAddCarAutocompletes ({ year, make, model, trim, generation }) {
   const [ makes, setMakes ] = useState([]);
   const [ models, setModels ] = useState([]);
+  const [ generations, setGenerations ] = useState([])
   const [ years, setYears ] = useState([]);
   const [ trims, setTrims ] = useState([]);
   const [ engines, setEngines ] = useState([]);
-  const [ exteriorColors, setExteriorColors ] = useState([]);
-  const [ interiorColors, setInteriorColors ] = useState([]);
 
   useEffect(() => {
     async function fetchOptions() {
-      const makes = await RapidApi.fetchMakes(fYear(year));
+      const makes = await RapidApi.fetchMakes();
       setMakes(makes)
     }
     fetchOptions();
-  }, [year]);
+  }, []);
 
   useEffect(() => {
     async function fetchOptions() {
       if (make) {
-        const models = await RapidApi.fetchModels(make);
+        const models = await RapidApi.fetchModels(make.id);
         setModels(models);
       }
     }
@@ -31,28 +31,30 @@ function useAddCarAutocompletes ({ year, make, model, trim }) {
 
   useEffect(() => {
     async function fetchOptions() {
+      if (model) {
+        const generations = await RapidApi.fetchGenerations(model.id);
+        setGenerations(generations);
+      }
+    }
+    fetchOptions();
+  }, [model]);
+
+  useEffect(() => {
+    async function fetchOptions() {
       if (make && model) {
-        const years = await RapidApi.fetchYears({ make, model });
-        setYears(years);
-        const formattedYear = fYear(year);
-        const params = { make, model, year: formattedYear }
-        const trims = await RapidApi.fetchTrims(params);
-        setTrims([...new Set(trims.map(trim => trim.name))]);
+        const trims = await RapidApi.fetchTrims(generation.id);
+        setTrims(trims);
         if (trim) {
-          const engines = await RapidApi.fetchEngines({ ...params, trim });
-          setEngines(engines);
-          const exteriorColors = await RapidApi.fetchExteriorColors({ ...params, trim });
-          setExteriorColors([...new Set(exteriorColors.map(color => color.name))]);
-          const interiorColors = await RapidApi.fetchInteriorColors({ ...params, trim });
-          setInteriorColors([...new Set(interiorColors.map(color => color.name))]);
+          const specs = await RapidApi.fetchSpecs(trim.id);
+          setEngines(specs);
         }
       }
       
     }
     fetchOptions();
-  }, [make, model, year, trim]);
+  }, [generation , trim]);
 
-  return { makes, models, years, trims, engines, exteriorColors, interiorColors };
+  return { makes, models, generations, years, trims, engines };
 }
 
 export default useAddCarAutocompletes;
