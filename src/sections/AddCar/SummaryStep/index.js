@@ -13,13 +13,16 @@ import { useEffect } from 'react';
 // ----------------------------------------------------------------------
 
 const INTERIOR_TYPES = ["Full Leather",	"Fabric",	"Double Ton leather/fabric mix"];
+const exteriorColors = ["white", "black", "silver", "gray", "red", "blue", "green", "yellow", "brown", "orange", "other"];
+const interiorColors = ["black", "gray", "beige", "brown", "white", "other"];
 const SPECIFICATIONS = ["GCC", "American", "Other"];
 
 export const SummarySchema = Yup.object().shape({
   year: Yup.string().nullable().required('Year is required'),
   make: Yup.object().nullable().required('Make is required'),
   model: Yup.object().nullable().required('Model is required'),
-  trim: Yup.string().nullable().required('Trim is required'),
+  generation: Yup.object().nullable().required('Generation is required'),
+  trim: Yup.object().nullable().required('Trim is required'),
   mileage: Yup.number('Should be a number').nullable().required('Mileage is required'),
   engine: Yup.object().nullable().required('Engine options are required'),
   body_type: Yup.string(),
@@ -42,6 +45,7 @@ export const SummaryDefaultValues = {
   year: "",
   make: null,
   model: null,
+  generation: null,
   trim: null,
   mileage: 0,
   registered_emirates: "",
@@ -63,24 +67,26 @@ export const SummaryDefaultValues = {
 };
 
 const mapFormDataToApi = (values) => ( values ? {
-  make: values.make?.name || '',
+  make: values.make || '',
+  generation: values.generation || '',
   trim: values.trim || '',
-  model: values.model?.name || '',
+  model: values.model || '',
   year: values.year,
 }: {})
 
 export default function SummaryStep({ errors, watch, setValue }) {
   const values = watch();
-  const { makes, models, years, trims, engines, exteriorColors, interiorColors } = useAddCarAutocompletes(mapFormDataToApi(values))
-
+  const { makes, models, generations, trims, engines } = useAddCarAutocompletes(mapFormDataToApi(values))
   // clear the fields of their dependencies has been changed
   useEffect(() => {
     setValue('model', null);
+    setValue('generation', null);
     setValue('year', null);
     setValue('trim', null);
     setValue('engine', "");
   }, [values.make, setValue]);
   useEffect(() => {
+    setValue('generation', null);
     setValue('year', null);
     setValue('trim', null);
     setValue('engine', "");
@@ -88,7 +94,7 @@ export default function SummaryStep({ errors, watch, setValue }) {
   useEffect(() => {
     setValue('trim', null);
     setValue('engine', "");
-  }, [values.year, setValue]);
+  }, [values.year, values.generation, setValue]);
   useEffect(() => {
     setValue('engine', "");
   }, [values.year, setValue]);
@@ -118,28 +124,36 @@ export default function SummaryStep({ errors, watch, setValue }) {
           isOptionEqualToValue={isOptionEqualToValue}
           getOptionLabel={(option) => option.name ?? ''}
         />
+        <RHFAutocomplete
+          disabled={!values?.model}
+          name="generation"
+          label="Generation"
+          options={generations}
+          isOptionEqualToValue={isOptionEqualToValue}
+          getOptionLabel={(option) => option.name ?? ''}
+        />
         <RHFDatePicker
           name="year"
           views={['year']}
           label="Year"
           openTo="year"
           className='add-car-datepicker'
-          shouldDisableYear={year => years.indexOf(fYear(year)) === -1}
+          shouldDisableYear={year => fYear(year) < values?.generation?.yearFrom || fYear(year) > values?.generation?.yearTo}
         />
-        <RHFAutocomplete
+        <RHFSelect
           disabled={!values?.model && !values?.make}
+          name="body_type"
+          label="Body Type"
+        >
+          {BODY_TYPES_OPTIONS.map(bodyType => <MenuItem key={bodyType.value} value={bodyType.value}>{bodyType.label}</MenuItem>)}
+        </RHFSelect>
+        <RHFAutocomplete
+          disabled={!values?.model || !values?.make || !values?.generation || !values?.body_type}
           name="trim"
           label="Trim"
-          options={trims}
-        />
-        <RHFTextField
-          name="mileage"
-          label="Mileage (km)"
-          type="number"
-        />
-        <RHFTextField
-          name="registered_emirates"
-          label="Registered Emirates"
+          isOptionEqualToValue={isOptionEqualToValue}
+          options={trims.filter(child => child.bodyType === values.body_type)}
+          getOptionLabel={(option) => option.trim + ' ' +option.series ?? ''}
         />
         <RHFSelect
           disabled={!values?.model && !values?.make}
@@ -149,15 +163,19 @@ export default function SummaryStep({ errors, watch, setValue }) {
             renderValue: (engine) => <EngineCard obj={engine} />
           }}
         >
-          {engines.map(engine => <MenuItem key={engine.id} value={engine}><EngineCard obj={engine} /></MenuItem>)}
+          <MenuItem key={engines.id} value={engines}><EngineCard obj={engines} /></MenuItem>
         </RHFSelect>
-        <RHFSelect
-          disabled={!values?.model && !values?.make}
-          name="body_type"
-          label="Body Type"
-        >
-          {BODY_TYPES_OPTIONS.map(bodyType => <MenuItem key={bodyType.value} value={bodyType.value}>{bodyType.label}</MenuItem>)}
-        </RHFSelect>
+        <RHFTextField
+          name="mileage"
+          label="Mileage (km)"
+          type="number"
+        />
+        <RHFTextField
+          name="registered_emirates"
+          label="Registered Emirates"
+        />
+        
+        
         <RHFSelect
           disabled={!values?.model && !values?.make}
           name="keys"
