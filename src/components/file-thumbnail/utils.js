@@ -124,6 +124,9 @@ export function fileNameByUrl(fileUrl) {
 // ----------------------------------------------------------------------
 
 export function fileData(file) {
+  if (!file) {
+    return {};
+  }
   // Url
   if (typeof file === 'string') {
     return {

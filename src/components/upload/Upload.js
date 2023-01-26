@@ -69,10 +69,11 @@ export default function Upload({
     disabled,
     ...other,
   });
+  const filteredFiles = files?.filter(file => file !== undefined);
 
   const hasFile = !!file && !multiple;
 
-  const hasFiles = files && multiple && files.length > 0;
+  const hasFiles = filteredFiles && multiple && filteredFiles.length > 0;
 
   const isError = isDragReject || !!error;
 
@@ -138,7 +139,7 @@ export default function Upload({
       {hasFiles && (
         <>
           <Box sx={{ my: 3 }}>
-            <MultiFilePreview files={files} thumbnail={thumbnail} onRemove={onRemove} />
+            <MultiFilePreview files={filteredFiles} thumbnail={thumbnail} onRemove={onRemove} />
           </Box>
 
           <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
