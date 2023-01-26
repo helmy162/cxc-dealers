@@ -226,7 +226,6 @@ export default function EcommerceProductDetailsPage() {
     duration: Yup.string().required('Duration is required'),
     auctionDate: Yup.date().required('Auction date is required'),
     auctionTime: Yup.date().required('Auction time is required'),
-    auctionFullDate: Yup.date().required('Auction date is required'),
   });
 
   const defaultValues = useMemo(
@@ -261,6 +260,7 @@ export default function EcommerceProductDetailsPage() {
       var hours = parts[0];
       var isoDuration = `PT${hours}H`;
       const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price};
+      console.log(mergedDate);
       const res = await axios.post('http://your-endpoint.com', mergedDate);
       console.log(res);
       await new Promise((resolve) => setTimeout(resolve, 500));

@@ -59,16 +59,24 @@ export default function ExteriorCondition({ watch, setValue }) {
     setFile(null);
   }, [defect, markers, submittedMarkers, setValue, file]);
 
+  const [error, setError] = useState(null);
+
   const handleDropSingleFile = useCallback((acceptedFiles) => {
     const newFile = acceptedFiles[0];
     if (newFile) {
-      setFile(
-        Object.assign(newFile, {
-          preview: URL.createObjectURL(newFile),
-        })
-      );
+        if(newFile.size > 4000000) {
+            setError('File too big! Image size should be less than 4MB.');
+        } else {
+            setFile(
+            Object.assign(newFile, {
+                preview: URL.createObjectURL(newFile),
+            })
+            );
+            setError('');
+        }
     }
-  }, []);
+}, []);
+
 
   return (
     <Grid container spacing={2}>
@@ -81,6 +89,7 @@ export default function ExteriorCondition({ watch, setValue }) {
       </Grid>
       <Grid item sm={6}>
         { isErrorDisplayed && <Alert severity='warning'>You should describe the previous mark first</Alert>}
+        {error && <Alert severity='warning'>{error}</Alert>}
         <List>
           { submittedMarkers.map((marker, key) => <MarkerRow onDeleteButtonClick={onDeleteMarker} marker={marker} key={key} id={key} />)}
         </List>
@@ -93,7 +102,7 @@ export default function ExteriorCondition({ watch, setValue }) {
             type="button"
             onClick={onSubmitButton} 
             variant="outlined"
-            disabled={!defect || !file}
+            disabled={!defect || !file || error}
           >
             Add marker</Button>
         </Paper>}
