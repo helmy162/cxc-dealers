@@ -13,8 +13,9 @@ import { useEffect } from 'react';
 // ----------------------------------------------------------------------
 
 const INTERIOR_TYPES = ["Full Leather",	"Fabric",	"Double Ton leather/fabric mix"];
-const exteriorColors = ["white", "black", "silver", "gray", "red", "blue", "green", "yellow", "brown", "orange", "other"];
-const interiorColors = ["black", "gray", "beige", "brown", "white", "other"];
+const exteriorColors = ["White", "Black", "Silver", "Gray", "Red", "Blue", "Green", "Yellow", "Brown", "Orange", "Other"];
+const interiorColors = ["Black", "Gray", "Beige", "Brown", "White", "Other"];
+const UAEEmirates = ["Abu Dhabi", "Ajman", "Al Ain", "Dubai", "Fujairah", "Ras Al Khaimah", "Sharjah", "Umm Al Quwain"];
 const SPECIFICATIONS = ["GCC", "American", "Other"];
 
 export const SummarySchema = Yup.object().shape({
@@ -25,6 +26,7 @@ export const SummarySchema = Yup.object().shape({
   trim: Yup.object().nullable().required('Trim is required'),
   mileage: Yup.number('Should be a number').nullable().required('Mileage is required'),
   engine: Yup.object().nullable().required('Engine options are required'),
+  registered_emirates: Yup.string().nullable().required('Registered emirates is required'),
   body_type: Yup.string(),
   exterior_color: Yup.string().nullable(),
   interior_color: Yup.string().nullable(),
@@ -171,11 +173,13 @@ export default function SummaryStep({ errors, watch, setValue }) {
           label="Mileage (km)"
           type="number"
         />
-        <RHFTextField
+        <RHFAutocomplete
           name="registered_emirates"
           label="Registered Emirates"
+          options={UAEEmirates}
+          isOptionEqualToValue={isOptionEqualToValue}
+          getOptionLabel={(option) => option ?? ''}
         />
-        
         
         <RHFSelect
           disabled={!values?.model && !values?.make}
