@@ -368,9 +368,9 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
       if 
       ( 
          product.id.toString().indexOf(filterName.toLowerCase()) !== -1
-      || product.details.make.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.details.model.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.details.year.toString().indexOf(filterName.toLowerCase()) !== -1 
+      || product?.details?.make.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
+      || product?.details?.model.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
+      || product?.details?.year.toString().indexOf(filterName.toLowerCase()) !== -1 
       // || product.seller_name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 // uncomment when seller_name is ready
       )
         return true;
