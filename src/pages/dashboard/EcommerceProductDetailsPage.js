@@ -271,6 +271,17 @@ export default function EcommerceProductDetailsPage() {
     }
   };
 
+  const [copySuccess, setCopySuccess] = useState('');
+  
+  useEffect(() => {
+    if (copySuccess) {
+      const timer = setTimeout(() => {
+        setCopySuccess("");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [copySuccess]);
+
   return (
     <>
       <Helmet>
@@ -292,7 +303,7 @@ export default function EcommerceProductDetailsPage() {
 
         {product && (
           <>
-            <div style={{fontSize:'36px', fontWeight:'700', marginBottom:'50px', display:'flex', alignItems:'center', gap:'20px'}}>
+            <div style={{fontSize:'36px', fontWeight:'700', marginBottom:'50px', display:'flex', alignItems:'center', gap:'20px', flexWrap: 'wrap'}}>
               #{product?.id}
 
               <Label
@@ -315,6 +326,17 @@ export default function EcommerceProductDetailsPage() {
               >
                 View Inspection
               </Button>
+              <Button
+              onClick={() => {navigator.clipboard.writeText(window.location.origin + '/' + product?.id + '/inspection'); setCopySuccess('Copied!');}}
+              variant="contained"
+              startIcon={<Iconify icon="eva:copy-fill" />}
+              >
+                Copy Link
+              </Button>
+              <span className='text-[14px] ease-in-out'>
+                {copySuccess}
+              </span>
+              
               
             </div>
             <Card style={{marginBottom:'50px'}}>

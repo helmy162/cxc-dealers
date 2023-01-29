@@ -14,7 +14,8 @@ import {
     Typography,
     AccordionSummary,
     AccordionDetails,
-    Tooltip
+    Tooltip,
+    Button,
   } from '@mui/material';
 
 import Iconify from '../../components/iconify';
@@ -23,7 +24,7 @@ import ProductDetailsCarousel from './ProductDetailsCarousel';
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProduct, getProducts } from '../../redux/slices/product';
 
-export default function CarDetails({ }) {
+export default function CarDetails({withImages = true}) {
     const { themeStretch } = useSettingsContext();
     const { name } = useParams();
     const dispatch = useDispatch();
@@ -113,27 +114,58 @@ export default function CarDetails({ }) {
       }
     }, []);
 
+    // copy to clipboard
+    const [copySuccess, setCopySuccess] = useState('');
+    useEffect(() => {
+        if (copySuccess) {
+        const timer = setTimeout(() => {
+            setCopySuccess("");
+        }, 3000);
+        return () => clearTimeout(timer);
+        }
+    }, [copySuccess]);
+
     if (!isLoading && product) {
         return(
             <>
+            {
+                withImages &&
                 <Helmet>
                     <title> {`${product.details.make} ${product.details.model} ${product.details.year} Insepction Report`} </title>
                 </Helmet>
+            }
                 <section className='flex flex-col gap-[10px] details-section'>
-                    <h2 className="text-[24px] font-semibold capitalize mb-3 text-center">
-                        {product.details.make} {product.details.model} {product.details.year} - Insepction Report
-                    </h2>
-            
-                    <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                        <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                            <h2 className="text-[20px] font-semibold capitalize mb-3">
-                                Car Images
+                    {
+                        withImages ?
+                        <>
+                            <h2 className="text-[24px] font-semibold capitalize mb-3 text-center">
+                                {product.details.make} {product.details.model} {product.details.year} - Insepction Report
                             </h2>
-                        </AccordionSummary>
-                        <AccordionDetails className='max-w-[800px] m-auto'>
-                            <ProductDetailsCarousel product={product} />
-                        </AccordionDetails>
-                    </Accordion>
+                            <Button
+                            onClick={() => {navigator.clipboard.writeText(window.location.origin + '/' + product?.id + '/inspection'); setCopySuccess('Copied!');}}
+                            variant="contained"
+                            startIcon={<Iconify icon="eva:copy-fill" />}
+                            >
+                                Copy Link
+                            </Button>
+                            <span className='text-[14px] ease-in-out'>
+                                {copySuccess}
+                            </span>
+                        
+                            <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+                                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                                    <h2 className="text-[20px] font-semibold capitalize mb-3">
+                                        Car Images
+                                    </h2>
+                                </AccordionSummary>
+                                <AccordionDetails className='max-w-[800px] m-auto'>
+                                    <ProductDetailsCarousel product={product} />
+                                </AccordionDetails>
+                            </Accordion>
+                        </>
+                        :
+                        null
+                    }
 
                     {allAccordions}
                 
