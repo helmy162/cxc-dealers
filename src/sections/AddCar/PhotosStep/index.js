@@ -1,8 +1,10 @@
 import * as Yup from 'yup';
 import { Box, Stack, Alert } from "@mui/material";
-import { useCallback } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { RHFUpload } from "src/components/hook-form";
-import { useState } from 'react';
+import imageCompression from 'browser-image-compression';
+
+const MAX_SIZE = 4000000; // 4 MB
 
 export const PhotosSchema = Yup.object().shape({
   images: Yup.array()
@@ -12,33 +14,49 @@ export const PhotosDefaultValues = {
 };
 
 export default function PhotosStep ({ watch, setValue }) {
-  const images = watch('images');
+  const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setValue('images', images);
+  }, [images, setValue]);
+
   const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const newFiles = acceptedFiles.map(file => {
-        if(file.size > 4000000){
-          setError("file size should be less than 4MB")
-          return;
+    async (acceptedFiles) => {
+      const newFiles = [];
+      for (let i = 0; i < acceptedFiles.length; i++) {
+        const file = acceptedFiles[i];
+        if (file.size > MAX_SIZE) {
+          const options = {
+            maxSizeMB: MAX_SIZE / 1000000,
+            maxWidthOrHeight: 720,
+            useWebWorker: true,
+          };
+          const compressedBlob = await imageCompression(file, options);
+          const processedFile = new File([compressedBlob], `${i}_${Date.now()}_compressed.jpg`, { type: file.type, path: file.path });
+          newFiles.push(processedFile);
+        } else {
+          newFiles.push(file);
         }
-        setError(null)
+      }
+      
+      const processedFiles = newFiles.map((file, index) => {
         return Object.assign(file, {
           preview: URL.createObjectURL(file),
+          id: `${index}_${Date.now()}_${file.name}`
         });
       });
-      if (acceptedFiles && acceptedFiles.length) {
-        const filteredImages = newFiles.filter(image => image !== undefined);
-        setValue('images', [...filteredImages, ...images], { shouldValidate: true });
-        console.log([...filteredImages, ...images])
-      }
+      console.log(processedFiles);
+      setImages([...processedFiles, ...images]);
+      
     },
-    [setValue, images]
+    [images]
   );
 
   const handleRemoveFile = (_0, idx) => {
     const newFiles = [...images];
     newFiles.splice(idx, 1);
-    setValue('images', newFiles);
+    setImages(newFiles);
   };
 
   return (
@@ -51,7 +69,6 @@ export default function PhotosStep ({ watch, setValue }) {
           xs: 'repeat(1, 1fr)',
         }}
       >
-        {error && <Alert severity='error'>{error}</Alert>}
         <RHFUpload
           name='images'
           multiple

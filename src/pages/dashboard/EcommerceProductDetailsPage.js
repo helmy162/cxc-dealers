@@ -66,7 +66,6 @@ import {
 import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
 
 import { cars } from '../../_mock/assets/cars';
-import CarPDF from './CarPDF.js';
 import CarDetails from './CarDetails.js';
 import { slideAnimationDuration } from '@mui/x-date-pickers/CalendarPicker/PickersSlideTransition';
 import { func } from 'prop-types';

@@ -6,6 +6,7 @@ import { RHFSelect } from 'src/components/hook-form';
 import MarkerRow from './MarkerRow';
 import { Upload } from 'src/components/upload';
 import { DEFECTS_OPTIONS } from './constants';
+import imageCompression from 'browser-image-compression';
 // ----------------------------------------------------------------------
 
 export const ExteriorConditionSchema = Yup.object().shape({
@@ -61,21 +62,38 @@ export default function ExteriorCondition({ watch, setValue }) {
 
   const [error, setError] = useState(null);
 
-  const handleDropSingleFile = useCallback((acceptedFiles) => {
+  const MAX_SIZE = 4000000; // 4 MB
+
+  const handleDropSingleFile = useCallback(async (acceptedFiles) => {
     const newFile = acceptedFiles[0];
     if (newFile) {
-        if(newFile.size > 4000000) {
-            setError('File too big! Image size should be less than 4MB.');
+      try {
+        if (newFile.size > MAX_SIZE) {
+          const options = {
+            maxSizeMB: 3,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+          };
+          const compressedBlob = await imageCompression(newFile, options);
+          const processedFile = new File([compressedBlob], `${Date.now()}_compressed.jpg`, { type: newFile.type, path: newFile.path });
+          setFile(
+            Object.assign(processedFile, {
+              preview: URL.createObjectURL(processedFile),
+            })
+          );
         } else {
-            setFile(
+          setFile(
             Object.assign(newFile, {
                 preview: URL.createObjectURL(newFile),
             })
             );
-            setError('');
         }
+      } catch (error) {
+        setError(error.message);
+      }
     }
-}, []);
+  }, []);
+  
 
 
   return (
