@@ -62,25 +62,29 @@ export default function ExteriorCondition({ watch, setValue }) {
 
   const [error, setError] = useState(null);
 
-  const MAX_SIZE = 4000000; // 4 MB
+  const MAX_SIZE = 1000000; // 1 MB
 
   const handleDropSingleFile = useCallback(async (acceptedFiles) => {
     const newFile = acceptedFiles[0];
     if (newFile) {
       try {
+        
         if (newFile.size > MAX_SIZE) {
+          
           const options = {
-            maxSizeMB: 3,
+            maxSizeMB: 1,
             maxWidthOrHeight: 1920,
             useWebWorker: true,
           };
           const compressedBlob = await imageCompression(newFile, options);
           const processedFile = new File([compressedBlob], `${Date.now()}_compressed.jpg`, { type: newFile.type, path: newFile.path });
+          console.log('processedFile', processedFile); // true
           setFile(
             Object.assign(processedFile, {
               preview: URL.createObjectURL(processedFile),
             })
           );
+          console.log('file', file); 
         } else {
           setFile(
             Object.assign(newFile, {
