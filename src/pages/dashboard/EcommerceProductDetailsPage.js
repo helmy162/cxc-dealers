@@ -40,6 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from '../../components/table';
+import axiosInstance from 'src/utils/axios';
 import {RHFTextField, RHFAutocomplete } from '../../components/hook-form';
 import FormProvider from '../../components/hook-form';
 import { sentenceCase } from 'change-case';
@@ -258,9 +259,9 @@ export default function EcommerceProductDetailsPage() {
       var parts = duration.split(" ");
       var hours = parts[0];
       var isoDuration = `PT${hours}H`;
-      const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price};
+      const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price, car_id: product.id};
       console.log(mergedDate);
-      const res = await axios.post('http://your-endpoint.com', mergedDate);
+      const res = await axiosInstance.post('admin/auctions', mergedDate);
       console.log(res);
       await new Promise((resolve) => setTimeout(resolve, 500));
       // reset();
