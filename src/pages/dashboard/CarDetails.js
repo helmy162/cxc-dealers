@@ -45,7 +45,7 @@ export default function CarDetails({withImages = true}) {
             if (product) {
                 setDefectImages(product.exterior.markers.map(marker => 'https://api.carsxchange.com'+ marker.photo));
                 Object.keys(product).forEach(key => {
-                    if (typeof product[key] === 'object' && key !== 'exterior' && key !== 'images' && key !=='seller_id') {
+                    if (typeof product[key] === 'object' && key !== 'exterior' && key !== 'images' && key !=='seller_id' && key !=='seller' && key !=='auction' && key !=='bids') {
                         let listItems = []
                         for (let subKey in product[key]) {
                             if (product[key].hasOwnProperty(subKey) && product[key][subKey] !== null && product[key][subKey] !== "" && subKey !== 'engine') {
