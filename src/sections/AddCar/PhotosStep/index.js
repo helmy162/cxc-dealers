@@ -2,7 +2,6 @@ import * as Yup from 'yup';
 import { Box, Stack, Alert } from "@mui/material";
 import { useCallback, useState, useEffect } from "react";
 import { RHFUpload } from "src/components/hook-form";
-import imageCompression from 'browser-image-compression';
 
 const MAX_SIZE = 1000000; // 1 MB
 
@@ -27,26 +26,47 @@ export default function PhotosStep ({ watch, setValue }) {
       for (let i = 0; i < acceptedFiles.length; i++) {
         const file = acceptedFiles[i];
         if (file.size > MAX_SIZE) {
-          const options = {
-            maxSizeMB: MAX_SIZE / 1000000,
-            maxWidthOrHeight: 720,
-            useWebWorker: true,
-          };
-          const compressedBlob = await imageCompression(file, options);
-          const processedFile = new File([compressedBlob], `${i}_${Date.now()}_compressed.jpg`, { type: file.type, path: file.path });
-          newFiles.push(processedFile);
+          const image = new Image();
+          image.src = URL.createObjectURL(file);
+          await new Promise((resolve) => {
+            image.onload = resolve;
+          });
+
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const scale = Math.min(1920 / image.width, 1920 / image.height);
+          canvas.width = image.width * scale;
+          canvas.height = image.height * scale;
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+          canvas.toBlob(async (blob) => {
+            const processedFile = new File([blob], `${i}_${Date.now()}_compressed.jpg`, { type: file.type, path: file.path });
+            newFiles.push(processedFile);
+            if (newFiles.length === acceptedFiles.length) {
+              const processedFiles = newFiles.map((file, index) => {
+                return Object.assign(file, {
+                  preview: URL.createObjectURL(file),
+                  id: `${index}_${Date.now()}_${file.name}`
+                });
+              });
+              console.log(processedFiles);
+              setImages([...processedFiles, ...images]);
+            }
+          }, "image/jpeg", 0.9);
         } else {
           newFiles.push(file);
         }
       }
       
-      const processedFiles = newFiles.map((file, index) => {
-        return Object.assign(file, {
-          preview: URL.createObjectURL(file),
-          id: `${index}_${Date.now()}_${file.name}`
+      if (newFiles.length === acceptedFiles.length) {
+        const processedFiles = newFiles.map((file, index) => {
+          return Object.assign(file, {
+            preview: URL.createObjectURL(file),
+            id: `${index}_${Date.now()}_${file.name}`
+          });
         });
-      });
-      setImages([...processedFiles, ...images]);
+        setImages([...processedFiles, ...images]);
+      }
       
     },
     [images]
