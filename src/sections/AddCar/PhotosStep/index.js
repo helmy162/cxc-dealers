@@ -46,7 +46,6 @@ export default function PhotosStep ({ watch, setValue }) {
           id: `${index}_${Date.now()}_${file.name}`
         });
       });
-      console.log(processedFiles);
       setImages([...processedFiles, ...images]);
       
     },

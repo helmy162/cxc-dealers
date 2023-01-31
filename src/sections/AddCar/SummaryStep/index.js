@@ -141,17 +141,17 @@ export default function SummaryStep({ errors, watch, setValue }) {
           openTo="year"
           className='add-car-datepicker'
           shouldDisableYear={year => fYear(year) < values?.generation?.yearFrom || fYear(year) > values?.generation?.yearTo || fYear(year) > new Date().getFullYear()}
-          disabled={!values?.model || !values?.make || !values?.generation }
+          disabled={!values?.generation }
         />
         <RHFSelect
-          disabled={!values?.model || !values?.make || !values?.generation }
+          disabled={!values?.generation }
           name="body_type"
           label="Body Type"
         >
           {BODY_TYPES_OPTIONS.map(bodyType => <MenuItem key={bodyType.value} value={bodyType.value}>{bodyType.label}</MenuItem>)}
         </RHFSelect>
         <RHFAutocomplete
-          disabled={!values?.model || !values?.make || !values?.generation }
+           disabled={!values?.generation }
           name="trim"
           label="Trim"
           isOptionEqualToValue={isOptionEqualToValue}
@@ -159,7 +159,7 @@ export default function SummaryStep({ errors, watch, setValue }) {
           getOptionLabel={(option) => option.trim + ' ' +option.series ?? ''}
         />
         <RHFSelect
-          disabled={!values?.model && !values?.make}
+           disabled={!values?.trim }
           name="engine"
           label="Engine"
           SelectProps={{
