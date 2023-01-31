@@ -4,7 +4,7 @@ import { useCallback, useState, useEffect } from "react";
 import { RHFUpload } from "src/components/hook-form";
 import imageCompression from 'browser-image-compression';
 
-const MAX_SIZE = 4000000; // 4 MB
+const MAX_SIZE = 1000000; // 1 MB
 
 export const PhotosSchema = Yup.object().shape({
   images: Yup.array().required().min(1)

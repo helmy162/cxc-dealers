@@ -119,7 +119,7 @@ export default function ExteriorCondition({ watch, setValue }) {
           <RHFSelect name="defect" label="Defect" sx={{marginBottom: '1rem'}}>
             {DEFECTS_OPTIONS.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)}
           </RHFSelect>
-          <Upload file={file} name={submittedMarkers.length} onDrop={handleDropSingleFile} onDelete={() => setFile(null)} sx={{marginBottom: '1rem'}} />
+          <Upload accept={{ 'image/*': [] }} file={file} name={submittedMarkers.length} onDrop={handleDropSingleFile} onDelete={() => setFile(null)} sx={{marginBottom: '1rem'}} />
           <Button
             type="button"
             onClick={onSubmitButton} 
