@@ -5,6 +5,7 @@ import {
 } from 'react';
 
 import axios from 'axios';
+import axiosInstance from 'src/utils/axios';
 
 const endpoints = {
   GET_CARS: `${process.env.REACT_APP_HOST_API_KEY}cars`
@@ -25,7 +26,7 @@ export default function useCarsListingPage() {
       setLoading(true);
       const url = `${endpoints.GET_CARS}?page=${page}`
 
-      const { data: response } = await axios.get(url);
+      const { data: response } = await axiosInstance.get(`cars?page=${page}`);
 
       if (!total) {
         setTotal(response.total);
