@@ -1,15 +1,50 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import {
   Box,
   Typography
 } from "@mui/material";
 
 import SpecItem from './SpecItem';
+import Pusher from "pusher-js";
+import { useAuthContext } from "src/auth/useAuthContext";
 
 export default function InfoRow({ data }) {
   const image = useMemo(() => {
     return data.images && data?.images[0] ? `https://api.carsxchange.com/${data.images[0]}` : ''
   }, [data])
+
+  const [auctionID, setAuctionID] = useState(null);
+  const [highestBid, setHighestBid] = useState(0);
+  const { user } = useAuthContext();
+  useEffect(() => {
+    data?.auction?.latest_bid ? setHighestBid(data?.auction?.latest_bid?.bid) : setHighestBid(data?.auction?.start_price);
+    const access_token = user?.accessToken;
+    const PUSHER_APP_KEY = "9d45400630a8fa077501";
+    const chanelAuthEndpoint =
+      "https://api.carsxchange.com/api/v1/pusher/auth-channel";
+    const auctionID = data?.auction?.id;
+    setAuctionID(auctionID);
+    let pusher = new Pusher(PUSHER_APP_KEY, {
+      cluster: "eu",
+      channelAuthorization: {
+        endpoint: chanelAuthEndpoint,
+        transport: "ajax",
+        params: {},
+        headers: {
+          authorization: `Bearer ${access_token}`,
+        },
+      },
+    });
+    const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
+    channel.bind("NewBid", (data) => {
+        setHighestBid(data.auction.last_bid);
+    });
+
+    return () => {
+      channel.unbind("NewBid");
+      pusher.disconnect();
+    };
+  }, [auctionID, user, data]);
 
   return (
     <Box
@@ -28,6 +63,8 @@ export default function InfoRow({ data }) {
           alt="car"
           style={{
             width: '100%',
+            aspectRatio: '16/9',
+            objectFit: 'cover',
             borderRadius: '8px'
           }}
         />
@@ -49,7 +86,7 @@ export default function InfoRow({ data }) {
           <Typography
             color="#1D7DBD"
             fontWeight="bold"
-          >AED {data.highestBid}</Typography>
+          >AED {highestBid}</Typography>
         </Box>
 
         <Box
