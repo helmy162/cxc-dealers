@@ -75,7 +75,7 @@ const adminNavConfig = [
       {
         title: 'Cars',
         path: PATH_DEALER.cars,
-        icon: ICONS.car,
+        icon: ICONS.bid,
       },
     ],
   },
