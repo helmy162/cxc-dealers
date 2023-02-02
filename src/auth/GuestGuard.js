@@ -12,10 +12,13 @@ GuestGuard.propTypes = {
 };
 
 export default function GuestGuard({ children }) {
-  const { isAuthenticated, isInitialized } = useAuthContext();
+  const { isAuthenticated, isInitialized, user} = useAuthContext();
 
-  if (isAuthenticated) {
+  if (isAuthenticated && user.role === 'admin') {
     return <Navigate to="/dashboard" />;
+  }
+  else if (isAuthenticated && user.role === 'dealer') {
+    return <Navigate to="/dealer" />;
   }
 
   if (!isInitialized) {

@@ -1,5 +1,5 @@
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD, PATH_DEALER } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
@@ -10,13 +10,42 @@ const icon = (name) => (
 
 const ICONS = {
   user: icon('ic_user'),
+  users: icon('ic_users'),
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
   car: icon('ic_car'),
+  profile: icon('ic_profile'),
+  bid: icon('ic_bid'),
 };
 
-const navConfig = [
+const dealerNavConfig = [
+
+  // MANAGEMENT
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'bidding',
+    items: [
+      {
+        title: 'Cars',
+        path: PATH_DEALER.cars,
+        icon: ICONS.car,
+      },
+    ],
+  },
+  {
+    subheader: 'management',
+    items: [
+      {
+        title: 'My Account',
+        path: PATH_DEALER.account,
+        icon: ICONS.profile,
+      },
+    ],
+  },
+];
+
+const adminNavConfig = [
 
   // MANAGEMENT
   // ----------------------------------------------------------------------
@@ -26,15 +55,30 @@ const navConfig = [
       {
         title: 'users',
         path: PATH_DASHBOARD.user.list,
-        icon: ICONS.user,
+        icon: ICONS.users,
       },
       {
         title: 'cars',
         path: PATH_DASHBOARD.car.list,
         icon: ICONS.car,
       },
+      {
+        title: 'My Account',
+        path: PATH_DEALER.account,
+        icon: ICONS.profile,
+      },
+    ],
+  },
+  {
+    subheader: 'bidding',
+    items: [
+      {
+        title: 'Cars',
+        path: PATH_DEALER.cars,
+        icon: ICONS.bid,
+      },
     ],
   },
 ];
 
-export default navConfig;
+export { dealerNavConfig, adminNavConfig };

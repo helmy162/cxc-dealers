@@ -12,6 +12,7 @@ import { _userPayment, _userAddressBook, _userInvoices, _userAbout, _userList} f
 import Iconify from '../../components/iconify';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
+import { useAuthContext } from '../../auth/useAuthContext';
 // sections
 import {
   AccountGeneral,
@@ -23,13 +24,13 @@ import {
 
 // ----------------------------------------------------------------------
 
-export default function UserAccountPage() {
+export default function UserAccountPage({isProfile = false}) {
+  const {user} = useAuthContext();
   const { themeStretch } = useSettingsContext();
 
   const { name } = useParams();
 
-  const currentUser = _userList.find((user) => paramCase(user.name) === name);
-  console.log(currentUser)
+  const currentUser = isProfile? user : _userList.find((user) => paramCase(user.name) === name);  
 
   const [currentTab, setCurrentTab] = useState('general');
 
