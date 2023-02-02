@@ -13,11 +13,18 @@ const Loadable = (Component) => (props) =>
 
 // ----------------------------------------------------------------------
 
-
+// auth
 export const LoginPage = Loadable(lazy(() => import('../pages/auth/LoginPage')));
 export const RegisterPage = Loadable(lazy(() => import('../pages/auth/RegisterPage')));
 export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/ResetPasswordPage')));
 
+// home
+export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));
+
+// dealer
+export const SingleCar = Loadable(lazy(() => import('../pages/dealer/SingleCar')));
+
+// admin
 export const CarsListingPage = Loadable(lazy(() => import('../pages/CarsListingPage')));
 export const UserListPage = Loadable(lazy(() => import('../pages/dashboard/UserListPage')));
 export const UserCreatePage = Loadable(lazy(() => import('../pages/dashboard/UserCreatePage')));

@@ -2,6 +2,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // auth
 import AuthGuard from '../auth/AuthGuard';
 import GuestGuard from '../auth/GuestGuard';
+import AdminGuard from '../auth/AdminGuard';
 // layouts
 import CompactLayout from '../layouts/compact';
 import DashboardLayout from '../layouts/dashboard';
@@ -22,7 +23,9 @@ import {
   EcommerceProductEditPage,
   EcommerceProductDetailsPage,
   AddCarPage,
-  CarDetails
+  CarDetails,
+  HomePage,
+  SingleCar
 } from './elements';
 import { PATH_AUTH } from './paths';
 
@@ -33,6 +36,7 @@ export default function Router() {
     {
       path: '/',
       children: [
+        { element: <HomePage />, index: true },
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         {
           path: PATH_AUTH.login,
@@ -61,10 +65,27 @@ export default function Router() {
       ],
     },
     {
+      path: 'dealer',
+      element: (
+        <AuthGuard>
+          <DashboardLayout type='dealer'/>
+        </AuthGuard>
+      ),
+      children: [
+        { element: <Navigate to={'cars'} replace />, index: true }, // this is the default page for the dealer
+        { path: 'cars', element: <EcommerceProductListPage /> }, // this is the car listing page
+        { path: 'cars/:name', element: <SingleCar />}, // this is the single car details page
+        { path: 'profile', element: <UserAccountPage isProfile={true} /> },
+        // other user pages...
+      ],
+    },    
+    {
       path: '/dashboard',
       element: (
         <AuthGuard>
-          <DashboardLayout />
+          <AdminGuard>
+            <DashboardLayout type='admin'/>
+          </AdminGuard>
         </AuthGuard>
       ),
       children: [
