@@ -14,7 +14,7 @@ AuthGuard.propTypes = {
 };
 
 export default function AuthGuard({ children }) {
-  const { isAuthenticated, isInitialized } = useAuthContext();
+  const { isAuthenticated, isInitialized, user} = useAuthContext();
 
   const { pathname } = useLocation();
 
@@ -28,7 +28,7 @@ export default function AuthGuard({ children }) {
     if (pathname !== requestedLocation) {
       setRequestedLocation(pathname);
     }
-    return <Login />;
+    return <Navigate to={'/auth/login'} />;
   }
 
   if (requestedLocation && pathname !== requestedLocation) {
