@@ -86,7 +86,7 @@ export default function InfoRow({ data }) {
           <Typography
             color="#1D7DBD"
             fontWeight="bold"
-          >AED {highestBid}</Typography>
+          >AED {highestBid?.toLocaleString('en-US')}</Typography>
         </Box>
 
         <Box
