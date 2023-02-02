@@ -12,7 +12,7 @@ import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
 //
-import navConfig from './config-navigation';
+import {adminNavConfig, dealerNavConfig }from './config-navigation';
 import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
 import NavToggleButton from './NavToggleButton';
@@ -24,7 +24,7 @@ NavVertical.propTypes = {
   onCloseNav: PropTypes.func,
 };
 
-export default function NavVertical({ openNav, onCloseNav }) {
+export default function NavVertical({ openNav, onCloseNav, type}) {
   const { pathname } = useLocation();
 
   const isDesktop = useResponsive('up', 'lg');
@@ -61,7 +61,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         <NavAccount />
       </Stack>
 
-      <NavSectionVertical data={navConfig} />
+      <NavSectionVertical data={ type==='admin'? adminNavConfig : dealerNavConfig} />
 
       <Box sx={{ flexGrow: 1 }} />
 

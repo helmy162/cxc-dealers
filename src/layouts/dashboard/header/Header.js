@@ -26,7 +26,7 @@ Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
 
-export default function Header({ onOpenNav }) {
+export default function Header({ onOpenNav, type}) {
   const theme = useTheme();
 
   const { themeLayout } = useSettingsContext();
@@ -49,7 +49,7 @@ export default function Header({ onOpenNav }) {
         </IconButton>
       )}
 
-      <Searchbar />
+      <Searchbar type={type}/>
 
       <Stack
         flexGrow={1}
