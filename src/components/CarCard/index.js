@@ -33,7 +33,7 @@ export default function CarCard({
         {/* <Timer time={data.auctionEndTime} /> */}
       </Box>
       <InfoRow data={data} />
-      <Status status={data.status} />
+      <Status status={data.status} data={data} />
     </Card>
   )
 }
