@@ -6,9 +6,14 @@ function path(root, sublink) {
 
 const ROOTS_AUTH = '/auth';
 const ROOTS_DASHBOARD = '/dashboard';
+const ROOTS_Dealer = '/dealer';
+const ROOTS_HOME = '/';
 
 // ----------------------------------------------------------------------
 
+export const PATH_HOME = {
+  root: ROOTS_HOME,
+}
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
   login: path(ROOTS_AUTH, '/login'),
@@ -18,12 +23,15 @@ export const PATH_AUTH = {
   // newPassword: path(ROOTS_AUTH, '/new-password'),
 };
 
+export const PATH_DEALER = {
+  root: ROOTS_Dealer,
+  cars: path(ROOTS_Dealer, '/cars'),
+  car: (name) => path(ROOTS_Dealer, `/cars/${name}`),
+  account: path(ROOTS_Dealer, '/profile'),
+}
+
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
-  one: path(ROOTS_DASHBOARD, '/one'),
-  two: path(ROOTS_DASHBOARD, '/two'),
-  three: path(ROOTS_DASHBOARD, '/three'),
-  addCar: path(ROOTS_DASHBOARD, '/newCar'),
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     four: path(ROOTS_DASHBOARD, '/user/four'),

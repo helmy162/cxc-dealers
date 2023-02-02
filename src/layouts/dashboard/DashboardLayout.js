@@ -15,7 +15,7 @@ import NavHorizontal from './nav/NavHorizontal';
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout() {
+export default function DashboardLayout( {type}) {
   const { themeLayout } = useSettingsContext();
 
   const isDesktop = useResponsive('up', 'lg');
@@ -34,14 +34,14 @@ export default function DashboardLayout() {
     setOpen(false);
   };
 
-  const renderNavVertical = <NavVertical openNav={open} onCloseNav={handleClose} />;
+  const renderNavVertical = <NavVertical openNav={open} onCloseNav={handleClose} type={type} />;
 
   if (isNavHorizontal) {
     return (
       <>
-        <Header onOpenNav={handleOpen} />
+        <Header onOpenNav={handleOpen} type={type}/>
 
-        {isDesktop ? <NavHorizontal /> : renderNavVertical}
+        {isDesktop ? <NavHorizontal type={type} /> : renderNavVertical}
 
         <Main>
           <Outlet />
@@ -53,7 +53,7 @@ export default function DashboardLayout() {
   if (isNavMini) {
     return (
       <>
-        <Header onOpenNav={handleOpen} />
+        <Header onOpenNav={handleOpen} type={type} />
 
         <Box
           sx={{
@@ -61,7 +61,7 @@ export default function DashboardLayout() {
             minHeight: { lg: 1 },
           }}
         >
-          {isDesktop ? <NavMini /> : renderNavVertical}
+          {isDesktop ? <NavMini type={type} /> : renderNavVertical}
 
           <Main>
             <Outlet />
@@ -73,7 +73,7 @@ export default function DashboardLayout() {
 
   return (
     <>
-      <Header onOpenNav={handleOpen} />
+      <Header onOpenNav={handleOpen} type={type}/>
 
       <Box
         sx={{

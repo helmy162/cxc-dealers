@@ -80,7 +80,8 @@ export default function EcommerceProductListPage() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable({
-    defaultOrderBy: 'createdAt',
+    defaultOrderBy: 'id',
+    defaultOrder: 'desc',
   });
 
   const { themeStretch } = useSettingsContext();
@@ -99,7 +100,7 @@ export default function EcommerceProductListPage() {
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  //uncomment when the endpoint is ready with the same data structure
+  
 
   useEffect(() => {
     dispatch(getProducts());

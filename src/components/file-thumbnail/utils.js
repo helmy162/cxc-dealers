@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------
 
+import { FilterHdrOutlined } from "@mui/icons-material";
+
 // Define more types here
 const FORMAT_PDF = ['pdf'];
 const FORMAT_TEXT = ['txt'];
@@ -19,7 +21,8 @@ const iconUrl = (icon) => `/assets/icons/files/${icon}.svg`;
 
 export function fileFormat(fileUrl) {
   let format;
-
+  if(fileUrl.includes('blob'))
+    return 'image';
   switch (fileUrl?.includes(fileTypeByUrl(fileUrl))) {
     case FORMAT_TEXT.includes(fileTypeByUrl(fileUrl)):
       format = 'txt';

@@ -21,7 +21,7 @@ import Iconify from '../../../components/iconify';
 import { IconButtonAnimate } from '../../../components/animate';
 import SearchNotFound from '../../../components/search-not-found';
 //
-import NavConfig from '../nav/config-navigation';
+import {adminNavConfig, dealerNavConfig }from '../nav/config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ const StyledPopper = styled((props) => <Popper {...props} />)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function Searchbar() {
+function Searchbar( {type}) {
   const navigate = useNavigate();
 
   const { pathname } = useLocation();
@@ -96,7 +96,8 @@ function Searchbar() {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const reduceItems = NavConfig.map((list) => handleLoop(list.items, list.subheader)).flat();
+  const reduceItems = type === 'admin'? adminNavConfig.map((list) => handleLoop(list.items, list.subheader)).flat():
+                                        dealerNavConfig.map((list) => handleLoop(list.items, list.subheader)).flat();
 
   const allItems = flattenArray(reduceItems).map((option) => {
     const group = splitPath(reduceItems, option.path);

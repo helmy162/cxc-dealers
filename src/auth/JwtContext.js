@@ -84,7 +84,7 @@ export function AuthProvider({ children }) {
           type: 'INITIAL',
           payload: {
             isAuthenticated: true,
-            user: {...user.data, role: user.UserType },
+            user: {...user.data, role: user.UserType, accessToken: accessToken },
           },
         });
       } else {
@@ -125,7 +125,7 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'LOGIN',
       payload: {
-        user,
+        user: {...user, role: user.type },
       },
     });
   }, []);

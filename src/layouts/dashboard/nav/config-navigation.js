@@ -1,5 +1,5 @@
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD, PATH_DEALER } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
@@ -16,7 +16,33 @@ const ICONS = {
   car: icon('ic_car'),
 };
 
-const navConfig = [
+const dealerNavConfig = [
+
+  // MANAGEMENT
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'bidding',
+    items: [
+      {
+        title: 'Cars',
+        path: PATH_DEALER.cars,
+        icon: ICONS.car,
+      },
+    ],
+  },
+  {
+    subheader: 'management',
+    items: [
+      {
+        title: 'My Account',
+        path: PATH_DEALER.account,
+        icon: ICONS.user,
+      },
+    ],
+  },
+];
+
+const adminNavConfig = [
 
   // MANAGEMENT
   // ----------------------------------------------------------------------
@@ -37,4 +63,4 @@ const navConfig = [
   },
 ];
 
-export default navConfig;
+export { dealerNavConfig, adminNavConfig };
