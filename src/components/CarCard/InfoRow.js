@@ -7,6 +7,7 @@ import {
 import SpecItem from './SpecItem';
 import Pusher from "pusher-js";
 import { useAuthContext } from "src/auth/useAuthContext";
+import Status from './Status';
 
 export default function InfoRow({ data }) {
   const image = useMemo(() => {
@@ -55,7 +56,7 @@ export default function InfoRow({ data }) {
       }}
     >
       <Box sx={{
-        marginRight: '20px',
+        marginRight: { xs: '0px', sm: '20px' },
         maxWidth: { xs: '100%', sm: '265px' }
       }}>
         <img
@@ -74,6 +75,7 @@ export default function InfoRow({ data }) {
       }}>
         <Box sx={{
           display: 'flex',
+          justifyContent: 'center',
           fontSize: '18px',
           marginTop: { xs: '20px', sm: 0 }
         }}>
@@ -92,6 +94,7 @@ export default function InfoRow({ data }) {
         <Box
           sx={{
             display: 'flex',
+            justifyContent: 'center',
             flexWrap: 'wrap',
             gap: '10px',
             width: '100%',
@@ -118,7 +121,9 @@ export default function InfoRow({ data }) {
             {data.details.engine.horsepower_hp} HP
           </SpecItem>
         </Box>
+        
       </Box>
+      
     </Box>
   )
 }

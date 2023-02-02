@@ -10,10 +10,13 @@ const icon = (name) => (
 
 const ICONS = {
   user: icon('ic_user'),
+  users: icon('ic_users'),
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
   car: icon('ic_car'),
+  profile: icon('ic_profile'),
+  bid: icon('ic_bid'),
 };
 
 const dealerNavConfig = [
@@ -36,7 +39,7 @@ const dealerNavConfig = [
       {
         title: 'My Account',
         path: PATH_DEALER.account,
-        icon: ICONS.user,
+        icon: ICONS.profile,
       },
     ],
   },
@@ -52,11 +55,26 @@ const adminNavConfig = [
       {
         title: 'users',
         path: PATH_DASHBOARD.user.list,
-        icon: ICONS.user,
+        icon: ICONS.users,
       },
       {
         title: 'cars',
         path: PATH_DASHBOARD.car.list,
+        icon: ICONS.car,
+      },
+      {
+        title: 'My Account',
+        path: PATH_DEALER.account,
+        icon: ICONS.profile,
+      },
+    ],
+  },
+  {
+    subheader: 'bidding',
+    items: [
+      {
+        title: 'Cars',
+        path: PATH_DEALER.cars,
         icon: ICONS.car,
       },
     ],

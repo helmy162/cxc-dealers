@@ -3,8 +3,35 @@ import {
   Typography
 } from '@mui/material'
 import Countdown from 'react-countdown';
+import { useEffect, useState } from 'react';
 
-export default function CarCardTimer({ time }) {
+export default function CarCardTimer({ data }) {
+  const [timeRemaining, setTimeRemaining] = useState(null);
+
+  useEffect(() => {
+    const endDate = new Date(data?.auction?.end_at);
+    const intervalId = setInterval(() => {
+      const currentTime = new Date();
+      const difference = endDate - currentTime;
+
+      if (difference < 0) {
+        clearInterval(intervalId);
+        setTimeRemaining(null);
+        return;
+      }
+
+      const hours = Math.floor(difference / 1000 / 60 / 60);
+      const minutes = Math.floor((difference / 1000 / 60) % 60);
+      const seconds = Math.floor((difference / 1000) % 60);
+
+      setTimeRemaining(
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+      );      
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [data]);
+
   return (
     <Box
       sx={{
@@ -17,19 +44,10 @@ export default function CarCardTimer({ time }) {
         mr={0.5}
         color="#8184A3"
       >
-        Auction ends in
+        
+        {timeRemaining ? 'Auction ends in ' + timeRemaining : 'Expired'} 
       </Typography>
-      <Countdown
-        date={time}
-        renderer={({ formatted }) => (
-          <Typography
-            variant="string"
-            color="#E32519"
-          >
-            {`${formatted.hours}:${formatted.minutes}:${formatted.seconds}`}
-          </Typography>
-        )}
-      />
+      
     </Box>
   )
 }

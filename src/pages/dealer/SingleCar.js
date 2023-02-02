@@ -29,13 +29,14 @@ export default function SingleCar(){
         dispatch(getProduct(name));
   }, [dispatch]);
 
-  
+  console.log(product);
   const NewProductSchema = Yup.object().shape({
     bid: 
-    product?.auction?.latest_bid?.bid < product?.auction?.start_price ? 
-    Yup.number().min(product?.auction?.start_price, `Minimum bid is ${product?.auction?.start_price} AED`)
-    :
+    product?.auction?.latest_bid ?
     Yup.number().min(product?.auction?.latest_bid?.bid + 500, 'You have to add at least 500 AED more than the highest bid')
+    :
+    Yup.number().min(product?.auction?.start_price, `Minimum bid is ${product?.auction?.start_price?.toLocaleString('en-US')} AED`)
+    
 });
 
   const defaultValues = useMemo(
@@ -126,7 +127,6 @@ export default function SingleCar(){
       setTimeRemaining(
         `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
       );
-      console.log(timeRemaining)
     }, 1000);
 
     return () => clearInterval(intervalId);
@@ -158,18 +158,18 @@ export default function SingleCar(){
                                 </div>
                                 <div className="flex flex-col items-center justify-center basis-1/3 bg-white py-[12px]">
                                     <h1 className="text-[#8184A3]">Highest Bid</h1>
-                                    <h1 className="text-[#1E1E1E] font-semibold">{highestBid} AED</h1>
+                                    <h1 className="text-[#1E1E1E] font-semibold">{highestBid?.toLocaleString('en-US')} AED</h1>
                                 </div>
                                 <div className="flex flex-col items-center justify-center basis-1/3 bg-white py-[12px] rounded-r-lg">
                                     <h1 className="text-[#8184A3]">Minimum Bid</h1>
-                                    <h1 className="text-[#1E1E1E] font-semibold">170,500 AED</h1>
+                                    <h1 className="text-[#1E1E1E] font-semibold">{product.auction.start_price?.toLocaleString('en-US')} AED</h1>
                                 </div>
                             </div>
                             {/* specifications section */}
                             <div className="flex flex-wrap justify-between gap-y-5">
                                 <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[30%]">
                                     <div className=" text-[#141414] text-[16px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/mileage.svg"/> Mileage</div>
-                                    <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">59,900 KM</div>
+                                    <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product.details.mileage}</div>
                                 </div>
                                 <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[30%]">
                                     <div className=" text-[#141414] text-[16px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/transmission.svg"/> Transmission</div>

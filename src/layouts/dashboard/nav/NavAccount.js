@@ -30,7 +30,7 @@ export default function NavAccount() {
           {user?.name}
         </Typography>
 
-        <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
+        <Typography variant="body2" noWrap sx={{ color: 'text.secondary', textTransform:'capitalize' }}>
           {user?.role}
         </Typography>
       </Box>

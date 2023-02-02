@@ -4,8 +4,11 @@ export default function SpecItem({ children }) {
   return (
     <Box
       sx={{
-        width: { xs: '48%', sm: 'auto', md: '33%' },
+        width: { xs: '48%', sm: 'auto', md: '30%' },
         maxWidth: { xs: '100%', sm: 'auto', md: '150px' },
+        minWidth: 'fit-content',
+        flexGrow: 1,
+        textAlign: 'center',
         height: '30px',
         background: '#E8F2F8',
         fontSize: '14px',
@@ -14,7 +17,8 @@ export default function SpecItem({ children }) {
         color: '#8184A3',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        textTransform: 'capitalize',
       }}
     >
       {children}

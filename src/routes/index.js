@@ -36,7 +36,7 @@ export default function Router() {
     {
       path: '/',
       children: [
-        { element: <HomePage />, index: true },
+        // { element: <HomePage />, index: true },
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         {
           path: PATH_AUTH.login,
@@ -73,7 +73,7 @@ export default function Router() {
       ),
       children: [
         { element: <Navigate to={'cars'} replace />, index: true }, // this is the default page for the dealer
-        { path: 'cars', element: <EcommerceProductListPage /> }, // this is the car listing page
+        { path: 'cars', element: <CarsListingPage /> }, // this is the car listing page
         { path: 'cars/:name', element: <SingleCar />}, // this is the single car details page
         { path: 'profile', element: <UserAccountPage isProfile={true} /> },
         // other user pages...
@@ -120,10 +120,7 @@ export default function Router() {
           <CarDetails />
         </div>,
     },
-    {
-      path: 'dealer/cars',
-      element: <CarsListingPage />,
-    },
+
     {
       element: <CompactLayout />,
       children: [{ path: '404', element: <Page404 /> }],

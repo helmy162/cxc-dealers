@@ -12,10 +12,14 @@ import Header from './header';
 import NavMini from './nav/NavMini';
 import NavVertical from './nav/NavVertical';
 import NavHorizontal from './nav/NavHorizontal';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout( {type}) {
+export default function DashboardLayout( {}) {
+
+  const {user} = useAuthContext();
+  const type = user.role;
   const { themeLayout } = useSettingsContext();
 
   const isDesktop = useResponsive('up', 'lg');
