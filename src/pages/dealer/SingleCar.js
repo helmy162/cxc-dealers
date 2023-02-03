@@ -140,11 +140,11 @@ export default function SingleCar(){
                     <Helmet>
                         <title> {`${product.details.make} ${product.details.model} ${product.details.year} Bid`} </title>
                     </Helmet>
-                    <div className="flex p-[24px] gap-[44px]">
-                        <div className="w-1/2">
+                    <div className="flex flex-col p-[24px] gap-[44px] lg:flex-row">
+                        <div className="w-full lg:w-1/2">
                             <ProductDetailsCarousel product={product} />
                         </div>
-                        <div className="w-1/2 flex flex-col gap-8">
+                        <div className="flex flex-col gap-8 w-full lg:w-1/2">
                             {/* car name and timer */}
                             <div className="flex justify-between items-center">
                                 <h1 className="text-[24px] font-semibold">{product.details.make} {product.details.model} {product.details.year}</h1>
@@ -153,42 +153,42 @@ export default function SingleCar(){
                             {/* prices section */}
                             <div className="min-h-[60px] bg-[#DFDFDF] flex p-[1px] gap-[1px] rounded-lg">
                                 <div className="flex flex-col items-center justify-center basis-1/3 bg-white py-[12px] rounded-l-lg">
-                                    <h1 className="text-[#8184A3]">Seller's Price</h1>
-                                    <h1 className="text-[#1E1E1E] font-semibold">210,000 AED</h1>
+                                    <h1 className="text-[#8184A3] text-[14px] lg:text-[16px]">Seller's Price</h1>
+                                    <h1 className="text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold">210,000 AED</h1>
                                 </div>
                                 <div className="flex flex-col items-center justify-center basis-1/3 bg-white py-[12px]">
-                                    <h1 className="text-[#8184A3]">Highest Bid</h1>
-                                    <h1 className="text-[#1E1E1E] font-semibold">{highestBid?.toLocaleString('en-US')} AED</h1>
+                                    <h1 className="text-[#8184A3] text-[14px] lg:text-[16px]">Highest Bid</h1>
+                                    <h1 className="text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold">{highestBid?.toLocaleString('en-US')} AED</h1>
                                 </div>
                                 <div className="flex flex-col items-center justify-center basis-1/3 bg-white py-[12px] rounded-r-lg">
-                                    <h1 className="text-[#8184A3]">Minimum Bid</h1>
-                                    <h1 className="text-[#1E1E1E] font-semibold">{product.auction.start_price?.toLocaleString('en-US')} AED</h1>
+                                    <h1 className="text-[#8184A3] text-[14px] lg:text-[16px]">Minimum Bid</h1>
+                                    <h1 className="text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold">{product.auction.start_price?.toLocaleString('en-US')} AED</h1>
                                 </div>
                             </div>
                             {/* specifications section */}
-                            <div className="flex flex-wrap justify-between gap-y-5">
-                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[30%]">
-                                    <div className=" text-[#141414] text-[16px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/mileage.svg"/> Mileage</div>
+                            <div className="flex flex-wrap justify-center gap-x-5 gap-y-5 items-end">
+                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
+                                    <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/mileage.svg"/> Mileage</div>
                                     <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product.details.mileage}</div>
                                 </div>
-                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[30%]">
-                                    <div className=" text-[#141414] text-[16px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/transmission.svg"/> Transmission</div>
+                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
+                                    <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/transmission.svg"/> Transmission</div>
                                     <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">Automatic</div>
                                 </div>
-                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[30%]">
-                                    <div className=" text-[#141414] text-[16px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/engine.svg"/> Engine</div>
+                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
+                                    <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/engine.svg"/> Engine</div>
                                     <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">V10</div>
                                 </div>
-                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[30%]">
-                                    <div className=" text-[#141414] text-[16px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/paint.svg"/> Paint</div>
+                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
+                                    <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/paint.svg"/> Paint</div>
                                     <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">Parchery repainted</div>
                                 </div>
-                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[30%]">
-                                    <div className=" text-[#141414] text-[16px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/specs.svg"/> Specs</div>
+                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
+                                    <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/specs.svg"/> Specs</div>
                                     <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">GCC</div>
                                 </div>
-                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[30%]">
-                                    <div className=" text-[#141414] text-[16px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/color.svg"/> Color</div>
+                                <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
+                                    <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/color.svg"/> Color</div>
                                     <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">White</div>
                                 </div>
                             </div>
