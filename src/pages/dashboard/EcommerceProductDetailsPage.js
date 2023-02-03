@@ -58,19 +58,8 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import { SkeletonProductDetails } from '../../components/skeleton';
 import { BidTableRow } from '../../sections/@dashboard/e-commerce/list';
-// sections
-import {
-  ProductDetailsSummary,
-  ProductDetailsReview,
-  ProductDetailsCarousel,
-} from '../../sections/@dashboard/e-commerce/details';
-import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
-
-import { cars } from '../../_mock/assets/cars';
-import CarDetails from './CarDetails.js';
-import { slideAnimationDuration } from '@mui/x-date-pickers/CalendarPicker/PickersSlideTransition';
-import { func } from 'prop-types';
-
+// loading screen
+import LoadingScreen from '../../components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -112,6 +101,7 @@ export default function EcommerceProductDetailsPage() {
   const { themeStretch } = useSettingsContext();
 
   const { name } = useParams();
+  console.log(name)
 
   const dispatch = useDispatch();
 
@@ -284,9 +274,11 @@ export default function EcommerceProductDetailsPage() {
 
   return (
     <>
+    {product && product.id == name && (
       <Helmet>
         <title>{`Cars: ${product?.id || ''} | CarsXchange`}</title>
       </Helmet>
+    )}
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
@@ -297,11 +289,10 @@ export default function EcommerceProductDetailsPage() {
               name: 'Cars',
               href: PATH_DASHBOARD.car.root,
             },
-            { name: '#' + product?.id },
+            (product && product.id == name)? { name: '#' + product?.id } : { name: '#' },
           ]}
         />
-
-        {product && (
+        {product && product.id == name && (
           <>
             <div style={{fontSize:'36px', fontWeight:'700', marginBottom:'50px', display:'flex', alignItems:'center', gap:'20px', flexWrap: 'wrap'}}>
               #{product?.id}
@@ -526,7 +517,7 @@ export default function EcommerceProductDetailsPage() {
             />
           </>
         )}
-        {isLoading && <SkeletonProductDetails />}
+        {isLoading && <LoadingScreen />}
       </Container>
     </>
   );
