@@ -47,8 +47,7 @@ export default function CarCardTimer({ data }) {
         mr={0.5}
         color="#8184A3"
       >
-        
-        {startIn? 'Stay Tuned' : timeRemaining ? 'Auction ends in ' + timeRemaining : 'Expired'} 
+        {startIn > 0 ? 'Stay Tuned' : timeRemaining ? 'Auction ends in ' + timeRemaining : 'Expired'} 
       </Typography>
       
     </Box>

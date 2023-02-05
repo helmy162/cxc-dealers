@@ -24,8 +24,6 @@ export default function useCarsListingPage() {
   const getCars = async (page) => {
     try {
       setLoading(true);
-      const url = `${endpoints.GET_CARS}?page=${page}`
-
       const { data: response } = await axiosInstance.get(`cars?page=${page}`);
 
       if (!total) {

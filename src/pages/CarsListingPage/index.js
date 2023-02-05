@@ -13,6 +13,7 @@ import OffersCount from './OffersCount';
 import AppliedFilters from './AppliedFilters';
 
 import useCarsListingPage from './useCarsListingPage';
+import LoadingScreen from '../../components/loading-screen';
 
 
 export default function CarsListingPage() {
@@ -38,7 +39,7 @@ export default function CarsListingPage() {
       <Helmet>
         <title>Cars</title>
       </Helmet>
-
+      {isLoading && <LoadingScreen />}
       <Container
         sx={{
           display: 'flex',

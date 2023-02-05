@@ -10,24 +10,29 @@ const statusColors = {
 
 export default function CarCardStatus({ data, status }) {
 
-  const [livestatus, setLiveStatus] = useState('pending');
+  const [livestatus, setLiveStatus] = useState('');
 
   useEffect(() => {
-    if(status?.toLocaleLowerCase() !== 'approved') return
-    setLiveStatus('live')
     const endDate = new Date(data?.auction?.end_at);
     const startDate = new Date(data?.auction?.start_at);
     const intervalId = setInterval(() => {
       const currentTime = new Date();
-      if(currentTime < startDate) {
+      const difference = endDate - currentTime;
+      if(status?.toLocaleLowerCase() !== 'approved'){
+        setLiveStatus('pending')
+        return;
+      }
+      else if(currentTime < startDate) {
         setLiveStatus('upcoming')
         return;
       }
-      const difference = endDate - currentTime;
-      if (difference < 0) {
+      else if (difference < 0) {
         clearInterval(intervalId);
         setLiveStatus('expired')
         return;
+      }
+      else{
+        setLiveStatus('live')
       }
       
     }, 1000);
