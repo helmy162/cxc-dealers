@@ -4,7 +4,8 @@ import { Box } from '@mui/material';
 const statusColors = {
   expired: '#E32519',
   live: '#1FD63C',
-  pending: '#ffc400'
+  pending: '#ffc400',
+  upcoming: '#0077C9',
 }
 
 export default function CarCardStatus({ data, status }) {
@@ -15,8 +16,13 @@ export default function CarCardStatus({ data, status }) {
     if(status?.toLocaleLowerCase() !== 'approved') return
     setLiveStatus('live')
     const endDate = new Date(data?.auction?.end_at);
+    const startDate = new Date(data?.auction?.start_at);
     const intervalId = setInterval(() => {
       const currentTime = new Date();
+      if(currentTime < startDate) {
+        setLiveStatus('upcoming')
+        return;
+      }
       const difference = endDate - currentTime;
       if (difference < 0) {
         clearInterval(intervalId);

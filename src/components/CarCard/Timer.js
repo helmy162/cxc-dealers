@@ -7,12 +7,15 @@ import { useEffect, useState } from 'react';
 
 export default function CarCardTimer({ data }) {
   const [timeRemaining, setTimeRemaining] = useState(null);
+  const [startIn, setStartIn] = useState(null);
 
   useEffect(() => {
     const endDate = new Date(data?.auction?.end_at);
+    const startDate = new Date(data?.auction?.start_at);
     const intervalId = setInterval(() => {
       const currentTime = new Date();
       const difference = endDate - currentTime;
+      setStartIn(startDate - currentTime);
 
       if (difference < 0) {
         clearInterval(intervalId);
@@ -45,7 +48,7 @@ export default function CarCardTimer({ data }) {
         color="#8184A3"
       >
         
-        {timeRemaining ? 'Auction ends in ' + timeRemaining : 'Expired'} 
+        {startIn? 'Stay Tuned' : timeRemaining ? 'Auction ends in ' + timeRemaining : 'Expired'} 
       </Typography>
       
     </Box>
