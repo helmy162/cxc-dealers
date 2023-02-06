@@ -145,7 +145,7 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'REGISTER',
       payload: {
-        user: {...user, role: user.type },
+        user: {...user, role: 'dealer' },
       },
     });
   }, []);
