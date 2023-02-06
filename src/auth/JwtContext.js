@@ -140,7 +140,8 @@ export function AuthProvider({ children }) {
     });
     const { accessToken, user } = response.data;
 
-    localStorage.setItem('accessToken', accessToken);
+    // localStorage.setItem('accessToken', accessToken);
+    setSession(accessToken, user?.id);
 
     dispatch({
       type: 'REGISTER',

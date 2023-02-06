@@ -24,6 +24,7 @@ export default function UserTableToolbar({
   onFilterName,
   onFilterRole,
   onResetFilter,
+  hasFilterRole = true,
 }) {
   return (
     <Stack
@@ -35,7 +36,9 @@ export default function UserTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
+      {
+        hasFilterRole &&
+        <TextField
         fullWidth
         select
         label="Role"
@@ -70,6 +73,8 @@ export default function UserTableToolbar({
           </MenuItem>
         ))}
       </TextField>
+      }
+      
 
       <TextField
         fullWidth

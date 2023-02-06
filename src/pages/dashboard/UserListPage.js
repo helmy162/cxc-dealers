@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
@@ -38,26 +38,38 @@ import {
 } from '../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../sections/@dashboard/user/list';
+import { getUsers } from '../../redux/slices/user';
+import { useDispatch, useSelector } from '../../redux/store';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all'];
+
+
+const STATUS_OPTIONS = [
+  'all',
+  'Admin',
+  'Inspector',
+  'Dealer'
+];
 
 const ROLE_OPTIONS = [
   'all',
-  'Super Admin',
+  'Admin',
   'Inspector',
   'Dealer'
 ];
 
 const TABLE_HEAD = [
+  { id: 'id', label: 'ID', align: 'left'},
   { id: 'name', label: 'Name', align: 'left' },
   { id: 'email', label: 'Email', align: 'left' },
   { id: 'phone_number', label: 'Phone Number', align: 'left' },
   { id: 'bid_limit', label: 'Bid Limit', align: 'left' },
-
+  { id: 'role', label: 'Role', align: 'left' },
   { id: '' },
 ];
+
+
 
 // ----------------------------------------------------------------------
 
@@ -79,13 +91,30 @@ export default function UserListPage() {
     onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
-  } = useTable();
+  } = useTable({
+    defaultOrderBy: 'id',
+    defaultOrder: 'desc',
+  });
 
   const { themeStretch } = useSettingsContext();
 
+  const { users, isLoading } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (users && users.length) {
+      setTableData(users);
+    }
+  }, [users]);
+
   const navigate = useNavigate();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState([...users]);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -166,10 +195,10 @@ export default function UserListPage() {
     }
   };
   const handleAccountClick = (id) => {
-    navigate(PATH_DASHBOARD.user.account(paramCase(id)));
+    navigate(PATH_DASHBOARD.user.account(id));
   }
   const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
+    navigate(PATH_DASHBOARD.user.edit(id));
   };
 
   const handleResetFilter = () => {
@@ -189,7 +218,7 @@ export default function UserListPage() {
           heading="User List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'Users', href: PATH_DASHBOARD.user.root },
             { name: 'List' },
           ]}
           action={
@@ -228,6 +257,7 @@ export default function UserListPage() {
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
+            hasFilterRole={filterStatus === 'all'}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -268,17 +298,18 @@ export default function UserListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered
+                  {(isLoading ? [...Array(rowsPerPage)] : dataFiltered)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .filter(row => row)
                     .map((row) => (
                       <UserTableRow
-                        key={row.id}
+                        key={row?.id}
                         row={row}
-                        selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
-                        onSelectAccount={() => handleAccountClick(row.name)}
+                        selected={selected.includes(row?.id)}
+                        onSelectRow={() => onSelectRow(row?.id)}
+                        onDeleteRow={() => handleDeleteRow(row?.id)}
+                        onEditRow={() => handleEditRow(row?.id)}
+                        onSelectAccount={() => handleAccountClick(row?.id)}
                       />
                     ))}
 
@@ -353,8 +384,12 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
     });
   }
 
+  if (filterRole !== 'all') {
+    inputData = inputData.filter((user) => filterRole.toLowerCase().includes(user.type));
+  }
+
   if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
+    inputData = inputData.filter((user) => filterStatus.toLowerCase().includes(user.type));
   }
 
 

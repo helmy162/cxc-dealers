@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useParams } from 'react-router-dom';
@@ -12,6 +13,9 @@ import { useSettingsContext } from '../../components/settings';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 // sections
 import UserNewEditForm from '../../sections/@dashboard/user/UserNewEditForm';
+// redux
+import { useDispatch, useSelector } from '../../redux/store';
+import { getUsers } from '../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -19,8 +23,13 @@ export default function UserEditPage() {
   const { themeStretch } = useSettingsContext();
 
   const { name } = useParams();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) =>
+  state.user.users.find((user) => user.id == name));
 
-  const currentUser = _userList.find((user) => paramCase(user.name) === name);
+useEffect(() => {
+  dispatch(getUsers());
+}, [dispatch]);
 
   return (
     <>
@@ -37,7 +46,7 @@ export default function UserEditPage() {
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'User',
+              name: 'Users',
               href: PATH_DASHBOARD.user.list,
             },
             { name: currentUser?.name },

@@ -84,7 +84,7 @@ export default function UserAccountPage({isProfile = false}) {
           heading="Account"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'Users', href: PATH_DASHBOARD.user.root },
             { name: 'Account Settings' },
           ]}
         />

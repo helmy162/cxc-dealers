@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // form
 import { useForm, Controller } from 'react-hook-form';
@@ -39,14 +39,12 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
+    phoneNumber: Yup.string(),
+    company: Yup.string(),
     role: Yup.string().required('Role is required'),
-    avatarUrl: Yup.string().required('Avatar is required').nullable(true),
+    avatarUrl: Yup.string().nullable(true),
+    isVerified: Yup.boolean(),
+    status: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -54,16 +52,11 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       name: currentUser?.name || '',
       email: currentUser?.email || '',
       phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
       avatarUrl: currentUser?.avatarUrl || null,
       isVerified: currentUser?.isVerified || true,
       status: currentUser?.status,
       company: currentUser?.company || '',
-      role: currentUser?.role || '',
+      role: currentUser?.type || 'dealer',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -227,8 +220,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               <RHFTextField name="company" label="Company" />
 
               <RHFSelect native name="role" label="Role">
-                <option value="" disabled/>
-                <option value="admin">Super Admin</option>
+                <option value="admin">Admin</option>
                 <option value="inspector">Inpsector</option>
                 <option value="dealer">Dealer</option>
               </RHFSelect>

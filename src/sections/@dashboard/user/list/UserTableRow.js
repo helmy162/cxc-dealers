@@ -35,7 +35,8 @@ UserTableRow.propTypes = {
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectAccount }) {
   const navigate = useNavigate();
 
-  const { name, avatarUrl, company, role, isVerified, status, phoneNumber, email} = row;
+  const { id, name, phone, email, type} = row;
+
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -56,105 +57,117 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
+  if(row){
+    return (
+      <>
+        <TableRow hover selected={selected}>
+          <TableCell padding="checkbox">
+            <Checkbox checked={selected} onClick={onSelectRow} />
+          </TableCell>
 
-  return (
-    <>
-      <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+          <TableCell>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              {/* <Avatar alt={name} src={avatarUrl} /> */}
 
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            {/* <Avatar alt={name} src={avatarUrl} /> */}
+              <Typography variant="subtitle2" noWrap onClick={onSelectAccount} sx={{cursor:'pointer'}}>
+                #{id}
+              </Typography>
+            </Stack>
+          </TableCell>
+          
+          <TableCell>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              {/* <Avatar alt={name} src={avatarUrl} /> */}
 
-            <Typography variant="subtitle2" noWrap onClick={onSelectAccount}>
-              <RouterLink
-                to={PATH_DASHBOARD.user.account}
-                style={{color:'unset', textDecoration:'none'}}
-              >
+              <Typography variant="subtitle2" noWrap onClick={onSelectAccount} sx={{cursor:'pointer'}}>
                 {name}
-              </RouterLink>
-            </Typography>
-          </Stack>
-        </TableCell>
+              </Typography>
+            </Stack>
+          </TableCell>
 
-        <TableCell align="left">{email}</TableCell>
+          <TableCell align="left">{email}</TableCell>
 
-        <TableCell align="left">{phoneNumber}</TableCell>
+          <TableCell align="left">{phone}</TableCell>
 
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          $100,000
-        </TableCell>
+          <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+            $100,000
+          </TableCell>
+          <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+            {type}
+          </TableCell>
 
-        {/* <TableCell align="center">
-          <Iconify
-            icon={isVerified ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-            sx={{
-              width: 20,
-              height: 20,
-              color: 'success.main',
-              ...(!isVerified && { color: 'warning.main' }),
+          {/* <TableCell align="center">
+            <Iconify
+              icon={isVerified ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
+              sx={{
+                width: 20,
+                height: 20,
+                color: 'success.main',
+                ...(!isVerified && { color: 'warning.main' }),
+              }}
+            />
+          </TableCell>
+
+          <TableCell align="left">
+            <Label
+              variant="soft"
+              color={(status === 'banned' && 'error') || 'success'}
+              sx={{ textTransform: 'capitalize' }}
+            >
+              {status}
+            </Label>
+          </TableCell> */}
+
+          <TableCell align="right">
+            <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+
+        <MenuPopover
+          open={openPopover}
+          onClose={handleClosePopover}
+          arrow="right-top"
+          sx={{ width: 140 }}
+        >
+          <MenuItem
+            onClick={() => {
+              handleOpenConfirm();
+              handleClosePopover();
             }}
-          />
-        </TableCell>
-
-        <TableCell align="left">
-          <Label
-            variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
-            sx={{ textTransform: 'capitalize' }}
+            sx={{ color: 'error.main' }}
           >
-            {status}
-          </Label>
-        </TableCell> */}
-
-        <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-
-      <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Delete
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Edit
-        </MenuItem>
-      </MenuPopover>
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+            <Iconify icon="eva:trash-2-outline" />
             Delete
-          </Button>
-        }
-      />
-    </>
-  );
+          </MenuItem>
+
+          <MenuItem
+            onClick={() => {
+              onEditRow();
+              handleClosePopover();
+            }}
+          >
+            <Iconify icon="eva:edit-fill" />
+            Edit
+          </MenuItem>
+        </MenuPopover>
+
+        <ConfirmDialog
+          open={openConfirm}
+          onClose={handleCloseConfirm}
+          title="Delete"
+          content="Are you sure want to delete?"
+          action={
+            <Button variant="contained" color="error" onClick={onDeleteRow}>
+              Delete
+            </Button>
+          }
+        />
+      </>
+    );
+  }
+  else{
+    return null;
+  }
 }

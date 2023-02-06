@@ -29,7 +29,7 @@ export default function UserCreatePage() {
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'User',
+              name: 'Users',
               href: PATH_DASHBOARD.user.list,
             },
             { name: 'New user' },
