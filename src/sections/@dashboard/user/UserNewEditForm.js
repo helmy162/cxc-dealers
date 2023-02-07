@@ -54,7 +54,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       phoneNumber: currentUser?.phoneNumber || '',
       avatarUrl: currentUser?.avatarUrl || null,
       isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status,
+      status: currentUser?.status || 'active',
       company: currentUser?.company || '',
       role: currentUser?.type || 'dealer',
     }),
