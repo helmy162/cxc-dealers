@@ -4,14 +4,16 @@ import uniqBy from 'lodash/uniqBy';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import { get } from 'lodash';
 
 // ----------------------------------------------------------------------
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   error: null,
   products: [],
   product: null,
+  productStatus: null,
   checkout: {
     activeStep: 0,
     cart: [],
@@ -32,6 +34,10 @@ const slice = createSlice({
     startLoading(state) {
       state.isLoading = true;
     },
+    resetProduct(state) {
+      state.product = null;
+      state.productStatus = null;
+    },
 
     // HAS ERROR
     hasError(state, action) {
@@ -49,6 +55,11 @@ const slice = createSlice({
     getProductSuccess(state, action) {
       state.isLoading = false;
       state.product = action.payload;
+    },
+
+    getProductStatus(state, action) {
+      state.isLoading = false;
+      state.productStatus = action.payload;
     },
 
     // CHECKOUT
@@ -176,6 +187,7 @@ export default slice.reducer;
 // Actions
 export const {
   getCart,
+  resetProduct,
   addToCart,
   resetCart,
   gotoStep,
@@ -208,9 +220,32 @@ export function getProducts() {
 export function getProduct(name) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
+
     try {
       const response = await axios.get(`cars/all`);
       dispatch(slice.actions.getProductSuccess(response.data.find(product=> product.id == name)));
+      getStatus(response.data.find(product=> product.id == name))(dispatch);
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getStatus(product){
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      if(!product){
+        dispatch(slice.actions.startLoading());
+        console.log(product, slice.productStatus);
+        return;
+      }
+      const endDate = new Date(product?.auction?.end_at);
+      const currentTime = new Date();
+      const difference = endDate - currentTime;
+      dispatch(slice.actions.getProductStatus(difference));
+
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));

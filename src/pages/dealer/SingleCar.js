@@ -1,6 +1,6 @@
 import ProductDetailsCarousel from "../dashboard/ProductDetailsCarousel"
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct } from '../../redux/slices/product';
+import { getProduct, getStatus, resetProduct} from '../../redux/slices/product';
 import {useEffect, useMemo} from 'react';
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
@@ -17,19 +17,23 @@ import CarDetails from "../dashboard/CarDetails";
 import Pusher from "pusher-js";
 import { useAuthContext } from "src/auth/useAuthContext";
 import axiosInstance from 'src/utils/axios';
-import { useParams } from "react-router";
+import { Navigate, useParams, useNavigate  } from "react-router";
+import LoadingScreen from '../../components/loading-screen';
 
 export default function SingleCar(){
     const {name} = useParams();
     const {user} = useAuthContext();
-    const { product, isLoading, checkout } = useSelector((state) => state.product);
+    const { product, isLoading, checkout, productStatus } = useSelector((state) => state.product);
     const dispatch = useDispatch();
     
     useEffect(() => {
+        dispatch(resetProduct());
         dispatch(getProduct(name));
   }, [dispatch]);
 
-  console.log(product);
+
+
+
   const NewProductSchema = Yup.object().shape({
     bid: 
     product?.auction?.latest_bid ?
@@ -46,7 +50,7 @@ export default function SingleCar(){
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [product]
   );
-    console.log(product);
+
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
     defaultValues,
@@ -62,9 +66,32 @@ export default function SingleCar(){
 
   const [auctionID, setAuctionID] = useState(null);
   const [highestBid, setHighestBid] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(null);
+  const [canBid, setCanBid] = useState(true);
 
   useEffect(() => {
     setHighestBid(product?.auction?.latest_bid?.bid);
+    const intervalId = setInterval(() => {
+      dispatch(getStatus(product));
+      if (productStatus < 0) {
+        clearInterval(intervalId);
+        setTimeRemaining(null);
+        setCanBid(false)
+        return;
+      }
+      const hours = Math.floor(productStatus / 1000 / 60 / 60);
+      const minutes = Math.floor((productStatus / 1000 / 60) % 60);
+      const seconds = Math.floor((productStatus / 1000) % 60);
+
+      setTimeRemaining(
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+      );
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [productStatus, product, dispatch]);
+
+  useEffect(() => {
     const access_token = user?.accessToken;
     const PUSHER_APP_KEY = "9d45400630a8fa077501";
     const chanelAuthEndpoint =
@@ -89,7 +116,7 @@ export default function SingleCar(){
   
     return () => {
       channel.unbind("NewBid");
-      pusher.disconnect();
+      pusher.unsubscribe();
     };
   }, [auctionID, user, product]);
 
@@ -103,35 +130,9 @@ export default function SingleCar(){
       console.error(error);
     }
   };
-
-  const [timeRemaining, setTimeRemaining] = useState(null);
-  const [canBid, setCanBid] = useState(true);
-
-  useEffect(() => {
-    const endDate = new Date(product?.auction?.end_at);
-    const intervalId = setInterval(() => {
-      const currentTime = new Date();
-      const difference = endDate - currentTime;
-
-      if (difference < 0) {
-        clearInterval(intervalId);
-        setTimeRemaining(null);
-        setCanBid(false)
-        return;
-      }
-
-      const hours = Math.floor(difference / 1000 / 60 / 60);
-      const minutes = Math.floor((difference / 1000 / 60) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
-
-      setTimeRemaining(
-        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
-      );
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [product]);
-    
+  console.log(isLoading, product);
+  if(productStatus < 0 ) return <Navigate to="/404" />
+  if(!product || product.id != name || !productStatus || !timeRemaining) return <LoadingScreen />
     return(
         <>
             {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
   Box,
@@ -15,9 +15,16 @@ import AppliedFilters from './AppliedFilters';
 import useCarsListingPage from './useCarsListingPage';
 import LoadingScreen from '../../components/loading-screen';
 
+import { resetProduct } from '../../redux/slices/product';
+import { useDispatch } from '../../redux/store';
 
 export default function CarsListingPage() {
   const [isFilterVisible, setFilterVisible] = useState(false);
+  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(resetProduct());
+}, [dispatch]);
 
   const {
     isLoading,
