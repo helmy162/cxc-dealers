@@ -4,7 +4,6 @@ import uniqBy from 'lodash/uniqBy';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
-import { get } from 'lodash';
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +59,11 @@ const slice = createSlice({
     getProductStatus(state, action) {
       state.isLoading = false;
       state.productStatus = action.payload;
+    },
+
+    getExtendedTime(state, action) {
+      state.isLoading = false;
+      state.product.auction.end_at = action.payload;
     },
 
     // CHECKOUT
@@ -232,19 +236,62 @@ export function getProduct(name) {
   };
 }
 
+// ----------------------------------------------------------------------
+
 export function getStatus(product){
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       if(!product){
         dispatch(slice.actions.startLoading());
-        console.log(product, slice.productStatus);
         return;
       }
       const endDate = new Date(product?.auction?.end_at);
       const currentTime = new Date();
       const difference = endDate - currentTime;
       dispatch(slice.actions.getProductStatus(difference));
+      
+
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function extendEndtime(auctionID) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      // Make a GET request to retrieve the current auction data
+      const response = await axios.get(`admin/auctions/${auctionID}`);
+      const currentAuctionData = response.data.data;
+      
+      // Change the duration to end after 30 seconds
+      const startAt = new Date(currentAuctionData.start_at).getTime();
+      const endAt = new Date().getTime() + 30000;
+      const duration = endAt - startAt;
+      
+      // Convert the duration to ISO 8601 format
+      const updatedDuration = `PT${Math.floor(duration / 1000 / 60 /60)}H${Math.floor((duration / 1000 / 60) % 60 )}M${Math.round((duration / 1000) % 60)}S`;
+
+      // Update the auction data with the new duration time
+      const updatedAuctionData = {
+        car_id: currentAuctionData.car_id,
+        start_price: currentAuctionData.start_price,
+        date: currentAuctionData.start_at,
+        duration: updatedDuration
+      };
+
+      
+      await axios.put(`admin/auctions/${auctionID}`, { ...updatedAuctionData });
+
+      dispatch(slice.actions.getExtendedTime(new Date(endAt).toISOString()));
+
+      await getProduct(currentAuctionData.car_id)(dispatch);
+  
 
     } catch (error) {
       console.error(error);

@@ -24,7 +24,7 @@ import ProductDetailsCarousel from './ProductDetailsCarousel';
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProduct, getProducts } from '../../redux/slices/product';
 
-export default function CarDetails({withImages = true}) {
+export default function CarDetails({withImages = true, noLoading=false}) {
     const { themeStretch } = useSettingsContext();
     const { name } = useParams();
     const dispatch = useDispatch();
@@ -35,13 +35,12 @@ export default function CarDetails({withImages = true}) {
     const [allAccordions, setAllAccordions]= useState([]);
     useEffect(() => {
           dispatch(getProduct(name));
-          dispatch(getProducts());
     }, [dispatch, name]);
     
     const [defectImages, setDefectImages] = useState([]);
 
     useEffect(() => {
-        if(product && !isLoading){
+        if(product && !isLoading || noLoading){
             if (product) {
                 setDefectImages(product.exterior.markers.map(marker => 'https://api.carsxchange.com'+ marker.photo));
                 Object.keys(product).forEach(key => {
@@ -125,7 +124,7 @@ export default function CarDetails({withImages = true}) {
         }
     }, [copySuccess]);
 
-    if (!isLoading && product) {
+    if (!isLoading && product || noLoading) {
         return(
             <>
             {

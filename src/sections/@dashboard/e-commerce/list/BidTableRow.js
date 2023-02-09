@@ -41,7 +41,7 @@ export default function ProductTableRow({
   onEditRow,
   onViewRow,
 }) {
-  const { id, name, time, bid} = row;
+  const { dealer, time, bid} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -78,11 +78,11 @@ export default function ProductTableRow({
               onClick={onViewRow}
               sx={{ cursor: 'pointer' }}
             >
-              #{id}
+              #{dealer.id}
             </Link>
           </Stack>
         </TableCell>
-        <TableCell>{name}</TableCell>
+        <TableCell>{dealer.name}</TableCell>
         <TableCell>{time}</TableCell>
         <TableCell>{bid}</TableCell>
         <TableCell padding="checkbox">
