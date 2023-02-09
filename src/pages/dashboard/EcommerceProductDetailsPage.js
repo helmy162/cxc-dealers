@@ -101,7 +101,6 @@ export default function EcommerceProductDetailsPage() {
   const { themeStretch } = useSettingsContext();
 
   const { name } = useParams();
-  console.log(name)
 
   const dispatch = useDispatch();
 
@@ -112,6 +111,7 @@ export default function EcommerceProductDetailsPage() {
   const [currentTab, setCurrentTab] = useState('inspection');
 
   // const [tableData, setTableData] = useState([...product.bidders]);
+
   const [tableData, setTableData] = useState([]);
 
   const [filterName, setFilterName] = useState('');
@@ -155,6 +155,7 @@ export default function EcommerceProductDetailsPage() {
     if (name) {
       dispatch(getProduct(name));
       dispatch(getProducts());
+      setTableData([product?.auction?.latest_bid]);
     }
   }, [dispatch, name]);
 
