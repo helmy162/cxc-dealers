@@ -48,7 +48,7 @@ import Label from '../../components/label';
 import Scrollbar from '../../components/scrollbar';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct, getProducts, addToCart, gotoStep } from '../../redux/slices/product';
+import { getProduct, getProductAsAdmin, getStatus} from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -60,15 +60,19 @@ import { SkeletonProductDetails } from '../../components/skeleton';
 import { BidTableRow } from '../../sections/@dashboard/e-commerce/list';
 // loading screen
 import LoadingScreen from '../../components/loading-screen';
-
+//car status
+import { carStatus, carTimer } from '../../utils/status';
+// websocket
+import Pusher from "pusher-js";
+import { useAuthContext } from "src/auth/useAuthContext";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'Dealer ID', align: 'left' },
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'time', label: 'Time of bid', align: 'left' },
-  { id: 'bid', label: 'Highest Bid', align: 'left' },
-  { id: '' },
+  { id: 'user_id', label: 'Dealer ID', align: 'center' },
+  { id: 'user_name', label: 'Name', align: 'center' },
+  { id: 'created_at', label: 'Time of bid', align: 'center' },
+  { id: 'bid', label: 'Highest Bid', align: 'center' },
+  { id: '', label: 'Winner?', align: 'center' },
 ];
 
 
@@ -95,27 +99,91 @@ export default function EcommerceProductDetailsPage() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable({
-    defaultOrderBy: 'createdAt',
+    defaultOrderBy: 'bid',
+    defaultOrder: 'desc',
   });
 
   const { themeStretch } = useSettingsContext();
 
   const { name } = useParams();
-
+  const {user} = useAuthContext();
   const dispatch = useDispatch();
 
-  const { product, isLoading, checkout } = useSelector((state) => state.product);
+  const { productAsAdmin, isLoading, checkout, product, productStatus} = useSelector((state) => state.product);
+
+  useEffect(() => {
+    if (name) {
+      dispatch(getProductAsAdmin(name));
+      dispatch(getProduct(name));
+      dispatch(getStatus(product));
+    }
+  }, [dispatch, name]);
+
+  useEffect(() => {
+    if (productAsAdmin && productAsAdmin?.auction?.bids) {
+      setTableData(productAsAdmin?.auction?.bids);
+    }
+  }, [productAsAdmin]);
+
+  // product status
+  const [timeRemaining, setTimeRemaining] = useState(null);
+  const [livestatus, setLiveStatus] = useState(''); //live, expired, upcoming, pending
+  useEffect(() => {
+
+    if (livestatus !== 'expired' && livestatus !== 'pending') {
+      const intervalId = setInterval(() => {
+        const endAt = new Date(product?.auction?.end_at);
+        const startAt = new Date(product?.auction?.start_at);
+        const now = new Date();
+        
+        setLiveStatus(carStatus(productAsAdmin));
+        setTimeRemaining(carTimer(startAt > now ? startAt - now : endAt - now));
+      }, 1000);
   
-  // const product= cars.find(item => item.id===name)
+      return () => clearInterval(intervalId);
+    }
+  }, [productStatus, product, productAsAdmin, dispatch]);
+  
+  // websocket for live status
+  const [auctionID, setAuctionID] = useState(null);
+  useEffect(() => {
+    if (product?.auction?.id) {
+      setAuctionID(product?.auction?.id);
+    }
+  }, [product]);
+  
+  useEffect(() => {
+    const access_token = user?.accessToken;
+    const PUSHER_APP_KEY = "9d45400630a8fa077501";
+    const chanelAuthEndpoint =
+      "https://api.carsxchange.com/api/v1/pusher/auth-channel";
+
+    let pusher = new Pusher(PUSHER_APP_KEY, {
+      cluster: "eu",
+      channelAuthorization: {
+        endpoint: chanelAuthEndpoint,
+        transport: "ajax",
+        params: {},
+        headers: {
+          authorization: `Bearer ${access_token}`,
+        },
+      },
+    });
+    const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
+    channel.bind("NewBid", (data) => {
+        dispatch(getProductAsAdmin(name));
+    });
+  
+    return () => {
+      channel.unbind("NewBid");
+      pusher.unsubscribe();
+    };
+  }, [auctionID, user, product]);
+
 
   const [currentTab, setCurrentTab] = useState('inspection');
-
-  // const [tableData, setTableData] = useState([...product.bidders]);
-
   const [tableData, setTableData] = useState([]);
-
   const [filterName, setFilterName] = useState('');
-
   const [filterStatus, setFilterStatus] = useState([]);
 
 
@@ -126,18 +194,18 @@ export default function EcommerceProductDetailsPage() {
     filterStatus,
   });
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const dataInPage = dataFiltered?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 60 : 80;
 
   const isFiltered = filterName !== '' || !!filterStatus.length;
 
-  const isNotFound = (!dataFiltered.length && !!filterName) || (!isLoading && !dataFiltered.length);
+  const isNotFound = (!dataFiltered?.length && !!filterName) || (!isLoading && !dataFiltered?.length);
 
 
 
   const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+    const deleteRow = tableData?.filter((row) => row.id !== id);
     setSelected([]);
     setTableData(deleteRow);
 
@@ -148,16 +216,6 @@ export default function EcommerceProductDetailsPage() {
     }
   };
 
-
-
-
-  useEffect(() => {
-    if (name) {
-      dispatch(getProduct(name));
-      dispatch(getProducts());
-      setTableData([product?.auction?.latest_bid]);
-    }
-  }, [dispatch, name]);
 
   const auctionDurations = [
     '1 Hour',
@@ -181,33 +239,33 @@ export default function EcommerceProductDetailsPage() {
     {
       value: 'inspection',
       label: 'Inspection Details',
-      component: product ? <Markdown children={`
-      \n<p><strong> Inspection Status:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Online Price:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Asked Price:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Offered Price:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Inspector:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Inspector ID:</strong> <small> ${product?.seller_name} </small> </p>
+      component: productAsAdmin ? <Markdown children={`
+      \n<p><strong> Inspection Status:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Online Price:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Asked Price:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Offered Price:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Inspector:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Inspector ID:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
       `} /> : null,
     },
     {
       value: 'auction',
       label: `Auction Details`,
-      component: product ? <Markdown children={`
-      \n<p><strong> Seller's Price:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Start Time:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Auction Date:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Auction Duration:</strong> <small> ${product?.seller_name} </small> </p>
+      component: productAsAdmin ? <Markdown children={`
+      \n<p><strong> Seller's Price:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Start Time:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Auction Date:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Auction Duration:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
       `} /> : null,
     },
     {
       value: 'seller',
       label: `Seller's Details`,
-      component: product ? <Markdown children={`
-      \n<p><strong> Seller's Name:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Seller's Email:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Seller's Phone:</strong> <small> ${product?.seller_name} </small> </p>
-      \n<p><strong> Selling Date:</strong> <small> ${product?.seller_name} </small> </p>
+      component: productAsAdmin ? <Markdown children={`
+      \n<p><strong> Seller's Name:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Seller's Email:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Seller's Phone:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Selling Date:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
       `} /> : null,
     }
   ];
@@ -221,13 +279,13 @@ export default function EcommerceProductDetailsPage() {
 
   const defaultValues = useMemo(
     () => ({
-      start_price: product?.start_price || 0,
-      duration: product?.duration || auctionDurations[0],
-      auctionDate: product?.auctionDate || new Date(),
-      auctionTime: product?.auctionTime || new Date(),
+      start_price: productAsAdmin?.start_price || 0,
+      duration: productAsAdmin?.duration || auctionDurations[0],
+      auctionDate: productAsAdmin?.auctionDate || new Date(),
+      auctionTime: productAsAdmin?.auctionTime || new Date(),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [product]
+    [productAsAdmin]
   );
 
   const methods = useForm({
@@ -250,13 +308,9 @@ export default function EcommerceProductDetailsPage() {
       var parts = duration.split(" ");
       var hours = parts[0];
       var isoDuration = `PT${hours}H`;
-      const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price, car_id: product.id};
-      console.log(mergedDate);
+      const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price, car_id: productAsAdmin.id};
       const res = await axiosInstance.post('admin/auctions', mergedDate);
       console.log(res);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      // reset();
-      console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -273,11 +327,14 @@ export default function EcommerceProductDetailsPage() {
     }
   }, [copySuccess]);
 
+  
+
+  
   return (
     <>
-    {product && product.id == name && (
+    {productAsAdmin && productAsAdmin.id == name && livestatus && (
       <Helmet>
-        <title>{`Cars: ${product?.id || ''} | CarsXchange`}</title>
+        <title>{`Cars: ${productAsAdmin?.id || ''} | CarsXchange`}</title>
       </Helmet>
     )}
 
@@ -290,24 +347,25 @@ export default function EcommerceProductDetailsPage() {
               name: 'Cars',
               href: PATH_DASHBOARD.car.root,
             },
-            (product && product.id == name)? { name: '#' + product?.id } : { name: '#' },
+            (productAsAdmin && productAsAdmin.id == name)? { name: '#' + productAsAdmin?.id } : { name: '#' },
           ]}
         />
-        {product && product.id == name && (
+        {productAsAdmin && productAsAdmin.id == name && livestatus && (
           <>
             <div style={{fontSize:'36px', fontWeight:'700', marginBottom:'50px', display:'flex', alignItems:'center', gap:'20px', flexWrap: 'wrap'}}>
-              #{product?.id}
+              #{productAsAdmin?.id}
 
               <Label
                 variant="soft"
                 color={
-                  (product?.status === 'expired' && 'error') ||
-                  (product?.status === 'pending' && 'warning') ||
-                  (product?.status === 'active' && 'success') || 'success'
+                  (livestatus === 'expired' && 'error') ||
+                  (livestatus === 'pending' && 'warning') ||
+                  (livestatus === 'approved' && 'success') ||
+                  (livestatus === 'upcoming' && 'secondary') || 'success'
                 }
                 sx={{ textTransform: 'capitalize', minWidth:'100px', fontSize:'18px', fontWeight:'600', padding:'6px 16px', minHeight:'fit-content', height:'unset', lineHeight:'unset',}}
               >
-                {product?.status ? sentenceCase(product?.status) : ''}
+                {timeRemaining? timeRemaining : livestatus}
               </Label>
 
               <Button
@@ -319,7 +377,7 @@ export default function EcommerceProductDetailsPage() {
                 View Inspection
               </Button>
               <Button
-              onClick={() => {navigator.clipboard.writeText(window.location.origin + '/' + product?.id + '/inspection'); setCopySuccess('Copied!');}}
+              onClick={() => {navigator.clipboard.writeText(window.location.origin + '/' + productAsAdmin?.id + '/inspection'); setCopySuccess('Copied!');}}
               variant="contained"
               startIcon={<Iconify icon="eva:copy-fill" />}
               >
@@ -445,11 +503,11 @@ export default function EcommerceProductDetailsPage() {
               <TableSelectedAction
                 dense={dense}
                 numSelected={0}
-                rowCount={tableData.length}
+                rowCount={tableData?.length}
                 onSelectAllRows={(checked) =>
                   onSelectAllRows(
                     checked,
-                    tableData.map((row) => row.id)
+                    tableData?.map((row) => row.id)
                   )
                 }
                 action={
@@ -468,21 +526,21 @@ export default function EcommerceProductDetailsPage() {
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
-                    rowCount={tableData.length}
+                    rowCount={tableData?.length}
                     numSelected={0}
                     onSort={onSort}
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
-                        tableData.map((row) => row.id)
+                        tableData?.map((row) => row.id)
                       )
                     }
                   />
 
                   <TableBody>
                     {(isLoading ? [...Array(rowsPerPage)] : dataFiltered)
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((row, index) =>
+                      ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      ?.map((row, index) =>
                         row ? (
                           <BidTableRow
                             key={row.id}
@@ -498,7 +556,7 @@ export default function EcommerceProductDetailsPage() {
 
                     <TableEmptyRows
                       height={denseHeight}
-                      emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                      emptyRows={emptyRows(page, rowsPerPage, tableData?.length)}
                     />
 
                     <TableNoData isNotFound={isNotFound} />
@@ -507,7 +565,7 @@ export default function EcommerceProductDetailsPage() {
               </Scrollbar>
             </TableContainer>
             <TablePaginationCustom
-              count={dataFiltered.length}
+              count={dataFiltered?.length}
               page={page}
               rowsPerPage={rowsPerPage}
               onPageChange={onChangePage}
@@ -528,35 +586,18 @@ export default function EcommerceProductDetailsPage() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filterName, filterStatus }) {
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = inputData?.map((el, index) => [{
+    ...el,
+    user_name: el.dealer.name,
+  }, index]);
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
-  if (filterName) {
-    inputData = inputData.filter( function(product){
-      if 
-      (
-         product.id.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-      || product.id.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-      || product.make.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.model.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.year.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product.seller_name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-      )
-        return true;
-      return false;
-    });
-  }
-
-  if (filterStatus.length) {
-    inputData = inputData.filter((product) => filterStatus.includes(product.auction));
-  }
 
   return inputData;
 }
