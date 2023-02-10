@@ -7,6 +7,7 @@ import {
   Button,
   TableRow,
   Checkbox,
+  Radio,
   MenuItem,
   TableCell,
   IconButton,
@@ -21,6 +22,7 @@ import Image from '../../../../components/image';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import { create } from 'lodash';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +43,7 @@ export default function ProductTableRow({
   onEditRow,
   onViewRow,
 }) {
-  const { dealer, time, bid} = row;
+  const { dealer, time, bid, created_at} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -63,14 +65,24 @@ export default function ProductTableRow({
     setOpenPopover(null);
   };
 
+  const AnnouceWinner = () => {
+    console.log("Annouce Winner");
+    handleCloseConfirm();
+  }
+
+  const date = new Date(created_at);
+  const formattedDate = date.toLocaleDateString();
+  const formattedTime = date.toLocaleTimeString();
+
+  const id = dealer.id;
+  const name = dealer.name;
+
   return (
     <>
       <TableRow hover selected={selected}>
         
 
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2}>
-
+        <TableCell align='center'>
             <Link
               noWrap
               color="inherit"
@@ -80,13 +92,12 @@ export default function ProductTableRow({
             >
               #{dealer.id}
             </Link>
-          </Stack>
         </TableCell>
-        <TableCell>{dealer.name}</TableCell>
-        <TableCell>{time}</TableCell>
-        <TableCell>{bid}</TableCell>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
+        <TableCell align='center' id='name'>{name}</TableCell>
+        <TableCell align='center'>{formattedDate} {formattedTime}</TableCell>
+        <TableCell align='center'>{bid?.toLocaleString('en-US')} AED</TableCell>
+        <TableCell align='center'>
+          <Radio checked={selected} onClick={() => setOpenConfirm(true)} />
         </TableCell>
 
       </TableRow>
@@ -95,11 +106,11 @@ export default function ProductTableRow({
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title="Annouce Winner"
+        content={<>Are you sure want to annouce {dealer.name} with {bid?.toLocaleString('en-US')} AED bid as the winner ? <br />{dealer.name} will be notified via email</>}
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
+          <Button variant="contained" color="success" onClick={AnnouceWinner}>
+            Confirm
           </Button>
         }
       />
