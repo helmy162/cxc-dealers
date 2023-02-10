@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProducts } from '../../redux/slices/product';
+import { getProducts, getStatus } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -40,6 +40,9 @@ import ConfirmDialog from '../../components/confirm-dialog';
 import { ProductTableRow, ProductTableToolbar } from '../../sections/@dashboard/e-commerce/list';
 
 import { cars } from '../../_mock/assets/cars';
+
+//car status
+import { carStatus, carTimer } from '../../utils/status';
 
 // ----------------------------------------------------------------------
 
@@ -90,9 +93,9 @@ export default function EcommerceProductListPage() {
 
   const dispatch = useDispatch();
 
-  const { products, isLoading } = useSelector((state) => state.product);
+  const { products, isLoading, productStatus } = useSelector((state) => state.product);
 
-  const [tableData, setTableData] = useState([...cars]);
+  const [tableData, setTableData] = useState([]);
 
   const [filterName, setFilterName] = useState('');
 
@@ -112,6 +115,31 @@ export default function EcommerceProductListPage() {
     }
   }, [products]);
 
+
+  useEffect(() => {
+    
+      const intervalId = setInterval(() => {
+        if(tableData.length > 0){
+          setTableData(
+            tableData.map((product) => {
+              const endAt = new Date(product?.auction?.end_at);
+              const startAt = new Date(product?.auction?.start_at);
+              const now = new Date();
+              return {
+                ...product,
+                livestatus: product.status == 'pending'? 'pending' : carStatus(product),
+                timeRemaining: product.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
+              };
+            })
+          )
+          
+        }
+      }, 1000);
+  
+      return () => clearInterval(intervalId);
+    
+  }, [productStatus, products,  dispatch, tableData]);
+  
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
