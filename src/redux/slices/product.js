@@ -12,6 +12,7 @@ const initialState = {
   error: null,
   products: [],
   product: null,
+  productAsAdmin: null,
   productStatus: null,
   checkout: {
     activeStep: 0,
@@ -54,6 +55,11 @@ const slice = createSlice({
     getProductSuccess(state, action) {
       state.isLoading = false;
       state.product = action.payload;
+    },
+
+    getProductAsAdminSuccess(state, action) {
+      state.isLoading = false;
+      state.productAsAdmin = action.payload;
     },
 
     getProductStatus(state, action) {
@@ -238,6 +244,23 @@ export function getProduct(name) {
 
 // ----------------------------------------------------------------------
 
+export function getProductAsAdmin(name) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+
+    try {
+      const response = await axios.get(`admin/car/${name}`);
+      dispatch(slice.actions.getProductAsAdminSuccess(response.data));
+      // getStatus(response.data.find(product=> product.id == name))(dispatch);
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
 export function getStatus(product){
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -285,10 +308,9 @@ export function extendEndtime(auctionID) {
         duration: updatedDuration
       };
 
-      
-      await axios.put(`admin/auctions/${auctionID}`, { ...updatedAuctionData });
-
       dispatch(slice.actions.getExtendedTime(new Date(endAt).toISOString()));
+
+      await axios.put(`admin/auctions/${auctionID}`, { ...updatedAuctionData });
 
       await getProduct(currentAuctionData.car_id)(dispatch);
   

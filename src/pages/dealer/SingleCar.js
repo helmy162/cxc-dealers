@@ -118,6 +118,7 @@ export default function SingleCar(){
     const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
     channel.bind("NewBid", (data) => {
         setHighestBid(data.auction.last_bid);
+        dispatch(getProduct(name));
     });
   
     return () => {
@@ -129,7 +130,7 @@ export default function SingleCar(){
 
   const onSubmit = async (data) => {
     try {
-        if(productStatus < 30000) dispatch(extendEndtime(product.auction.id));
+        if(productStatus <= 30000) dispatch(extendEndtime(product.auction.id));
         const mergedDate = {bid: data.bid, auction_id: product.auction.id, car_id: product.id};
         const res = await axiosInstance.post('dealer/bid', mergedDate);
         
@@ -173,6 +174,32 @@ export default function SingleCar(){
                                   <h1 className="text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold">{product.auction.start_price?.toLocaleString('en-US')} AED</h1>
                               </div>
                           </div>
+                          <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} className="flex gap-4 items-start flex-wrap justify-center w-full bg-[#D9D9D926]/10 p-[20px] rounded-lg">
+                              <RHFTextField
+                                  name="bid"
+                                  className="!w-2/6 !min-w-[200px] !bg-white rounded-lg"
+                                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: '4px', maxHeight: '48px' } }}
+                                  label="Add Bid"
+                                  placeholder="0.00"
+                                  onChange={(event) =>
+                                      setValue('bid', Number(event.target.value), { shouldValidate: true })
+                                  }
+                                  InputLabelProps={{ shrink: true }}
+                                  InputProps={{
+                                      endAdornment: (
+                                      <InputAdornment position="start">
+                                          <Box component="span" sx={{ color: 'text.disabled' }}>
+                                          AED
+                                          </Box>
+                                      </InputAdornment>
+                                      ),
+                                      type: 'number',
+                                  }}
+                              />
+                              <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting} disabled={!canBid} className="max-h-[48px] !rounded">
+                                  Add Bid
+                              </LoadingButton>
+                          </FormProvider>
                           {/* specifications section */}
                           <div className="flex flex-wrap justify-center gap-x-5 gap-y-5 items-end">
                               <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
@@ -201,32 +228,7 @@ export default function SingleCar(){
                               </div>
                           </div>
                           {/* bid button */}
-                          <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} className="flex gap-4 items-start flex-wrap justify-center w-full bg-[#D9D9D926]/10 p-[20px] rounded-lg">
-                              <RHFTextField
-                                  name="bid"
-                                  className="!w-2/6 !min-w-[200px] !bg-white rounded-lg"
-                                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: '4px', maxHeight: '48px' } }}
-                                  label="Add Bid"
-                                  placeholder="0.00"
-                                  onChange={(event) =>
-                                      setValue('bid', Number(event.target.value), { shouldValidate: true })
-                                  }
-                                  InputLabelProps={{ shrink: true }}
-                                  InputProps={{
-                                      endAdornment: (
-                                      <InputAdornment position="start">
-                                          <Box component="span" sx={{ color: 'text.disabled' }}>
-                                          AED
-                                          </Box>
-                                      </InputAdornment>
-                                      ),
-                                      type: 'number',
-                                  }}
-                              />
-                              <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting} disabled={!canBid} className="max-h-[48px] !rounded">
-                                  Add Bid
-                              </LoadingButton>
-                          </FormProvider>
+                          
                       </div>
                     </div>
                     <div className="max-w-[1000px] p-[12px] m-auto">
