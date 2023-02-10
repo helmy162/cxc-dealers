@@ -41,7 +41,7 @@ export default function ProductTableRow({
   onEditRow,
   onViewRow,
 }) {
-  const { id, details, status } = row;
+  const { id, details, livestatus, timeRemaining } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -62,7 +62,8 @@ export default function ProductTableRow({
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
-  if(row && details){
+  console.log(row);
+  if(row && details && livestatus){
     return (
       <>
         <TableRow hover selected={selected}>
@@ -94,13 +95,14 @@ export default function ProductTableRow({
             <Label
               variant="soft"
               color={
-                (status === 'expired' && 'error') ||
-                (status === 'pending' && 'warning') ||
-                (status === 'active' && 'success') || 'success'
+                (livestatus === 'expired' && 'error') ||
+                (livestatus === 'pending' && 'warning') ||
+                (livestatus === 'upcoming' && 'secondary') ||
+                (livestatus === 'live' && 'success') || 'warning'
               }
               sx={{ textTransform: 'capitalize', minWidth:'100px'}}
             >
-              {status ? sentenceCase(status) : ''}
+              {timeRemaining ? timeRemaining : livestatus? sentenceCase(livestatus) : null }
             </Label>
           </TableCell>
   
