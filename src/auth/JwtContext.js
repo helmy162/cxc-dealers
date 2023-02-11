@@ -125,7 +125,8 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'LOGIN',
       payload: {
-        user: {...user, role: user.type },
+        isAuthenticated: true,
+        user: {...user, role: user.type, accessToken: access_token },
       },
     });
   }, []);
