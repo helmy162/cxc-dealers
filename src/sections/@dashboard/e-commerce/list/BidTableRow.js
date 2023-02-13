@@ -22,11 +22,13 @@ import Image from '../../../../components/image';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import { useSnackbar } from '../../../../components/snackbar';
 import { create } from 'lodash';
+import axiosInstance from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-ProductTableRow.propTypes = {
+BidTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -35,19 +37,22 @@ ProductTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
 };
 
-export default function ProductTableRow({
+export default function BidTableRow({
   row,
   selected,
-  onSelectRow,
   onDeleteRow,
   onEditRow,
   onViewRow,
+  onSelectAccount,
+  hasWinner,
 }) {
   const { dealer, time, bid, created_at} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState(null);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -65,8 +70,17 @@ export default function ProductTableRow({
     setOpenPopover(null);
   };
 
-  const AnnouceWinner = () => {
-    console.log("Annouce Winner");
+  const AnnounceWinner = (bid) => {
+    try {
+      const response = axiosInstance.put('admin/auction/declare-winner', {
+        auction_id: bid.auction_id,
+        bid_id: bid.id,
+        user_id: bid.user_id,
+      });
+      enqueueSnackbar('Winner was notified successfully', { variant: 'success' });
+    } catch (error) {
+      console.error(error);
+    }
     handleCloseConfirm();
   }
 
@@ -87,7 +101,7 @@ export default function ProductTableRow({
               noWrap
               color="inherit"
               variant="subtitle2"
-              onClick={onViewRow}
+              onClick={onSelectAccount}
               sx={{ cursor: 'pointer' }}
             >
               #{dealer.id}
@@ -97,7 +111,7 @@ export default function ProductTableRow({
         <TableCell align='center'>{formattedDate} {formattedTime}</TableCell>
         <TableCell align='center'>{bid?.toLocaleString('en-US')} AED</TableCell>
         <TableCell align='center'>
-          <Radio checked={selected} onClick={() => setOpenConfirm(true)} />
+          <Radio checked={selected} onClick={() => setOpenConfirm(true)} disabled={hasWinner}/>
         </TableCell>
 
       </TableRow>
@@ -106,10 +120,10 @@ export default function ProductTableRow({
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Annouce Winner"
-        content={<>Are you sure want to annouce {dealer.name} with {bid?.toLocaleString('en-US')} AED bid as the winner ? <br />{dealer.name} will be notified via email</>}
+        title="Announce Winner"
+        content={<>Are you sure want to announce {dealer.name} with {bid?.toLocaleString('en-US')} AED bid as the winner ? <br />{dealer.name} will be notified via email</>}
         action={
-          <Button variant="contained" color="success" onClick={AnnouceWinner}>
+          <Button variant="contained" color="success" onClick={() => AnnounceWinner(row)}>
             Confirm
           </Button>
         }

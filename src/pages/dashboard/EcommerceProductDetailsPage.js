@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, Route } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate} from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 
@@ -108,7 +108,7 @@ export default function EcommerceProductDetailsPage() {
   const { name } = useParams();
   const {user} = useAuthContext();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const { productAsAdmin, isLoading, checkout, product, productStatus} = useSelector((state) => state.product);
 
   useEffect(() => {
@@ -121,7 +121,7 @@ export default function EcommerceProductDetailsPage() {
 
   useEffect(() => {
     if (productAsAdmin && productAsAdmin?.auction?.bids) {
-      setTableData(productAsAdmin?.auction?.bids);
+      setTableData(productAsAdmin?.auction?.bids.filter((bid) => bid.dealer !== null));
     }
   }, [productAsAdmin]);
 
@@ -215,6 +215,10 @@ export default function EcommerceProductDetailsPage() {
       }
     }
   };
+
+  const handleAccountClick = (id) => {
+    navigate(PATH_DASHBOARD.user.edit(id)); // change edit to account
+  }
 
 
   const auctionDurations = [
@@ -310,7 +314,6 @@ export default function EcommerceProductDetailsPage() {
       var isoDuration = `PT${hours}H`;
       const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price, car_id: productAsAdmin.id};
       const res = await axiosInstance.post('admin/auctions', mergedDate);
-      console.log(res);
     } catch (error) {
       console.error(error);
     }
@@ -545,9 +548,11 @@ export default function EcommerceProductDetailsPage() {
                           <BidTableRow
                             key={row.id}
                             row={row}
-                            selected={selected.includes(row.id)}
+                            hasWinner={productAsAdmin?.auction?.winner_bid ? true : false}
+                            selected={row.id === productAsAdmin?.auction?.winner_bid}
                             onSelectRow={() => onSelectRow(row.id)}
                             onDeleteRow={() => handleDeleteRow(row.id)}
+                            onSelectAccount={() => handleAccountClick(row?.dealer?.id)}
                           />
                         ) : (
                           !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />
@@ -588,7 +593,7 @@ export default function EcommerceProductDetailsPage() {
 function applyFilter({ inputData, comparator, filterName, filterStatus }) {
   const stabilizedThis = inputData?.map((el, index) => [{
     ...el,
-    user_name: el.dealer.name,
+    user_name: el?.dealer?.name,
   }, index]);
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);

@@ -35,7 +35,7 @@ UserTableRow.propTypes = {
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectAccount }) {
   const navigate = useNavigate();
 
-  const { id, name, phone, email, type} = row;
+  const { id, name, phone, email, type, bid_limit} = row;
 
 
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -90,7 +90,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           <TableCell align="left">{phone}</TableCell>
 
           <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-            $100,000
+            {bid_limit ?? '0'} AED
           </TableCell>
           <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
             {type}

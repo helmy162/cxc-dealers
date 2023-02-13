@@ -23,7 +23,7 @@ import { _userList } from '../../_mock/arrays';
 // components
 import Iconify from '../../components/iconify';
 import Scrollbar from '../../components/scrollbar';
-// import ConfirmDialog from '../../components/confirm-dialog';
+import ConfirmDialog from '../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import {
@@ -40,6 +40,8 @@ import {
 import { UserTableToolbar, UserTableRow } from '../../sections/@dashboard/user/list';
 import { getUsers } from '../../redux/slices/user';
 import { useDispatch, useSelector } from '../../redux/store';
+// axios
+import axiosInstance from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -166,36 +168,54 @@ export default function UserListPage() {
     setFilterRole(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
+  const handleDeleteRow = async (id) => {
+    try {
+        const response = await axiosInstance.delete(`admin/users/${id}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+            const deleteRow = tableData.filter((row) => row.id !== id);
+            setSelected([]);
+            setTableData(deleteRow);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
       }
     }
-  };
+};
 
-  const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
-
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
+const handleDeleteRows = async (selectedRows) => {
+  const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+  selectedRows.forEach(async row => {
+    try {
+      const response = await axiosInstance.delete(`admin/users/${row}`);
+      // check if the DELETE request was successful
+      if (response.data.success) {
+        setSelected([]);
+        setTableData(deleteRows);
       }
+    } catch (error) {
+      console.error('Error:', error);
     }
-  };
+  });
+
+  if (page > 0) {
+    if (selectedRows.length === dataInPage.length) {
+      setPage(page - 1);
+    } else if (selectedRows.length === dataFiltered.length) {
+      setPage(0);
+    } else if (selectedRows.length > dataInPage.length) {
+      const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
+      setPage(newPage);
+    }
+  }
+};
   const handleAccountClick = (id) => {
-    navigate(PATH_DASHBOARD.user.account(id));
+    navigate(PATH_DASHBOARD.user.edit(id)); // change edit to account
   }
   const handleEditRow = (id) => {
     navigate(PATH_DASHBOARD.user.edit(id));
@@ -337,7 +357,7 @@ export default function UserListPage() {
         </Card>
       </Container>
 
-      {/* <ConfirmDialog
+      <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
         title="Delete"
@@ -358,7 +378,7 @@ export default function UserListPage() {
             Delete
           </Button>
         }
-      /> */}
+      />
     </>
   );
 }

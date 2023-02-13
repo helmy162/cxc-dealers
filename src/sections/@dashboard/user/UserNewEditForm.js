@@ -24,6 +24,7 @@ import FormProvider, {
   RHFUploadAvatar,
 } from '../../../components/hook-form';
 
+import axiosInstance from 'src/utils/axios';
 // ----------------------------------------------------------------------
 
 UserNewEditForm.propTypes = {
@@ -42,21 +43,31 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     phoneNumber: Yup.string(),
     company: Yup.string(),
     role: Yup.string().required('Role is required'),
-    avatarUrl: Yup.string().nullable(true),
     isVerified: Yup.boolean(),
     status: Yup.string(),
+    bidLimit: Yup.number().required('Bid limit is required'),
+    password: Yup.string().when('isEdit', {
+      is: (isEdit) => isEdit == false,
+      then: Yup.string().required('Password is required'),
+    }),
+    password_confirmation: Yup.string().when('isEdit', {
+      is: (isEdit) => isEdit == false,
+      then: Yup.string().required('Confirm Password is required'),
+    }),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
       email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status || 'active',
+      phoneNumber: currentUser?.phone || '',
+      isVerified: currentUser?.is_verified == '1' || false,
+      status: currentUser?.status || (!isEdit && 'active') || 'pending',
       company: currentUser?.company || '',
       role: currentUser?.type || 'dealer',
+      bidLimit: currentUser?.bid_limit || '0',
+      password: '',
+      password_confirmation: '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -90,12 +101,10 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
   const onSubmit = async (data) => {
     try {
-      console.log("test")
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
+      let res;
+      isEdit?  res = await axiosInstance.put(`admin/users/${currentUser.id}`, data) :  res = await axiosInstance.post('admin/users', data);
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       navigate(PATH_DASHBOARD.user.list);
-      console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -123,37 +132,16 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
             {isEdit && (
               <Label
-                color={values.status === 'active' ? 'success' : 'error'}
+                color={values.status === 'active' ? 'success' : 'warning'}
                 sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
               >
                 {values.status}
               </Label>
             )}
 
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
+           
 
-            {/* {isEdit && (
+            {isEdit && (
               <FormControlLabel
                 labelPlacement="start"
                 control={
@@ -163,9 +151,9 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                     render={({ field }) => (
                       <Switch
                         {...field}
-                        checked={field.value !== 'active'}
+                        checked={field.value === 'active'}
                         onChange={(event) =>
-                          field.onChange(event.target.checked ? 'banned' : 'active')
+                          field.onChange(event.target.checked ? 'active' : 'pending')
                         }
                       />
                     )}
@@ -174,16 +162,16 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 label={
                   <>
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
+                      Account Status
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
+                      Activate User Account
                     </Typography>
                   </>
                 }
                 sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
               />
-            )} */}
+            )}
 
             <RHFSwitch
               name="isVerified"
@@ -216,9 +204,19 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
             >
               <RHFTextField name="name" label="Full Name"/>
               <RHFTextField name="email" label="Email Address"/>
+              {
+                !isEdit && <RHFTextField name="password" label="Password" type="password"/>
+              }
+              {
+                !isEdit && <RHFTextField name="password_confirmation" label="Confirm Password" type="password"/>
+              }
               <RHFTextField name="phoneNumber" label="Phone Number"/>
               <RHFTextField name="company" label="Company" />
-
+              <RHFTextField
+                name = "bidLimit"
+                type="number"
+                label="Bid Limit"
+              />
               <RHFSelect native name="role" label="Role">
                 <option value="admin">Admin</option>
                 <option value="inspector">Inpsector</option>
