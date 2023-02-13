@@ -219,7 +219,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               />
               <RHFSelect native name="role" label="Role">
                 <option value="admin">Admin</option>
-                <option value="inspector">Inpsector</option>
+                <option value="inspector">Inspector</option>
                 <option value="dealer">Dealer</option>
               </RHFSelect>
 
