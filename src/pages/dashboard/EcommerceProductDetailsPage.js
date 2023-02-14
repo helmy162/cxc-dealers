@@ -58,6 +58,7 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import { SkeletonProductDetails } from '../../components/skeleton';
 import { BidTableRow } from '../../sections/@dashboard/e-commerce/list';
+import { ProductAuction } from '../../sections/@dashboard/e-commerce/details';
 // loading screen
 import LoadingScreen from '../../components/loading-screen';
 //car status
@@ -122,6 +123,9 @@ export default function EcommerceProductDetailsPage() {
   useEffect(() => {
     if (productAsAdmin && productAsAdmin?.auction?.bids) {
       setTableData(productAsAdmin?.auction?.bids.filter((bid) => bid.dealer !== null));
+    }
+    else {
+      setTableData([]);
     }
   }, [productAsAdmin]);
 
@@ -221,21 +225,9 @@ export default function EcommerceProductDetailsPage() {
   }
 
 
-  const auctionDurations = [
-    '1 Hour',
-    '2 Hours',
-    '3 Hours',
-    '6 Hours',
-    '12 Hours',
-    '24 Hours',
-    '48 Hours',
-    '72 Hours',
-  ];
 
-  const [auctionDate, setAuctionDate] = useState(new Date());
-  const [auctionTime, setAuctionTime] = useState(new Date());
-  const [duration, setDuration] = useState(auctionDurations[0]);
-  const [inputValue, setInputValue] = useState('')
+
+
 
   
 
@@ -274,50 +266,7 @@ export default function EcommerceProductDetailsPage() {
     }
   ];
 
-  const NewProductSchema = Yup.object().shape({
-    start_price: Yup.number().moreThan(0, 'Price should not be $0.00'),
-    duration: Yup.string().required('Duration is required'),
-    auctionDate: Yup.date().required('Auction date is required'),
-    auctionTime: Yup.date().required('Auction time is required'),
-  });
-
-  const defaultValues = useMemo(
-    () => ({
-      start_price: productAsAdmin?.start_price || 0,
-      duration: productAsAdmin?.duration || auctionDurations[0],
-      auctionDate: productAsAdmin?.auctionDate || new Date(),
-      auctionTime: productAsAdmin?.auctionTime || new Date(),
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [productAsAdmin]
-  );
-
-  const methods = useForm({
-    resolver: yupResolver(NewProductSchema),
-    defaultValues,
-  });
-
-  const {
-    reset,
-    watch,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
-
-  const onSubmit = async (data) => {
-    try {
-      const date = new Date(auctionDate.getFullYear(), auctionDate.getMonth(), auctionDate.getDate(), auctionTime.getHours(), auctionTime.getMinutes());
-      const duration = data.duration;
-      var parts = duration.split(" ");
-      var hours = parts[0];
-      var isoDuration = `PT${hours}H`;
-      const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price, car_id: productAsAdmin.id};
-      const res = await axiosInstance.post('admin/auctions', mergedDate);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
 
   const [copySuccess, setCopySuccess] = useState('');
   
@@ -423,83 +372,7 @@ export default function EcommerceProductDetailsPage() {
             </Card>
 
             <div style={{zIndex:'10000', marginBottom:'50px'}}>
-              <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} className="flex gap-4 items-center flex-wrap justify-center">
-                <RHFTextField
-                  name="start_price"
-                  className="!w-1/6 !min-w-[200px]"
-                  label="Start Price"
-                  placeholder="0.00"
-                  onChange={(event) =>
-                    setValue('start_price', Number(event.target.value), { shouldValidate: true })
-                  }
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="start">
-                        <Box component="span" sx={{ color: 'text.disabled' }}>
-                          AED
-                        </Box>
-                      </InputAdornment>
-                    ),
-                    type: 'number',
-                  }}
-                />
-
-                <DatePicker
-                  name="auctionDate"
-                  label="Auction Date"
-                  value={auctionDate}
-                  onChange={function (newValue) {
-                    setValue('auctionDate', newValue, { shouldValidate: true });
-                    setAuctionDate(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} className="!w-fit"/>}
-                  
-                />
-
-                <TimePicker
-                  name="auctionTime"
-                  ampm={false}
-                  label="Auction Time"
-                  value={auctionTime}
-                  onChange={function (newValue) {
-                    setValue('auctionTime', newValue, { shouldValidate: true });
-                    setAuctionTime(newValue);
-                  }}
-                  renderInput={(params) => <TextField  {...params} className="!w-fit" />}
-                />
-
-                <RHFAutocomplete
-                  className="!w-1/6 !min-w-[200px]"
-                  name="duration"
-                  label="Auction Duration"
-                  value={duration}
-                  onChange={function(_,newValue){
-                    setDuration(newValue)
-                    setValue('duration', newValue, { shouldValidate: true })
-                  }}         
-                  inputValue={inputValue}
-                  onInputChange={(_, newInputValue) => {
-                    setInputValue(newInputValue)
-                  }}     
-                  options={auctionDurations.map((option) => option)}
-                  ChipProps={{ size: 'small' }}
-                />
-
-                <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-                  Start Auction
-                </LoadingButton>
-
-              </FormProvider>
-            {/* <ModernDatepicker
-              date={auctionDate}
-              format={'DD-MM-YYYY'}
-              showBorder
-              onChange={date => setAuctionDate(date)}
-              placeholder={'Select a date'}
-              className="datePicker"
-            /> */}
-
+              <ProductAuction productAsAdmin={productAsAdmin}/>
             </div>
             
             <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>

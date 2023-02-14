@@ -62,7 +62,7 @@ export default function ProductTableRow({
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
-  console.log(row);
+
   if(row && details && livestatus){
     return (
       <>
