@@ -398,7 +398,12 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
 
   if (filterName) {
     inputData = inputData.filter( function(user){
-      if ((user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1) || user.phoneNumber.toLowerCase().indexOf(filterName.toLowerCase()) !== -1)
+      if (
+        user.name?.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 || 
+        (user.phone && user.phone.indexOf(filterName.toLowerCase()) !== -1 )|| 
+        user.email?.indexOf(filterName.toLowerCase()) !== -1 ||
+        '#' + user.id ==  filterName
+        )
         return true;
       return false;
     });
