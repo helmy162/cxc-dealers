@@ -52,7 +52,7 @@ const TABLE_HEAD = [
   { id: 'model', label: 'Model', align: 'left' },
   { id: 'year', label: 'Year', align: 'left' },
   { id: 'seller_name', label: 'Seller Name', align: 'left' },
-  { id: 'auction', label: 'Auction', align: 'center', width: 180 },
+  { id: 'status', label: 'Auction', align: 'center', width: 180 },
   { id: '' },
 ];
 
@@ -382,8 +382,13 @@ export default function EcommerceProductListPage() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filterName, filterStatus }) {
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
-
+  const stabilizedThis = inputData?.map((el, index) => [{
+    ...el,
+    make: el?.details?.make,
+    model: el?.details?.model,
+    year: el?.details?.year,
+    // seller_name: el?.seller_name, // uncomment when seller_name is ready
+  }, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
@@ -399,7 +404,8 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
          product.id.toString().indexOf(filterName.toLowerCase()) !== -1
       || product?.details?.make.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
       || product?.details?.model.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 
-      || product?.details?.year.toString().indexOf(filterName.toLowerCase()) !== -1 
+      || product?.details?.year.toString().indexOf(filterName.toLowerCase()) !== -1
+      || '#' + product.id == filterName
       // || product.seller_name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 // uncomment when seller_name is ready
       )
         return true;
