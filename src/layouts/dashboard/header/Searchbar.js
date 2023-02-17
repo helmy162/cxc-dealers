@@ -21,7 +21,7 @@ import Iconify from '../../../components/iconify';
 import { IconButtonAnimate } from '../../../components/animate';
 import SearchNotFound from '../../../components/search-not-found';
 //
-import {adminNavConfig, dealerNavConfig }from '../nav/config-navigation';
+import {adminNavConfig, dealerNavConfig, inspectorNavConfig }from '../nav/config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -97,6 +97,7 @@ function Searchbar( {type}) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const reduceItems = type === 'admin'? adminNavConfig.map((list) => handleLoop(list.items, list.subheader)).flat():
+                      type === 'inspector'? inspectorNavConfig.map((list) => handleLoop(list.items, list.subheader)).flat():
                                         dealerNavConfig.map((list) => handleLoop(list.items, list.subheader)).flat();
 
   const allItems = flattenArray(reduceItems).map((option) => {

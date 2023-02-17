@@ -1,5 +1,5 @@
 // routes
-import { PATH_DASHBOARD, PATH_DEALER } from '../../../routes/paths';
+import { PATH_DASHBOARD, PATH_DEALER, PATH_INSPECTOR } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
@@ -81,4 +81,25 @@ const adminNavConfig = [
   },
 ];
 
-export { dealerNavConfig, adminNavConfig };
+const inspectorNavConfig = [
+
+  // MANAGEMENT
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'management',
+    items: [
+      {
+        title: 'Add Car',
+        path: PATH_INSPECTOR.new,
+        icon: ICONS.car,
+      },
+      {
+        title: 'My Account',
+        path: PATH_INSPECTOR.account,
+        icon: ICONS.profile,
+      },
+    ],
+  },
+];
+
+export { dealerNavConfig, adminNavConfig, inspectorNavConfig };

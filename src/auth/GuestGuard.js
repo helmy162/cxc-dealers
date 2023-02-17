@@ -20,7 +20,9 @@ export default function GuestGuard({ children }) {
   else if (isAuthenticated && user.role === 'dealer') {
     return <Navigate to="/dealer" />;
   }
-
+  else if (isAuthenticated && user.role === 'inspector') {
+    return <Navigate to="/inspector" />;
+  }
   if (!isInitialized) {
     return <LoadingScreen />;
   }

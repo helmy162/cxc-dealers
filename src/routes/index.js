@@ -114,6 +114,19 @@ export default function Router() {
       ],
     },
     {
+      path: '/inspector',
+      element: (
+        <AuthGuard>
+          <DashboardLayout type='inspector'/>
+        </AuthGuard>
+      ),
+      children: [
+        { element: <Navigate to={'/inspector/new'} replace />, index: true }, // this is the default page for the inspector
+        { path: 'new', element: <AddCarPage /> }, // this is the car listing page
+        { path: 'profile', element: <UserAccountPage isProfile={true} /> },
+      ],
+    },
+    {
       path: ':name/inspection',
       element: 
         <div className='max-w-[1000px] p-[12px] m-auto'>

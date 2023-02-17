@@ -7,6 +7,7 @@ function path(root, sublink) {
 const ROOTS_AUTH = '/auth';
 const ROOTS_DASHBOARD = '/dashboard';
 const ROOTS_Dealer = '/dealer';
+const ROOTS_INSPECTOR = '/inspector';
 const ROOTS_HOME = '/';
 
 // ----------------------------------------------------------------------
@@ -28,6 +29,12 @@ export const PATH_DEALER = {
   cars: path(ROOTS_Dealer, '/cars'),
   car: (name) => path(ROOTS_Dealer, `/cars/${name}`),
   account: path(ROOTS_Dealer, '/profile'),
+}
+
+export const PATH_INSPECTOR = {
+  root: ROOTS_INSPECTOR,
+  new: path(ROOTS_INSPECTOR, '/new'),
+  account: path(ROOTS_INSPECTOR, '/profile'),
 }
 
 export const PATH_DASHBOARD = {

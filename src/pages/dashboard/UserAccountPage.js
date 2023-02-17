@@ -80,14 +80,25 @@ export default function UserAccountPage({isProfile = false}) {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
+        {
+          isProfile? 
+          <CustomBreadcrumbs
+          heading="My Account"
+          links={[
+            { name: 'Account Settings' },
+          ]}
+          />
+          :
+          <CustomBreadcrumbs
           heading="Account"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Users', href: PATH_DASHBOARD.user.root },
             { name: 'Account Settings' },
           ]}
-        />
+          />
+        }
+        
 
         <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
           {TABS.map((tab) => (

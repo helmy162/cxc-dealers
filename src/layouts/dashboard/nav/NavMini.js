@@ -8,7 +8,7 @@ import { hideScrollbarX } from '../../../utils/cssStyles';
 import Logo from '../../../components/logo';
 import { NavSectionMini } from '../../../components/nav-section';
 //
-import {adminNavConfig, dealerNavConfig }from './config-navigation';
+import {adminNavConfig, dealerNavConfig, inspectorNavConfig }from './config-navigation';
 import NavToggleButton from './NavToggleButton';
 
 // ----------------------------------------------------------------------
@@ -41,7 +41,7 @@ export default function NavMini({ type }) {
       >
         <Logo sx={{ mx: 'auto', my: 2 }} />
 
-        <NavSectionMini data={ type==='admin'? adminNavConfig : dealerNavConfig} /> {/* check this line */}
+        <NavSectionMini data={ type=='admin'? adminNavConfig : type=='inspector'? inspectorNavConfig : dealerNavConfig} /> {/* check this line */}
       </Stack>
     </Box>
   );
