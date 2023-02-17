@@ -49,6 +49,12 @@ export const PATH_DASHBOARD = {
     edit: (name) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
     account: (name) => path(ROOTS_DASHBOARD, `/user/${name}/account`),
   },
+  seller: {
+    root: path(ROOTS_DASHBOARD, '/seller'),
+    list : path(ROOTS_DASHBOARD, '/seller/list'),
+    new : path(ROOTS_DASHBOARD, '/seller/new'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/seller/${name}/edit`),
+  },
   car: {
     root: path(ROOTS_DASHBOARD, '/car'),
     new: path(ROOTS_DASHBOARD, '/car/new'),

@@ -19,6 +19,9 @@ import {
   UserCreatePage,
   UserAccountPage,
   UserEditPage,
+  SellerListPage,
+  SellerCreatePage,
+  SellerEditPage,
   EcommerceProductListPage,
   EcommerceProductEditPage,
   EcommerceProductDetailsPage,
@@ -111,6 +114,16 @@ export default function Router() {
             { path: ':name/account', element: <UserAccountPage /> },
           ],
         },
+        {
+          path: 'seller',
+          children: [
+            { element: <Navigate to="/dashboard/seller/list" replace />, index: true },
+            { path: 'new', element: <SellerCreatePage /> },
+            { path: ':name/edit', element: <SellerEditPage /> },
+            { path: 'list', element: <SellerListPage /> },
+            { path: ':name/account', element: <UserAccountPage /> },
+          ],
+        }
       ],
     },
     {

@@ -58,6 +58,11 @@ const adminNavConfig = [
         icon: ICONS.users,
       },
       {
+        title: 'sellers',
+        path: PATH_DASHBOARD.seller.list,
+        icon: ICONS.user,
+      },
+      {
         title: 'cars',
         path: PATH_DASHBOARD.car.list,
         icon: ICONS.car,
