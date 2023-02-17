@@ -133,7 +133,7 @@ export default function EcommerceProductDetailsPage() {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [livestatus, setLiveStatus] = useState(''); //live, expired, upcoming, pending
   useEffect(() => {
-
+    
     if (livestatus !== 'expired' && livestatus !== 'pending') {
       const intervalId = setInterval(() => {
         const endAt = new Date(product?.auction?.end_at);
@@ -141,7 +141,7 @@ export default function EcommerceProductDetailsPage() {
         const now = new Date();
         
         setLiveStatus(carStatus(productAsAdmin));
-        setTimeRemaining(carTimer(startAt > now ? startAt - now : endAt - now));
+        setTimeRemaining(productAsAdmin.status == 'pending'? null : carTimer(startAt > now ? startAt - now : endAt - now));
       }, 1000);
   
       return () => clearInterval(intervalId);
@@ -317,7 +317,7 @@ export default function EcommerceProductDetailsPage() {
                 }
                 sx={{ textTransform: 'capitalize', minWidth:'100px', fontSize:'18px', fontWeight:'600', padding:'6px 16px', minHeight:'fit-content', height:'unset', lineHeight:'unset',}}
               >
-                {timeRemaining? timeRemaining : livestatus}
+                {timeRemaining ? timeRemaining : livestatus? sentenceCase(livestatus) : null}
               </Label>
 
               <Button
