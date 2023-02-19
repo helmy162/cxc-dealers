@@ -29,6 +29,7 @@ export const PATH_DEALER = {
   cars: path(ROOTS_Dealer, '/cars'),
   car: (name) => path(ROOTS_Dealer, `/cars/${name}`),
   account: path(ROOTS_Dealer, '/profile'),
+  bids: path(ROOTS_Dealer, '/bids'),
 }
 
 export const PATH_INSPECTOR = {

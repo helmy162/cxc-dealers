@@ -41,6 +41,11 @@ const dealerNavConfig = [
         path: PATH_DEALER.account,
         icon: ICONS.profile,
       },
+      {
+        title: 'My Bids',
+        path: PATH_DEALER.bids,
+        icon: ICONS.bid,
+      }
     ],
   },
 ];
@@ -80,8 +85,13 @@ const adminNavConfig = [
       {
         title: 'Cars',
         path: PATH_DEALER.cars,
-        icon: ICONS.bid,
+        icon: ICONS.car,
       },
+      {
+        title: 'My Bids',
+        path: PATH_DEALER.bids,
+        icon: ICONS.bid,
+      }
     ],
   },
 ];

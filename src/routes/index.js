@@ -28,7 +28,8 @@ import {
   AddCarPage,
   CarDetails,
   HomePage,
-  SingleCar
+  SingleCar,
+  BidsPage
 } from './elements';
 import { PATH_AUTH } from './paths';
 
@@ -79,7 +80,8 @@ export default function Router() {
         { path: 'cars', element: <CarsListingPage /> }, // this is the car listing page
         { path: 'cars/:name', element: <SingleCar />}, // this is the single car details page
         { path: 'profile', element: <UserAccountPage isProfile={true} /> },
-        // other user pages...
+        { path: 'bids', element: <BidsPage /> },
+        // other dealer pages...
       ],
     },    
     {
