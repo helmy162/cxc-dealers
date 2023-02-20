@@ -162,10 +162,14 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
+  // Reset Password
   const resetPassword = useCallback(async ({ email }) => {
-    await axios.post('reset-password', { email })
+      // await new Promise((resolve) => setTimeout(resolve, 500));
+  }, []);
 
-    sessionStorage.setItem('email-recovery', email);
+  // Change Password
+  const newPassword = useCallback(async ({ data }) => {
+    // await new Promise((resolve) => setTimeout(resolve, 500)); 
   }, []);
 
   const memoizedValue = useMemo(
@@ -178,8 +182,9 @@ export function AuthProvider({ children }) {
       register,
       logout,
       resetPassword,
+      newPassword
     }),
-    [state.isAuthenticated, state.isInitialized, state.user, login, logout, register, resetPassword]
+    [state.isAuthenticated, state.isInitialized, state.user, login, logout, register, resetPassword, newPassword]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

@@ -14,6 +14,8 @@ import {
   LoginPage,
   RegisterPage,
   ResetPasswordPage,
+  NewPasswordPage,
+  VerifyCodePage,
   CarsListingPage,
   UserListPage,
   UserCreatePage,
@@ -61,9 +63,9 @@ export default function Router() {
         {
           element: <CompactLayout />,
           children: [
-            { path: 'reset-password', element: <ResetPasswordPage /> },
-            // { path: 'new-password', element: <NewPasswordPage /> },
-            // { path: 'verify', element: <VerifyCodePage /> },
+            { path: PATH_AUTH.resetPassword, element: <ResetPasswordPage /> },
+            { path: PATH_AUTH.newPassword, element: <NewPasswordPage /> },
+            { path: PATH_AUTH.verify, element: <VerifyCodePage /> },
           ],
         },
       ],

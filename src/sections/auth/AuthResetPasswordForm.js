@@ -37,7 +37,8 @@ export default function AuthResetPasswordForm() {
 
   const onSubmit = async (data) => {
     try {
-      await resetPassword(data)
+      await resetPassword(data.email);
+      sessionStorage.setItem('email-recovery', data.email);
       navigate(PATH_AUTH.newPassword);
     } catch (error) {
       console.error(error);
