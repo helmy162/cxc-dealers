@@ -129,6 +129,7 @@ export function AuthProvider({ children }) {
         user: {...user, role: user.type, accessToken: access_token },
       },
     });
+    initialize();
   }, []);
 
   // REGISTER
