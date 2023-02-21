@@ -24,7 +24,14 @@ const slice = createSlice({
     startLoading(state) {
       state.isLoading = true;
     },
-
+    // Reset User
+    resetUser(state) {
+      state.user = null;
+    },
+    // Reset Seller
+    resetSeller(state) {
+      state.seller = null;
+    },
     // HAS ERROR
     hasError(state, action) {
       state.isLoading = false;
@@ -56,6 +63,12 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
+
+// Actions
+export const {
+  resetUser,
+  resetSeller,
+} = slice.actions;
 
 // ----------------------------------------------------------------------
 

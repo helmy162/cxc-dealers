@@ -29,10 +29,10 @@ export default function SellerCreatePage() {
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Users',
-              href: PATH_DASHBOARD.user.list,
+              name: 'Sellers',
+              href: PATH_DASHBOARD.seller.list,
             },
-            { name: 'New user' },
+            { name: 'New Seller' },
           ]}
         />
         <SellerNewEditForm />

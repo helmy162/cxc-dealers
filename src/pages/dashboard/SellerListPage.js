@@ -37,7 +37,7 @@ import {
 } from '../../components/table';
 // sections
 import { SellerTableToolbar, SellerTableRow } from '../../sections/@dashboard/seller/list';
-import { getSellers } from '../../redux/slices/user';
+import { getSellers, resetSeller } from '../../redux/slices/user';
 import { useDispatch, useSelector } from '../../redux/store';
 // axios
 import axiosInstance from 'src/utils/axios';
@@ -103,6 +103,7 @@ export default function SellerListPage() {
 
   useEffect(() => {
     dispatch(getSellers());
+    dispatch(resetSeller());
   }, [dispatch]);
 
   useEffect(() => {

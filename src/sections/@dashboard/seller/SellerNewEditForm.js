@@ -7,7 +7,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import { Box, Card, Grid, Stack, Switch, Typography,  TextField, InputAdornment, IconButton, Tooltip } from '@mui/material';
 // utils
 import { fData } from '../../../utils/formatNumber';
 // routes
@@ -17,12 +17,15 @@ import { countries } from '../../../assets/data';
 // components
 import Label from '../../../components/label';
 import { useSnackbar } from '../../../components/snackbar';
+import Iconify from '../../../components/iconify';
 import FormProvider, {
   RHFSelect,
   RHFSwitch,
   RHFTextField,
   RHFUploadAvatar,
 } from '../../../components/hook-form';
+// hooks
+import useCopyToClipboard from '../../../hooks/useCopyToClipboard';
 
 import axiosInstance from 'src/utils/axios';
 // ----------------------------------------------------------------------
@@ -36,6 +39,17 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const { copy } = useCopyToClipboard();
+
+  const [sellerID, setSellerID] = useState(currentUser?.id);
+
+  const onCopy = (text) => {
+    if (text) {
+      enqueueSnackbar('Copied!');
+      copy(text);
+    }
+  };
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -70,6 +84,7 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
   const values = watch();
 
   useEffect(() => {
+    setSellerID(currentUser?.id);
     if (isEdit && currentUser) {
       reset(defaultValues);
     }
@@ -90,20 +105,14 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile, { shouldValidate: true });
-      }
-    },
-    [setValue]
-  );
+  const onChange = (value) => {
+    if (value.startsWith("971")) {
+      setValue("phone", value.slice(3));
+    } else {
+      setValue("phone", value);
+    }
+    
+  }
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -120,9 +129,39 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
+              <Stack spacing={2}>
+              <TextField
+                label="Seller ID"
+                className='w-fit'
+                value={sellerID? sellerID : 'Loading...'}
+                disabled
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Tooltip title="Copy">
+                        <IconButton onClick={() => onCopy(sellerID)}>
+                          <Iconify icon="eva:copy-fill" width={24} />
+                        </IconButton>
+                      </Tooltip>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Stack>
+            
               <RHFTextField name="name" label="Full Name"/>
               <RHFTextField name="email" label="Email Address"/>
-              <RHFTextField name="phone" label="Phone Number"/>
+              <RHFTextField name="phone" label="Phone Number"
+                onChange={(e) => onChange(e.target.value)}
+                type="number"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      +971
+                    </InputAdornment>
+                  ),
+                }}
+              />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
