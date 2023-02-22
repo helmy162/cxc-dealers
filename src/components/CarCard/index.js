@@ -3,18 +3,23 @@ import {
   Card,
   Typography
 } from '@mui/material'
-
+import { useEffect, useState} from 'react';
 import { Link as RouterLink  } from 'react-router-dom';
 
 import Timer from './Timer';
 import InfoRow from './InfoRow'
 import Status from './Status';
 import { PATH_DEALER } from 'src/routes/paths';
+import { carStatus, carTimer } from '../../utils/status';
 
 export default function CarCard({
   data,
   sx
 }) {
+  const [livestatus, setLiveStatus] = useState('');
+  useEffect(() => {
+    setLiveStatus(data.status == 'pending'? 'pending' : carStatus(data))
+  }, [data]);
 
   return (
     <Card sx={{
@@ -26,7 +31,17 @@ export default function CarCard({
 
     }}
     >
-      <RouterLink className='sm:flex-row flex-col-reverse' style={{display:'flex', flexDirection: { xs: 'column', sm: 'row' }}} to={PATH_DEALER.car(data.id)}>
+      <RouterLink className='sm:flex-row flex-col-reverse' style={{display:'flex', flexDirection: { xs: 'column', sm: 'row' }}} 
+      to={ 
+        new Date(data?.auction?.start_at) <= new Date()
+        && 
+        new Date(data?.auction?.end_at) >= new Date()
+        ?
+        PATH_DEALER.car(data.id)
+        :
+        null
+      }
+      >
         <Box sx={{
           width: '100%',
           display: 'flex',
@@ -41,12 +56,12 @@ export default function CarCard({
             </Typography>
             {
               data.status === 'approved' && 
-              <Timer data={data} />
+              <Timer product={data} />
             }
           </Box>
           <InfoRow data={data} />
         </Box>
-        <Status status={data.status} data={data} />
+        <Status product={data} />
         
       </RouterLink>
     </Card>

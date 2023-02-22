@@ -57,7 +57,8 @@ export default function InfoRow({ data }) {
     >
       <Box sx={{
         marginRight: { xs: '0px', sm: '20px' },
-        maxWidth: { xs: '100%', sm: '265px' }
+        maxWidth: { xs: '100%', sm: '265px' },
+        minWidth: { xs: '100%', sm: '265px' },
       }}>
         <img
           src={image}
@@ -73,23 +74,26 @@ export default function InfoRow({ data }) {
       <Box sx={{
         width: '100%'
       }}>
-        <Box sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          fontSize: '18px',
-          marginTop: { xs: '20px', sm: 0 }
-        }}>
-          <Typography
-            color="#8184A3"
-            mr={0.5}
-          >
-            Highest Bid:
-          </Typography>
-          <Typography
-            color="#1D7DBD"
-            fontWeight="bold"
-          >AED {highestBid?.toLocaleString('en-US')}</Typography>
-        </Box>
+        {
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            fontSize: '18px',
+            marginTop: { xs: '20px', sm: 0 }
+          }}>
+            <Typography
+              color="#8184A3"
+              mr={0.5}
+            >
+              Highest Bid:
+            </Typography>
+            <Typography
+              color="#1D7DBD"
+              fontWeight="bold"
+            >AED {highestBid?.toLocaleString('en-US')}</Typography>
+          </Box>
+        }
+        
 
         <Box
           sx={{

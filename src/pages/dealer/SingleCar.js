@@ -139,7 +139,7 @@ export default function SingleCar(){
     }
   };
   
-  if(productStatus < 0 ) return <Navigate to="/404" />
+  if(productStatus < 0 || ( new Date (product?.auction?.start_at) > new Date() ) ) return <Navigate to="/404" />
     return(
         <>
           {(!product || product.id != name || !productStatus || !timeRemaining ) && <LoadingScreen />}

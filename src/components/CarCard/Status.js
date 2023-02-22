@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useState} from 'react';
 import { Box } from '@mui/material';
+import { carStatus, carTimer } from '../../utils/status';
 
 const statusColors = {
   expired: '#E32519',
@@ -8,39 +9,20 @@ const statusColors = {
   upcoming: '#0077C9',
 }
 
-export default function CarCardStatus({ data, status }) {
+export default function CarCardStatus({ product }) {
 
   const [livestatus, setLiveStatus] = useState('');
 
   useEffect(() => {
-    const endDate = new Date(data?.auction?.end_at);
-    const startDate = new Date(data?.auction?.start_at);
+    setLiveStatus(product.status == 'pending'? 'pending' : carStatus(product))  
+  }, []);
+  useEffect(() => {
     const intervalId = setInterval(() => {
-      const currentTime = new Date();
-      const difference = endDate - currentTime;
-      if(status?.toLocaleLowerCase() !== 'approved'){
-        setLiveStatus('pending')
-        return;
-      }
-      else if(currentTime < startDate) {
-        setLiveStatus('upcoming')
-        return;
-      }
-      else if (difference < 0) {
-        clearInterval(intervalId);
-        setLiveStatus('expired')
-        return;
-      }
-      else{
-        setLiveStatus('live')
-      }
-      
+      setLiveStatus(product.status == 'pending'? 'pending' : carStatus(product))  
     }, 1000);
-
     return () => clearInterval(intervalId);
-  }, [data]);
+  }, [product]);
 
-  status = status?.toLocaleLowerCase()
   const backgroundColor = useMemo(() => statusColors[livestatus.toLocaleLowerCase()], [livestatus])
   return (
     <Box

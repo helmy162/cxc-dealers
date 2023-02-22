@@ -4,36 +4,23 @@ import {
 } from '@mui/material'
 import Countdown from 'react-countdown';
 import { useEffect, useState } from 'react';
+import { carStatus, carTimer } from '../../utils/status';
 
-export default function CarCardTimer({ data }) {
+export default function CarCardTimer({ product }) {
   const [timeRemaining, setTimeRemaining] = useState(null);
-  const [startIn, setStartIn] = useState(null);
 
   useEffect(() => {
-    const endDate = new Date(data?.auction?.end_at);
-    const startDate = new Date(data?.auction?.start_at);
+    const endAt = new Date(product?.auction?.end_at);
+    const startAt = new Date(product?.auction?.start_at);
+    const now = new Date();
+    setTimeRemaining(product.status == 'pending'? null : startAt > now ? 'Starts In ' + carTimer( startAt - now) : endAt < now ? null : 'Ends After ' + carTimer(endAt - now))
     const intervalId = setInterval(() => {
-      const currentTime = new Date();
-      const difference = endDate - currentTime;
-      setStartIn(startDate - currentTime);
-
-      if (difference < 0) {
-        clearInterval(intervalId);
-        setTimeRemaining(null);
-        return;
-      }
-
-      const hours = Math.floor(difference / 1000 / 60 / 60);
-      const minutes = Math.floor((difference / 1000 / 60) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
-
-      setTimeRemaining(
-        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
-      );      
+      const now = new Date();
+      setTimeRemaining(product.status == 'pending'? null : startAt > now ? 'Starts In ' + carTimer( startAt - now) : endAt < now ? null : 'Ends After ' + carTimer(endAt - now))
     }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [data]);
+  return () => clearInterval(intervalId);
+  }, [product]);
+  
 
   return (
     <Box
@@ -47,7 +34,7 @@ export default function CarCardTimer({ data }) {
         mr={0.5}
         color="#8184A3"
       >
-        {startIn > 0 ? 'Stay Tuned' : timeRemaining ? 'Auction ends in ' + timeRemaining : 'Expired'} 
+        {timeRemaining} 
       </Typography>
       
     </Box>
