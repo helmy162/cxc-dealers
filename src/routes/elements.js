@@ -18,7 +18,8 @@ export const LoginPage = Loadable(lazy(() => import('../pages/auth/LoginPage')))
 export const RegisterPage = Loadable(lazy(() => import('../pages/auth/RegisterPage')));
 export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/ResetPasswordPage')));
 export const NewPasswordPage = Loadable(lazy(() => import('../pages/auth/NewPasswordPage')));
-export const VerifyCodePage = Loadable(lazy(() => import('../pages/auth/VerifyCodePage')));
+export const VerifyCodePage = Loadable(lazy(() => import('../pages/auth/EmailSentPage')));
+export const EmailSentPage = Loadable(lazy(() => import('../pages/auth/EmailSentPage')));
 
 // home
 export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 // form
@@ -25,37 +25,41 @@ export default function AuthNewPasswordForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [token, setToken] = useState('');
 
-  const emailRecovery =
-    typeof window !== 'undefined' ? sessionStorage.getItem('email-recovery') : '';
-
+  
+  useEffect(() => {
+    // Extract email from URL
+    const searchParams = new URLSearchParams(window.location.search);
+    const email = searchParams.get("email");
+    const token = searchParams.get("token");
+    setEmail(email);
+    setToken(token);
+    // Set default values of form fields
+    methods.reset({ email: email || "", password: "", password_confirmation: "" });
+    
+  }, []);
+  
   const VerifyCodeSchema = Yup.object().shape({
-    code1: Yup.string().required('Code is required'),
-    code2: Yup.string().required('Code is required'),
-    code3: Yup.string().required('Code is required'),
-    code4: Yup.string().required('Code is required'),
-    code5: Yup.string().required('Code is required'),
-    code6: Yup.string().required('Code is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
-    confirmPassword: Yup.string()
+      password_confirmation: Yup.string()
       .required('Confirm password is required')
       .oneOf([Yup.ref('password'), null], 'Passwords must match'),
   });
 
-  const defaultValues = {
-    code1: '',
-    code2: '',
-    code3: '',
-    code4: '',
-    code5: '',
-    code6: '',
-    email: emailRecovery || '',
+  const defaultValues = useMemo(
+    () => ({
+    email: email || '',
     password: '',
-    confirmPassword: '',
-  };
+    password_confirmation: '',
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [email]
+  );
 
   const methods = useForm({
     mode: 'onChange',
@@ -70,8 +74,8 @@ export default function AuthNewPasswordForm() {
 
   const onSubmit = async (data) => {
     try {
-      await newPassword(data);
-      sessionStorage.removeItem('email-recovery');
+      const mergedData = {...data, token};
+      await newPassword(mergedData);
       enqueueSnackbar('Change password success!');
       navigate(PATH_DASHBOARD.root);
     } catch (error) {
@@ -79,28 +83,16 @@ export default function AuthNewPasswordForm() {
     }
   };
 
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         <RHFTextField
           name="email"
           label="Email"
-          disabled={!!emailRecovery}
+          disabled={true}
           InputLabelProps={{ shrink: true }}
         />
-
-        <RHFCodes keyName="code" inputs={['code1', 'code2', 'code3', 'code4', 'code5', 'code6']} />
-
-        {(!!errors.code1 ||
-          !!errors.code2 ||
-          !!errors.code3 ||
-          !!errors.code4 ||
-          !!errors.code5 ||
-          !!errors.code6) && (
-          <FormHelperText error sx={{ px: 2 }}>
-            Code is required
-          </FormHelperText>
-        )}
 
         <RHFTextField
           name="password"
@@ -118,7 +110,7 @@ export default function AuthNewPasswordForm() {
         />
 
         <RHFTextField
-          name="confirmPassword"
+          name="password_confirmation"
           label="Confirm New Password"
           type={showPassword ? 'text' : 'password'}
           InputProps={{

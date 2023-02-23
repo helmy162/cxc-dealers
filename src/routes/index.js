@@ -15,6 +15,7 @@ import {
   RegisterPage,
   ResetPasswordPage,
   NewPasswordPage,
+  EmailSentPage,
   VerifyCodePage,
   CarsListingPage,
   UserListPage,
@@ -65,7 +66,7 @@ export default function Router() {
           children: [
             { path: PATH_AUTH.resetPassword, element: <ResetPasswordPage /> },
             { path: PATH_AUTH.newPassword, element: <NewPasswordPage /> },
-            { path: PATH_AUTH.verify, element: <VerifyCodePage /> },
+            { path: PATH_AUTH.emailSent, element: <EmailSentPage /> },
           ],
         },
       ],

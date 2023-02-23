@@ -9,15 +9,15 @@ import Iconify from '../../components/iconify';
 // sections
 import AuthVerifyCodeForm from '../../sections/auth/AuthVerifyCodeForm';
 // assets
-import { EmailInboxIcon } from '../../assets/icons';
+import { EmailInboxIcon, SentIcon} from '../../assets/icons';
 
 // ----------------------------------------------------------------------
 
-export default function VerifyCodePage() {
+export default function EmailSentPage() {
   return (
     <>
       <Helmet>
-        <title> Verify Code | Minimal UI</title>
+        <title> Email Sent Successfully | Carsxchange</title>
       </Helmet>
 
       <EmailInboxIcon sx={{ mb: 5, height: 96 }} />
@@ -27,16 +27,14 @@ export default function VerifyCodePage() {
       </Typography>
 
       <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-        We have emailed a 6-digit confirmation code to acb@domain, please enter the code in below
-        box to verify your email.
+        We&apos;ve sent an email to your email address with instructions to reset your password.
       </Typography>
 
-      <AuthVerifyCodeForm />
-
-      <Typography variant="body2" sx={{ my: 3 }}>
-        Don’t have a code? &nbsp;
-        <Link variant="subtitle2">Resend code</Link>
+      <Typography sx={{ color: 'text.secondary', mb: 5 }}>
+        Please make sure to check your spam folder.
       </Typography>
+
+
 
       <Link
         component={RouterLink}

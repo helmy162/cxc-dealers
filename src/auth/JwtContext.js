@@ -169,8 +169,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   // Change Password
-  const newPassword = useCallback(async ({ data }) => {
-    // await new Promise((resolve) => setTimeout(resolve, 500)); 
+  const newPassword = useCallback(async (data ) => {
+    const response = await axios.post('new-password', data);
   }, []);
 
   const memoizedValue = useMemo(
