@@ -164,8 +164,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   // Reset Password
-  const resetPassword = useCallback(async ({ email }) => {
-      // await new Promise((resolve) => setTimeout(resolve, 500));
+  const resetPassword = useCallback(async ( email ) => {
+      const response = await axios.post('reset-password', {email});
   }, []);
 
   // Change Password
