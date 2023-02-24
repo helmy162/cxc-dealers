@@ -57,7 +57,7 @@ export default function UserAccountPage({isProfile = false}) {
       value: 'notifications',
       label: 'Notifications',
       icon: <Iconify icon="eva:bell-fill" />,
-      component: <AccountNotifications />,
+      component: <AccountNotifications user={currentUser} />,
     },
     {
       value: 'social_links',
