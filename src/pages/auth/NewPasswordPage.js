@@ -20,17 +20,6 @@ export default function NewPasswordPage() {
         <title> New Password | Carsxchange</title>
       </Helmet>
 
-      <SentIcon sx={{ mb: 5, height: 96 }} />
-
-      <Typography variant="h3" paragraph>
-        Request sent successfully!
-      </Typography>
-
-      <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-        We&apos;ve sent a 6-digit confirmation email to your email.
-        <br />
-        Please enter the code in below box to verify your email.
-      </Typography>
 
       <AuthNewPasswordForm />
 
