@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 // @mui
-import { Stack, Alert, Box, MenuItem, Typography } from '@mui/material';
+import { Stack, Alert, Box, MenuItem, Typography, InputAdornment} from '@mui/material';
 
 import { RHFAutocomplete, RHFCheckbox, RHFDatePicker, RHFSelect, RHFSwitch, RHFTextField } from '../../../components/hook-form';
 import useAddCarAutocompletes from 'src/hooks/useAddCarAutocompletes';
@@ -19,6 +19,8 @@ const UAEEmirates = ["Abu Dhabi", "Ajman", "Al Ain", "Dubai", "Fujairah", "Ras A
 const SPECIFICATIONS = ["GCC", "American", "Other"];
 
 export const SummarySchema = Yup.object().shape({
+  seller_id: Yup.string().required('Seller ID is required'),
+  seller_price: Yup.number('Should be a number').required('Seller price is required'),
   year: Yup.string().nullable().required('Year is required'),
   make: Yup.object().nullable().required('Make is required'),
   model: Yup.object().nullable().required('Model is required'),
@@ -44,6 +46,8 @@ export const SummarySchema = Yup.object().shape({
 });
 
 export const SummaryDefaultValues = {
+  seller_id: null,
+  seller_price: null,
   year: "",
   make: null,
   model: null,
@@ -102,6 +106,40 @@ export default function SummaryStep({ errors, watch, setValue }) {
   }, [values.year, setValue]);
   return (
     <Stack spacing={3}>
+      <Typography variant="h4">Seller Info</Typography>
+      <Box
+        rowGap={2}
+        columnGap={3}
+        display="grid"
+        gridTemplateColumns={{
+          sm: 'repeat(1, 1fr)',
+          md: 'repeat(3, 1fr)',
+        }}
+        sx={{marginBottom: '1rem'}}
+      >
+        <RHFTextField
+          name="seller_id"
+          label="Seller ID"
+          type="number"
+        />
+        <RHFTextField
+          name="seller_price"
+          label="Seller Price"
+          placeholder="0.00"
+          InputLabelProps={{ shrink: true }}
+          InputProps={{
+              endAdornment: (
+              <InputAdornment position="start">
+                  <Box component="span" sx={{ color: 'text.disabled' }}>
+                  AED
+                  </Box>
+              </InputAdornment>
+              ),
+              type: 'number',
+          }}
+        />
+      </Box>
+      <Typography variant="h4">Car Info</Typography>
       <Box
         rowGap={2}
         columnGap={3}
@@ -219,7 +257,7 @@ export default function SummaryStep({ errors, watch, setValue }) {
         <RHFSwitch name="is_new" label="Is new" />
         <RHFSwitch name="first_owner" label="First owner" />
       </Box>
-      <Typography variant="h3">Car history</Typography>
+      <Typography variant="h4">Car History</Typography>
       <Box
         rowGap={2}
         columnGap={3}

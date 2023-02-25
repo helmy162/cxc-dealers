@@ -17,10 +17,12 @@ import SSAStep, { SSADefaultValues, SSASchema } from './SSAStep';
 import IEACStep, { IEACDefaultValues, IEACSchema } from './IEACStep';
 import CarSpecsStep, { CarSpecsDefaultValues, CarSpecsSchema } from './CarSpecsStep';
 import TyresStep, { TyresDefaultValues, TyresSchema } from './TyresStep';
+import PhotosStep, { PhotosDefaultValues, PhotosSchema } from './PhotosStep';
+import PrivateStep, { PrivateDefaultValues, PrivateSchema } from './PrivateStep';
 
 //api
 import CarApi from '../../utils/api/CarApi';
-import PhotosStep, { PhotosDefaultValues, PhotosSchema } from './PhotosStep';
+
 import { ADD_CAR_STEPS, STEPS_QUEUE } from './constants';
 import { usePrompt } from 'src/hooks/useBlocker';
 import { PATH_DASHBOARD } from 'src/routes/paths';
@@ -30,6 +32,12 @@ const formSteps = {
     method: CarApi.generateInfo,
     validationSchema: SummarySchema,
     defaultValues: SummaryDefaultValues,
+  },
+  [ADD_CAR_STEPS.PRIVATE_PHOTOS]: {
+    component: PrivateStep,
+    method: CarApi.uploadPhotos,
+    validationSchema: PrivateSchema ,
+    defaultValues: PrivateDefaultValues,
   },
   [ADD_CAR_STEPS.EXTERIOR_CONDITION]: {
     component: ExteriorCondition,
@@ -77,7 +85,7 @@ const formSteps = {
 // ----------------------------------------------------------------------
 
 export default function AddCar() {
-  const [step, setFormStep] = useState(0);
+  const [step, setFormStep] = useState(1);
   const [isLastStep, setIsLastStep] = useState(false);
   const [carId, setCarId] = useState(-1);
   const [showFinishMessage, setShowFinishMessage] = useState(false);

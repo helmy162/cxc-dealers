@@ -41,6 +41,12 @@
     z-index: 9999;
 }
 
+/* image marker */
+
+.image-marker__image{
+    max-height: 500px;
+    width: auto !important;
+}
 
 
   
