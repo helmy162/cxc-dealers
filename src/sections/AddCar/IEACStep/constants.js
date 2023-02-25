@@ -145,6 +145,11 @@ const AC_HEATING_OPTIONS = [
 { value: 'not_working', label: 'Not working' }
 ];
 
+const AIRBAG_OPTIONS = [
+    { value: 'good', label: 'Good' },
+    { value: 'deployed', label: 'Deplyed' },
+]
+
 export {
 ENGINE_AND_TRANSMISSION_OPTIONS,
 DASHBOARD_CONDITION_PADS_OPTIONS,
@@ -166,5 +171,6 @@ CRUISE_CONTROL_OPTIONS,
 PUSH_START_STOP_BUTTON_OPTIONS,
 AC_COOLING_OPTIONS,
 CONVERTIBLE_OPERATIONS_OPTIONS,
-AC_HEATING_OPTIONS
+AC_HEATING_OPTIONS,
+AIRBAG_OPTIONS
 };

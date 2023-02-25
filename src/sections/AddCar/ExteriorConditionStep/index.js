@@ -7,6 +7,7 @@ import MarkerRow from './MarkerRow';
 import { Upload } from 'src/components/upload';
 import { DEFECTS_OPTIONS } from './constants';
 import imageCompression from 'browser-image-compression';
+import { reset } from 'numeral';
 // ----------------------------------------------------------------------
 
 export const ExteriorConditionSchema = Yup.object().shape({
@@ -58,6 +59,7 @@ export default function ExteriorCondition({ watch, setValue }) {
     setValue('markers', newSubmittedMarkers);
     setActiveMarker(null);
     setFile(null);
+    setValue('defect', '');
   }, [defect, markers, submittedMarkers, setValue, file]);
 
   const [error, setError] = useState(null);
@@ -78,13 +80,11 @@ export default function ExteriorCondition({ watch, setValue }) {
           };
           const compressedBlob = await imageCompression(newFile, options);
           const processedFile = new File([compressedBlob], `${Date.now()}_compressed.jpg`, { type: newFile.type, path: newFile.path });
-          console.log('processedFile', processedFile); // true
           setFile(
             Object.assign(processedFile, {
               preview: URL.createObjectURL(processedFile),
             })
           );
-          console.log('file', file); 
         } else {
           setFile(
             Object.assign(newFile, {

@@ -16,9 +16,12 @@ import { ENGINE_AND_TRANSMISSION_OPTIONS,
   coolantOptions,
   batteryConditionOptions,
   gearShiftingOptions,
+  chassisOptions,
+  oilLeaksOptions,
+  waterSladgeOptions,
   shiftInterlockOptions} from './constants';
-import { renderAddCarSelect } from 'src/utils/forms';
-import { RHFTextField } from 'src/components/hook-form';
+import { renderAddCarSelect, renderAddCarSwitch } from 'src/utils/forms';
+import { RHFTextField, RHFCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +76,11 @@ const fields = [
   { name: 'Coolant', label: 'Coolant', options: coolantOptions},
   { name: 'Battery_Condition', label: 'Battery Condition', options: batteryConditionOptions },
   { name: 'Gear_Shifting', label: 'Gear Shifting', options: gearShiftingOptions},
-  { name: 'Shift_Interlock_4x4_Condition', label: 'Shift Interlock (4x4) Condition', options: shiftInterlockOptions },
+  { name: 'Shift_Interlock_Condition', label: 'Shift Interlock (4x4) Condition', options: shiftInterlockOptions },
+  { name: 'Chassis', label: 'Chassis', options: chassisOptions},
+  { name: 'Chassis_Extension', label: 'Chassis Extension', options: chassisOptions},
+  { name: 'Oil_Leaks', label: 'Oil Leaks', options: oilLeaksOptions},
+  { name: 'Water_Sladge', label: 'Water Sladge', options: waterSladgeOptions},
 ];
 
 export default function EngineAndTransmissionStep() {
@@ -89,7 +96,9 @@ export default function EngineAndTransmissionStep() {
         }}
       >
         { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
+        
         <RHFTextField name="Engine_Comment" label="Comments" multiline />
+        {renderAddCarSwitch({ name: 'Warning_Signal', label: 'Warning Signal' })}
       </Box>
   </Stack>);
 }

@@ -117,6 +117,25 @@ const shiftInterlockOptions = [
   { value: 'propeller_shaft_noisy', label: 'Propeller Shaft Noisy' }
 ];
 
+const chassisOptions = [
+  { value: 'good', label: 'Good' },
+  { value: 'to_be_repaired', label: 'To be repaired' },
+  { value: 'damaged', label: 'Damaged' },
+]
+
+const oilLeaksOptions = [
+  { value: 'none', label: 'No Leaks' },
+  { value: 'cover', label: 'Engine Valve cover oil leak' },
+  { value: 'sum', label: 'Oil Sum Leak' },
+]
+
+const waterSladgeOptions = [
+  { value: 'none', label: 'None'},
+  { value: 'engine', label: 'Engine oil water mix' },
+  { value: 'gear', label: 'Gear oil water mix' },
+  { value: 'radiator', label: 'Radiator oil water mix' },
+]
+
 export {
   ENGINE_AND_TRANSMISSION_OPTIONS,
   radiatorConditionOptions,
@@ -133,5 +152,8 @@ export {
   coolantOptions,
   batteryConditionOptions,
   gearShiftingOptions,
-  shiftInterlockOptions
+  shiftInterlockOptions,
+  chassisOptions,
+  oilLeaksOptions,
+  waterSladgeOptions
 };

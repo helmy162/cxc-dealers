@@ -21,6 +21,7 @@ import { ENGINE_AND_TRANSMISSION_OPTIONS,
   PUSH_START_STOP_BUTTON_OPTIONS,
   AC_COOLING_OPTIONS,
   CONVERTIBLE_OPERATIONS_OPTIONS,
+  AIRBAG_OPTIONS,
   AC_HEATING_OPTIONS } from './constants';
 import { renderAddCarSelect } from 'src/utils/forms';
 import { RHFTextField } from 'src/components/hook-form';
@@ -95,6 +96,7 @@ const fields = [
   { name: 'AC_Cooling', label: 'AC Cooling', options: AC_COOLING_OPTIONS },
   { name: 'Convertible_Operations', label: 'Convertible Operations', options: CONVERTIBLE_OPERATIONS_OPTIONS },
   { name: 'AC_Heating', label: 'AC Heating', options: AC_HEATING_OPTIONS },
+  { name: 'Airbag', label: 'Airbag', options: AIRBAG_OPTIONS },
 ];
 
 export default function SSAStep() {
