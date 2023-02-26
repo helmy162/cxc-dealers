@@ -24,10 +24,13 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
 } from '../../../components/hook-form';
+import { MuiTelInput } from 'mui-tel-input'
 // hooks
 import useCopyToClipboard from '../../../hooks/useCopyToClipboard';
 
 import axiosInstance from 'src/utils/axios';
+
+
 // ----------------------------------------------------------------------
 
 SellerNewEditForm.propTypes = {
@@ -61,7 +64,7 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
     () => ({
       name: currentUser?.name || '',
       email: currentUser?.email || '',
-      phone: currentUser?.phone || '',
+      phone: currentUser?.phone || '+971',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -105,14 +108,13 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
     }
   };
 
-  const onChange = (value) => {
-    if (value.startsWith("971")) {
-      setValue("phone", value.slice(3));
-    } else {
-      setValue("phone", value);
-    }
-    
-  }
+  // const onChange = (value) => {
+  //   if (value.startsWith("971")) {
+  //     setValue("phone", value.slice(3));
+  //   } else {
+  //     setValue("phone", value);
+  //   }
+  // }
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -151,7 +153,23 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
             
               <RHFTextField name="name" label="Full Name"/>
               <RHFTextField name="email" label="Email Address"/>
-              <RHFTextField name="phone" label="Phone Number"
+              
+              <Controller
+                name="phone"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <MuiTelInput
+                    {...field}
+                    fullWidth
+                    value={typeof field.value === 'number' && field.value === 0 ? '' : field.value}
+                    error={!!error}
+                    label="Phone Number"
+                    defaultCountry="ae"
+                  />
+                )}
+              />
+
+              {/* <RHFTextField name="phone" label="Phone Number"
                 onChange={(e) => onChange(e.target.value)}
                 type="number"
                 InputProps={{
@@ -161,7 +179,7 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
                     </InputAdornment>
                   ),
                 }}
-              />
+              /> */}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

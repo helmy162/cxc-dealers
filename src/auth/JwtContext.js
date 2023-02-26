@@ -133,9 +133,10 @@ export function AuthProvider({ children }) {
   }, []);
 
   // REGISTER
-  const register = useCallback(async (email, password, confirmPassword, firstName, lastName) => {
+  const register = useCallback(async (email, password, confirmPassword, firstName, lastName, phone) => {
     const response = await axios.post('register', {
       name: `${firstName} ${lastName}`,
+      phoneNumber: phone,
       email,
       password,
       password_confirmation: confirmPassword,
@@ -151,6 +152,8 @@ export function AuthProvider({ children }) {
         user: {...user, role: 'dealer' },
       },
     });
+
+    login(email, password)
   }, []);
 
   // LOGOUT
