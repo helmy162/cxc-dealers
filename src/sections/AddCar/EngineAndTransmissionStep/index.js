@@ -1,9 +1,27 @@
 import * as Yup from 'yup';
 // @mui
 import { Stack, Alert, Box } from '@mui/material';
-import { ENGINE_AND_TRANSMISSION_OPTIONS, ENGINE_SMOKE_OPTIONS, ENGINE_NOISE_OPTIONS } from '../constants';
-import { renderAddCarSelect } from 'src/utils/forms';
-import { RHFTextField } from 'src/components/hook-form';
+import { ENGINE_AND_TRANSMISSION_OPTIONS, 
+  radiatorConditionOptions,
+  silencerOptions,
+  axelsOptions,
+  engineBeltsOptions,
+  gearLeverOptions,
+  radiatorFanOptions,
+  engineIdlingOptions,
+  engineNoiseOptions,
+  engineOilOptions,
+  engineSmokeOptions,
+  exhaustOptions,
+  coolantOptions,
+  batteryConditionOptions,
+  gearShiftingOptions,
+  chassisOptions,
+  oilLeaksOptions,
+  waterSladgeOptions,
+  shiftInterlockOptions} from './constants';
+import { renderAddCarSelect, renderAddCarSwitch } from 'src/utils/forms';
+import { RHFTextField, RHFCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -43,20 +61,26 @@ export const EngineAndTransmissionDefaultValues = {
   Engine_Comment: '',
 };
 
-const fields = [
-  { name: 'Radiator_Condition', label: 'Radiator Condition'},
-  { name: 'Engine_Noise', label: 'Engine Noise', options: ENGINE_NOISE_OPTIONS },
-  { name: 'Axels', label: 'Axels' },
-  { name: 'Engine_Oil', label: 'Engine Oil' },
-  { name: 'Engine_Belts', label: 'Engine_Belts'},
-  { name: 'Engine_Smoke', label: 'Engine Smoke', options: ENGINE_SMOKE_OPTIONS},
-  { name: 'Gear_Lever', label: 'Gear Lever'},
-  { name: 'Exhaust', label: 'Exhaust'},
-  { name: 'Radiator_Fan', label: 'Radiator Fan'},
-  { name: 'Coolant', label: 'Coolant'},
-  { name: 'Engine_Idling', label: 'Engine Idling'},
-  { name: 'Gear_Shifting', label: 'Gear Shifting'},
-  { name: 'Silencer', label: 'Silencer'},
+const fields = [  
+  { name: 'Radiator_Condition', label: 'Radiator Condition', options: radiatorConditionOptions},
+  { name: 'Silencer', label: 'Silencer', options: silencerOptions}, 
+  { name: 'Axels', label: 'Axels', options: axelsOptions },
+  { name: 'Engine_Belts', label: 'Engine_Belts', options: engineBeltsOptions},
+  { name: 'Gear_Lever', label: 'Gear Lever', options: gearLeverOptions},
+  { name: 'Radiator_Fan', label: 'Radiator Fan', options: radiatorFanOptions},
+  { name: 'Engine_Idling', label: 'Engine Idling', options: engineIdlingOptions},
+  { name: 'Engine_Noise', label: 'Engine Noise', options: engineNoiseOptions},
+  { name: 'Engine_Oil', label: 'Engine Oil', options: engineOilOptions },
+  { name: 'Engine_Smoke', label: 'Engine Smoke', options: engineSmokeOptions},
+  { name: 'Exhaust', label: 'Exhaust', options: exhaustOptions},
+  { name: 'Coolant', label: 'Coolant', options: coolantOptions},
+  { name: 'Battery_Condition', label: 'Battery Condition', options: batteryConditionOptions },
+  { name: 'Gear_Shifting', label: 'Gear Shifting', options: gearShiftingOptions},
+  { name: 'Shift_Interlock_Condition', label: 'Shift Interlock (4x4) Condition', options: shiftInterlockOptions },
+  { name: 'Chassis', label: 'Chassis', options: chassisOptions},
+  { name: 'Chassis_Extension', label: 'Chassis Extension', options: chassisOptions},
+  { name: 'Oil_Leaks', label: 'Oil Leaks', options: oilLeaksOptions},
+  { name: 'Water_Sladge', label: 'Water Sladge', options: waterSladgeOptions},
 ];
 
 export default function EngineAndTransmissionStep() {
@@ -72,7 +96,9 @@ export default function EngineAndTransmissionStep() {
         }}
       >
         { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
+        
         <RHFTextField name="Engine_Comment" label="Comments" multiline />
+        {renderAddCarSwitch({ name: 'Warning_Signal', label: 'Warning Signal' })}
       </Box>
   </Stack>);
 }

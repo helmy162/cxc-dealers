@@ -3,7 +3,12 @@ import * as Yup from 'yup';
 import { Stack, Alert, Box, MenuItem } from '@mui/material';
 import { renderAddCarSelect, renderAddCarSwitch } from 'src/utils/forms';
 import { RHFSelect, RHFSwitch, RHFTextField } from 'src/components/hook-form';
-import { ENGINE_AND_TRANSMISSION_OPTIONS } from '../constants';
+import {ENGINE_AND_TRANSMISSION_OPTIONS,
+  Drives,
+  TiptronicGears,
+  SunroofType,
+  WheelsType,
+  ConvertibleType } from './constants';
 
 // ----------------------------------------------------------------------
 export const CarSpecsSchema = Yup.object().shape({
@@ -34,7 +39,7 @@ export const CarSpecsSchema = Yup.object().shape({
   View_Camera: Yup.boolean(),
   Blind_Spot_Indicator: Yup.boolean(),
   Anti_Lock: Yup.boolean(),
-  Cruise_Control: Yup.boolean(),
+  Adaptive_Cruise_Control: Yup.boolean(),
   Power_Steering: Yup.boolean(),
   	Trip_Gears: Yup.string(),
   Carbon_Fiber_Interior: Yup.boolean(),
@@ -79,7 +84,7 @@ export const CarSpecsDefaultValues = {
   View_Camera: true,
   Blind_Spot_Indicator: true,
   Anti_Lock: true,
-  Cruise_Control: true,
+  Adaptive_Cruise_Control: true,
   Power_Steering: true,
   	Trip_Gears: 'working',
   Carbon_Fiber_Interior: true,
@@ -88,12 +93,14 @@ export const CarSpecsDefaultValues = {
   Adaptive_Suspension: true,
   Height_Control: true,
   Navigation_System: true,
-  Drives: 'no_visible_fault',
+  Drives: 'average',
   Sunroof_Type: 'sunroof',
   Wheel_Type: '4wd',
   Side_Steps: true,
   Convertible: 'false',
-  Other_Features: ''
+  Other_Features: '',
+  Tiptronic_Gears: 'working',
+  
 };
 
 const clickBoxes = [
@@ -103,7 +110,7 @@ const clickBoxes = [
   { name: 'Roof_Rack', label: 'Roof Rack'},
   { name: 'Spoiler', label: 'Spoiler'},
   { name: 'Dual_Exhaust', label: 'Dual Exhaust'},
-  { name: 'Alarm', label: 'Alarm/Anti-heft system'},
+  { name: 'Alarm', label: 'Alarm/Anti-theft system'},
   { name: 'Rear_Video', label: 'Rear video entertainment system'},
   { name: 'Premium_Sound', label: 'Premium Sound system'},
   { name: 'Heads_Up_Display', label: 'Heads Up Display'},
@@ -124,7 +131,7 @@ const clickBoxes = [
   { name: 'View_Camera', label: 'View Camera'},
   { name: 'Blind_Spot_Indicator', label: 'Blind Spot Indicator'},
   { name: 'Anti_Lock', label: 'Anti Lock Brakes/ABS'},
-  { name: 'Cruise_Control', label: 'Adaptive Cruise Control'},
+  { name: 'Adaptive_Cruise_Control', label: 'Adaptive Cruise Control'},
   { name: 'Power_Steering', label: 'Power Steering'},
   { name: 'Side_Steps', label: 'Side Steps'},
   { name: 'Carbon_Fiber_Interior', label: 'Carbon Fiber Interior'},
@@ -133,6 +140,14 @@ const clickBoxes = [
   { name: 'Adaptive_Suspension', label: 'Adaptive Suspension'},
   { name: 'Height_Control', label: 'Height Control'},
   { name: 'Navigation_System', label: 'Navigation System'},
+];
+
+const fields = [
+  { name: 'Drives', label: 'Drives', options: Drives},
+  { name: 'Tiptronic_Gears', label: 'Tiptronic Gears', options: TiptronicGears },
+  { name: 'Sunroof_Type', label: 'Sunroof Type', options: SunroofType},
+  { name: 'Wheel_Type', label: 'Wheel Type', options: WheelsType},
+  { name: 'Convertible', label: 'Convertible', options: ConvertibleType},
 ];
 
 export default function CarSpecsStep() {
@@ -148,26 +163,7 @@ export default function CarSpecsStep() {
         }}
       >
         { clickBoxes.map(field => renderAddCarSwitch({...field })) }
-        { renderAddCarSelect({ name: 'Drives', label: 'Drives', options: ENGINE_AND_TRANSMISSION_OPTIONS })}
-        <RHFSelect name='	Trip_Gears' label='Triptronic Gears'>
-          <MenuItem value='working'>Working</MenuItem>
-          <MenuItem value='not_working'>Not working</MenuItem>
-          <MenuItem value='not_available'>Not available</MenuItem>
-        </RHFSelect>
-        <RHFSelect name='Sunroof_Type' label='Sunroof Type'>
-          <MenuItem value='sunroof'>Sunroof</MenuItem>
-          <MenuItem value='panorama'>Panorama</MenuItem>
-          <MenuItem value='moonroof'>Moonroof</MenuItem>
-        </RHFSelect>
-        <RHFSelect name='Wheel_Type' label='Wheels Type'>
-          <MenuItem value='2wd'>2wd</MenuItem>
-          <MenuItem value='4wd'>4wd</MenuItem>
-        </RHFSelect>
-        <RHFSelect name='Convertible' label='Convertible'>
-          <MenuItem value='false'>No</MenuItem>
-          <MenuItem value='hard_top'>Hard top</MenuItem>
-          <MenuItem value='soft_top'>Soft top</MenuItem>
-        </RHFSelect>
+        { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
         <RHFTextField multiline name='Other_Features' label='Other Features' />
       </Box>
 

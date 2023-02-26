@@ -1,7 +1,16 @@
 import * as Yup from 'yup';
 // @mui
 import { Stack, Alert, Box } from '@mui/material';
-import { ENGINE_AND_TRANSMISSION_OPTIONS } from '../constants';
+import { 
+  ENGINE_AND_TRANSMISSION_OPTIONS,
+  brakePadsOptions,
+  brakeDiscsOrLiningOptions,
+  parkingBrakeOperationsOptions,
+  suspensionOptions,
+  shockAbsorberOperationOptions,
+  steeringOperationOptions,
+  steeringAlignmentOptions,
+  wheelAlignmentOptions,} from './constants';
 import { renderAddCarSelect } from 'src/utils/forms';
 import { RHFTextField } from 'src/components/hook-form';
 
@@ -31,14 +40,14 @@ export const SSADefaultValues = {
 };
 
 const fields = [
-  { name: 'Brake_Pads', label: 'Brake Pads'},
-  { name: 'Brake_Discs_Or_Lining', label: 'Brake Discs Or Lining' },
-  { name: 'Parking_Brake_Operations', label: 'Parking Brake Operations' },
-  { name: 'Suspension', label: 'Suspension' },
-  { name: 'Shock_Absorber_Operation', label: 'Shock Absorber Operation'},
-  { name: 'Steering_Operation', label: 'Steering Operation'},
-  { name: 'Steering_Alignment', label: 'Steering Alignment'},
-  { name: 'Wheel_Alignment', label: 'Wheel Alignment'},
+  { name: 'Brake_Pads', label: 'Brake Pads', options: brakePadsOptions },
+  { name: 'Brake_Discs_Or_Lining', label: 'Brake Discs Or Lining', options: brakeDiscsOrLiningOptions},
+  { name: 'Parking_Brake_Operations', label: 'Parking Brake Operations', options: parkingBrakeOperationsOptions },
+  { name: 'Suspension', label: 'Suspension', options: suspensionOptions},
+  { name: 'Shock_Absorber_Operation', label: 'Shock Absorber Operation', options: shockAbsorberOperationOptions},
+  { name: 'Steering_Operation', label: 'Steering Operation', options: steeringOperationOptions},
+  { name: 'Steering_Alignment', label: 'Steering Alignment', options: steeringAlignmentOptions},
+  { name: 'Wheel_Alignment', label: 'Wheel Alignment', options: wheelAlignmentOptions}
 ];
 
 export default function SSAStep() {

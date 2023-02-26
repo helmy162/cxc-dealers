@@ -48,6 +48,7 @@ const ACCIDENT_HISTORY_OPTIONS = [
 
 const ADD_CAR_STEPS = {
   SUMMARY: 'Car details',
+  PRIVATE_PHOTOS: 'Private information',
   EXTERIOR_CONDITION: 'Exterior Condition',
   ENGINE_AND_TRANSMISSION: 'Engine and Transmission',
   SSA: 'Steering, Suspension & Brakes',
@@ -59,6 +60,7 @@ const ADD_CAR_STEPS = {
 
 const STEPS_QUEUE = [
   ADD_CAR_STEPS.SUMMARY,
+  ADD_CAR_STEPS.PRIVATE_PHOTOS,
   ADD_CAR_STEPS.EXTERIOR_CONDITION,
   ADD_CAR_STEPS.ENGINE_AND_TRANSMISSION,
   ADD_CAR_STEPS.SSA,
