@@ -23,6 +23,7 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
 } from '../../../components/hook-form';
+import { MuiTelInput } from 'mui-tel-input'
 
 import axiosInstance from 'src/utils/axios';
 // ----------------------------------------------------------------------
@@ -60,7 +61,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     () => ({
       name: currentUser?.name || '',
       email: currentUser?.email || '',
-      phoneNumber: currentUser?.phone || '',
+      phoneNumber: currentUser?.phone || '+971',
       isVerified: currentUser?.is_verified == '1' || false,
       status: currentUser?.status || (!isEdit && 'active') || 'pending',
       company: currentUser?.company || '',
@@ -210,7 +211,20 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               {
                 !isEdit && <RHFTextField name="password_confirmation" label="Confirm Password" type="password"/>
               }
-              <RHFTextField name="phoneNumber" label="Phone Number"/>
+              <Controller
+                name="phoneNumber"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <MuiTelInput
+                    {...field}
+                    fullWidth
+                    value={typeof field.value === 'number' && field.value === 0 ? '' : field.value}
+                    error={!!error}
+                    label="Phone Number"
+                    defaultCountry="ae"
+                  />
+                )}
+              />
               <RHFTextField name="company" label="Company" />
               <RHFTextField
                 name = "bidLimit"

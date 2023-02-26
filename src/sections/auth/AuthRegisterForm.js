@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as Yup from 'yup';
 // form
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Stack, IconButton, InputAdornment, Alert } from '@mui/material';
@@ -11,6 +11,7 @@ import { useAuthContext } from '../../auth/useAuthContext';
 // components
 import Iconify from '../../components/iconify';
 import FormProvider, { RHFTextField } from '../../components/hook-form';
+import { MuiTelInput } from 'mui-tel-input'
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +23,7 @@ export default function AuthRegisterForm() {
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().required('First name required'),
     lastName: Yup.string().required('Last name required'),
+    phone: Yup.string().required('Phone is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string().required('Password confirmation is required')
@@ -31,6 +33,7 @@ export default function AuthRegisterForm() {
   const defaultValues = {
     firstName: '',
     lastName: '',
+    phone: '+971',
     email: '',
     password: '',
     confirmPassword: '',
@@ -43,6 +46,7 @@ export default function AuthRegisterForm() {
 
   const {
     reset,
+    control,
     setError,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
@@ -51,7 +55,7 @@ export default function AuthRegisterForm() {
   const onSubmit = async (data) => {
     try {
       if (register) {
-        await register(data.email, data.password, data.confirmPassword, data.firstName, data.lastName);
+        await register(data.email, data.password, data.confirmPassword, data.firstName, data.lastName, data.phone);
       }
     } catch (error) {
       console.error(error);
@@ -72,6 +76,21 @@ export default function AuthRegisterForm() {
           <RHFTextField name="firstName" label="First name" />
           <RHFTextField name="lastName" label="Last name" />
         </Stack>
+
+        <Controller
+          name="phone"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <MuiTelInput
+              {...field}
+              fullWidth
+              value={typeof field.value === 'number' && field.value === 0 ? '' : field.value}
+              error={!!error}
+              label="Phone Number"
+              defaultCountry="ae"
+            />
+          )}
+        />
 
         <RHFTextField name="email" label="Email address" />
 
