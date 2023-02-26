@@ -38,9 +38,9 @@ export default function SingleCar(){
   const NewProductSchema = Yup.object().shape({
     bid: 
     product?.auction?.latest_bid ?
-    Yup.number().min(product?.auction?.latest_bid?.bid + 500, 'You have to add at least 500 AED more than the highest bid')
+    Yup.number().min(product?.auction?.latest_bid?.bid + 500, 'You have to add at least 500 AED more than the highest bid').max(user.bid_limit, `Your bid limit is ${user.bid_limit} AED`)
     :
-    Yup.number().min(product?.auction?.start_price, `Minimum bid is ${product?.auction?.start_price?.toLocaleString('en-US')} AED`)
+    Yup.number().min(product?.auction?.start_price, `Minimum bid is ${product?.auction?.start_price?.toLocaleString('en-US')} AED`).max(user.bid_limit, `Your bid limit is ${user.bid_limit} AED`)
     
 });
 
