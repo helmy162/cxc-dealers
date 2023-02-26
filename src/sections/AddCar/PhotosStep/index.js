@@ -12,8 +12,8 @@ export const PhotosDefaultValues = {
   images: []
 };
 
-export default function PhotosStep ({ watch, setValue }) {
-  const [images, setImages] = useState([]);
+export default function PhotosStep ({ watch, setValue, images, setImages }) {
+
   const [error, setError] = useState(null);
 
   useEffect(() => {

@@ -20,15 +20,10 @@ export const ExteriorConditionDefaultValues = {
   markers: [],
 };
 
-export default function ExteriorCondition({ watch, setValue }) {
+export default function ExteriorCondition({ watch, setValue, markers, setMarkers, activeMarker, setActiveMarker, submittedMarkers, setSubmittedMarkers, isErrorDisplayed, setIsErrorDisplayed, file, setFile }) {
   const [defect] = watch(['defect']);
 
-  const [markers, setMarkers] = useState([]);
-  const [activeMarker, setActiveMarker] = useState(null);
-  const [submittedMarkers, setSubmittedMarkers] = useState([]);
-  const [isErrorDisplayed, setIsErrorDisplayed] = useState(false);
-
-  const [file, setFile] = useState(null);
+  
 
   const onAddMarker = useCallback((marker) => {
     if (!activeMarker) {

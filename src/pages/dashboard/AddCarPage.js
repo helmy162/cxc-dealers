@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // components
-import AddCar from '../../sections/AddCar';
+
 import { useSettingsContext } from '../../components/settings';
 import FormProvider from '../../components/hook-form';
 
@@ -24,21 +24,24 @@ import {
   AccountChangePassword,
 } from '../../sections/@dashboard/user/account';
 
-import SummaryStep, { SummarySchema, SummaryDefaultValues } from '../../sections/AddCar/SummaryStep';
+import SummaryStep from '../../sections/AddCar/SummaryStep';
 import { AllSchema, AllDefaultValues } from '../../sections/AddCar/AllSteps';
-import ExteriorCondition, { ExteriorConditionDefaultValues, ExteriorConditionSchema } from '../../sections/AddCar/ExteriorConditionStep';
-import EnginerAndTransmissionStep, { EngineAndTransmissionDefaultValues, EngineAndTransmissionSchema } from '../../sections/AddCar/EngineAndTransmissionStep';
-import SSAStep, { SSADefaultValues, SSASchema } from '../../sections/AddCar/SSAStep';
-import IEACStep, { IEACDefaultValues, IEACSchema } from '../../sections/AddCar/IEACStep';
-import CarSpecsStep, { CarSpecsDefaultValues, CarSpecsSchema } from '../../sections/AddCar/CarSpecsStep';
-import TyresStep, { TyresDefaultValues, TyresSchema } from '../../sections/AddCar/TyresStep';
-import PhotosStep, { PhotosDefaultValues, PhotosSchema } from '../../sections/AddCar/PhotosStep';
-import PrivateStep, { PrivateDefaultValues, PrivateSchema } from '../../sections/AddCar/PrivateStep';
+import ExteriorCondition from '../../sections/AddCar/ExteriorConditionStep';
+import EnginerAndTransmissionStep from '../../sections/AddCar/EngineAndTransmissionStep';
+import SSAStep from '../../sections/AddCar/SSAStep';
+import IEACStep from '../../sections/AddCar/IEACStep';
+import CarSpecsStep from '../../sections/AddCar/CarSpecsStep';
+import TyresStep from '../../sections/AddCar/TyresStep';
+import PhotosStep from '../../sections/AddCar/PhotosStep';
+import PrivateStep from '../../sections/AddCar/PrivateStep';
 
 // _mock_
 import { _userPayment, _userAddressBook, _userInvoices, _userAbout, _userList} from '../../_mock/arrays';
 import { current } from '@reduxjs/toolkit';
 
+import CarApi from '../../utils/api/CarApi';
+
+import axiosInstance from '../../utils/axios';
 // ----------------------------------------------------------------------
 
 export default function AddCarPage() {
@@ -49,6 +52,18 @@ export default function AddCarPage() {
   const [currentTab, setCurrentTab] = useState('general');
   const [currentStep, setCurrentStep] = useState(0);
 
+  const [images, setImages] = useState([]);
+
+  const [idImages, setIDImages] = useState([]);
+  const [registerationCardImages, setRegistrationCardImages] = useState([]);
+  const [vinImages, setVinImages] = useState([]);
+  const [insuranceImages, setInsuranceImages] = useState([]);
+  
+  const [markers, setMarkers] = useState([]);
+  const [activeMarker, setActiveMarker] = useState(null);
+  const [submittedMarkers, setSubmittedMarkers] = useState([]);
+  const [isErrorDisplayed, setIsErrorDisplayed] = useState(false);
+  const [file, setFile] = useState(null);
 
   const methods = useForm({
     resolver: yupResolver(AllSchema),
@@ -62,27 +77,30 @@ export default function AddCarPage() {
     setError,
     watch,
     reset,
+    resetField,
     formState: { errors, isSubmitting, isDirty },
   } = methods;
+
+  const values = watch();
 
   const TABS = [
     {
       value: 'general',
       label: 'General',
       icon: <Iconify icon="ic:round-account-box" />,
-      component: createElement( SummaryStep,{ setValue, watch }),
+      component: createElement( SummaryStep,{ setValue, watch, values, resetField }),
     },
     {
       value: 'documents',
       label: 'Documents',
       icon: <Iconify icon="fa:drivers-license" />,
-      component: createElement( PrivateStep,{ setValue, watch })
+      component: createElement( PrivateStep,{ setValue, watch, idImages, setIDImages, registerationCardImages, setRegistrationCardImages, vinImages, setVinImages, insuranceImages, setInsuranceImages })
     },
     {
       value: 'exterior',
       label: 'Exterior',
       icon: <Iconify icon="material-symbols:car-crash" />,
-      component: createElement( ExteriorCondition,{ setValue, watch }),
+      component: createElement( ExteriorCondition,{ setValue, watch, markers, setMarkers, activeMarker, setActiveMarker, submittedMarkers, setSubmittedMarkers, isErrorDisplayed, setIsErrorDisplayed, file, setFile }),
     },
     {
       value: 'engine',
@@ -118,7 +136,7 @@ export default function AddCarPage() {
       value: 'images',
       label: 'Images',
       icon: <Iconify icon="mdi:images" />,
-      component: createElement( PhotosStep,{ setValue, watch }),
+      component: createElement( PhotosStep,{ setValue, watch, images, setImages }),
     },
     
   ];
@@ -133,8 +151,9 @@ export default function AddCarPage() {
   }, [errors]);
 
   const onSubmit = async(data) => {
-    console.log(data);
-    
+    const mergedData = CarApi.mapFormDataToApiRequest(data);
+    console.log(mergedData);
+    const res = await axiosInstance.post('inspector/add/car/general-info', mergedData)
   };
 
   useEffect(() => {
@@ -155,6 +174,8 @@ export default function AddCarPage() {
       behavior: 'smooth'
     });
   }
+
+  
 
   return (
     <>

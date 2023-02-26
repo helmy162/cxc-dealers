@@ -75,35 +75,14 @@ export const SummaryDefaultValues = {
 const mapFormDataToApi = (values) => ( values ? {
   make: values.make || '',
   generation: values.generation || '',
-  trim: values.trim || '',
+  trim: values.trim || null,
   model: values.model || '',
   year: values.year,
 }: {})
 
-export default function SummaryStep({ errors, watch, setValue }) {
+export default function SummaryStep({ errors, watch, setValue, resetField }) {
   const values = watch();
   const { makes, models, generations, trims, engines } = useAddCarAutocompletes(mapFormDataToApi(values))
-  // clear the fields of their dependencies has been changed
-  useEffect(() => {
-    setValue('model', null);
-    setValue('generation', null);
-    setValue('year', null);
-    setValue('trim', null);
-    setValue('engine', "");
-  }, [values.make, setValue]);
-  useEffect(() => {
-    setValue('generation', null);
-    setValue('year', null);
-    setValue('trim', null);
-    setValue('engine', "");
-  }, [values.model, setValue]);
-  useEffect(() => {
-    setValue('trim', null);
-    setValue('engine', "");
-  }, [values.year, values.generation, setValue]);
-  useEffect(() => {
-    setValue('engine', "");
-  }, [values.year, setValue]);
   return (
     <Stack spacing={3}>
       <Typography variant="h4">Seller Info</Typography>
@@ -155,6 +134,14 @@ export default function SummaryStep({ errors, watch, setValue }) {
           options={makes}
           isOptionEqualToValue={isOptionEqualToValue}
           getOptionLabel={(option) => option.name ?? ''}
+          onChange={(e, value) => {
+            resetField("model");
+            resetField("generation");
+            resetField("year");
+            resetField("trim");
+            resetField("engine");
+            setValue("make", value);
+          } }
         />
         <RHFAutocomplete
           disabled={!values?.make}
@@ -163,6 +150,13 @@ export default function SummaryStep({ errors, watch, setValue }) {
           options={models}
           isOptionEqualToValue={isOptionEqualToValue}
           getOptionLabel={(option) => option.name ?? ''}
+          onChange={(e, value) => {
+            resetField("generation");
+            resetField("year");
+            resetField("trim");
+            resetField("engine");
+            setValue("model", value);
+          } }
         />
         <RHFAutocomplete
           disabled={!values?.model}
@@ -171,6 +165,13 @@ export default function SummaryStep({ errors, watch, setValue }) {
           options={generations}
           isOptionEqualToValue={isOptionEqualToValue}
           getOptionLabel={(option) => option.name ?? ''}
+          onChange={(e, value) => {
+            setValue('year', null);
+            resetField("trim");
+            resetField("engine");
+            setValue("generation", value);
+           
+          } }
         />
         <RHFDatePicker
           name="year"
@@ -180,6 +181,7 @@ export default function SummaryStep({ errors, watch, setValue }) {
           className='add-car-datepicker'
           shouldDisableYear={year => fYear(year) < values?.generation?.yearFrom || fYear(year) > values?.generation?.yearTo || fYear(year) > new Date().getFullYear()}
           disabled={!values?.generation }
+          
         />
         <RHFSelect
           disabled={!values?.generation }
@@ -195,6 +197,10 @@ export default function SummaryStep({ errors, watch, setValue }) {
           isOptionEqualToValue={isOptionEqualToValue}
           options={trims}
           getOptionLabel={(option) => option.trim + ' ' +option.series ?? ''}
+          onChange={(e, value) => {
+            resetField("engine");
+            setValue("trim", value);
+          } }
         />
         <RHFSelect
            disabled={!values?.trim }

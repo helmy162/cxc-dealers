@@ -41,7 +41,7 @@ function useAddCarAutocompletes ({ year, make, model, trim, generation }) {
 
   useEffect(() => {
     async function fetchOptions() {
-      if (make && model) {
+      if (make && model && generation) {
         const trims = await RapidApi.fetchTrims(generation.id);
         setTrims(trims);
         if (trim) {

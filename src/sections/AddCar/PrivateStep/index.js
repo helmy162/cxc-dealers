@@ -18,12 +18,8 @@ export const PrivateDefaultValues = {
   insurance_images: [],
 };
 
-export default function Private ({ watch, setValue }) {
-  const [idImages, setIDImages] = useState([]);
-  const [registerationCardImages, setRegistrationCardImages] = useState([]);
-  const [vinImages, setVinImages] = useState([]);
-  const [insuranceImages, setInsuranceImages] = useState([]);
-  const [error, setError] = useState(null);
+export default function Private ({ watch, setValue, idImages, setIDImages, registerationCardImages, setRegistrationCardImages, vinImages, setVinImages, insuranceImages, setInsuranceImages }) {
+
 
   useEffect(() => {
     setValue("id_images", idImages);

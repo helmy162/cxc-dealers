@@ -1,78 +1,72 @@
 import axiosInstance from "../axios";
 import { fYear } from "../formatTime";
 
-const mapSummaryToApiRequest = ({ make, model, trim, engine, year, carId, generation, ...rest }) => ({
-  ...rest,
-  model: model.name,
-  make: make.name,
-  year: fYear(year),
-  trim: trim.trim + ' ' + trim.series,
-  genration: generation.name,
-  engine: {
-    type: engine.engineType,
-    size: engine.capacityCm3,
-    cylindres: engine.numberOfCylinders,
-    horsepower_hp: engine.engineHp,
-    transmission: engine.transmission,
-  }
-});
-
-const mapCarDataToApiRequest = ({ carId, ...rest }) => {
-  const data = {
-    car_id: carId,
+const mapFormDataToApiRequest = ({ 
+  make, 
+  model, 
+  trim, 
+  engine, 
+  year, 
+  generation, 
+  FrontLeft, 
+  FrontRight, 
+  RearLeft, 
+  RearRight, 
+  markers,
+  images,
+  id_images,
+  registeration_card_images,
+  vin_images,
+  insurance_images,
+  ...rest 
+}) => {
+ 
+  
+  // Map summary data
+  const summaryData = {
     ...rest,
-  };
-  return data
-};
-
-const mapTiresDataToApiRequest = ({ carId, FrontLeft, FrontRight, RearLeft, RearRight, SpareTyre}) => {
-  return {
-    car_id: carId,
+    model: model.name,
+    make: make.name,
+    year: fYear(year),
+    trim: trim.trim + ' ' + trim.series,
+    generation: generation.name,
+    engine: {
+      type: engine.engineType,
+      size: engine.capacityCm3,
+      cylinders: engine.numberOfCylinders,
+      horsepower_hp: engine.engineHp,
+      transmission: engine.transmission,
+    },
     Front_Left_Year: fYear(FrontLeft),
     Front_Right_Year: fYear(FrontRight),
     Rear_Left_Year: fYear(RearLeft),
     Rear_Right_Year: fYear(RearRight),
-    Spare_Tyre: SpareTyre,
-  }
-};
 
-const mapExteriorConditionToApi = ({ carId, markers }) => { 
+  };
   const bodyFormData = new FormData();
-  bodyFormData.append('car_id', carId);
+  Object.keys(summaryData).forEach((key) => {
+    bodyFormData.append(key, summaryData[key]);
+  });
+  
+  // Map exterior condition data
   markers.map((marker, idx) =>  {
-    bodyFormData.append(`images[${idx}]`, marker.file);
-    bodyFormData.append('markers[]', JSON.stringify({ x: marker.left, y: marker.top, defect: marker.defect, photo: idx }))
+    bodyFormData.append(`exterior_images[${idx}]`, marker.file);
+    bodyFormData.append('markers[]', JSON.stringify({ x: marker.left, y: marker.top, defect: marker.defect, photo: idx }));
   });
 
+  (images || []).map(image => bodyFormData.append('images[]', image));
+  (id_images || []).map(image => bodyFormData.append('id_images[]', image));
+  (registeration_card_images || []).map(image => bodyFormData.append('registeration_card_images[]', image));
+  (vin_images || []).map(image => bodyFormData.append('vin_images[]', image));
+
+  
   return bodyFormData;
 };
 
-const generateInfo = async (form) => {
-  const { data } = await axiosInstance.post('inspector/add/car/general-info', mapSummaryToApiRequest(form));
-  return data?.car || {};
-};
-const saveEngineAndTransmission = async (data) => await axiosInstance.post('inspector/add/car/engine-transmission', mapCarDataToApiRequest(data));
-const saveSSA = async (data) => await axiosInstance.post('inspector/add/car/steering-suspension-brakes', mapCarDataToApiRequest(data));
-const saveIEAC = async (data) => await axiosInstance.post('inspector/add/car/interior-electricals-AC', mapCarDataToApiRequest(data));
-const saveCarSpecs = async (data) => await axiosInstance.post('inspector/add/car/specs', mapCarDataToApiRequest(data));
-const saveTyres = async (data) => await axiosInstance.post('inspector/add/car/wheels', mapTiresDataToApiRequest(data));
-const uploadPhotos = async ({ carId, ...data }) => { 
-  const bodyFormData = new FormData();
-  (data?.images || []).map(image => bodyFormData.append('images[]', image));
-  bodyFormData.append('car_id', carId); 
-  return await axiosInstance.post('inspector/add/car/images', bodyFormData);
-};
-const saveExteriorCondition = (data) => axiosInstance.post('inspector/add/car/exterior-condition', mapExteriorConditionToApi(data));
+
 
 const methods = {
-  generateInfo,
-  saveEngineAndTransmission,
-  saveSSA,
-  saveIEAC,
-  saveCarSpecs,
-  saveTyres,
-  uploadPhotos,
-  saveExteriorCondition,
+ mapFormDataToApiRequest
 };
 
 export default methods;
