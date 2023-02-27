@@ -58,6 +58,7 @@ const mapFormDataToApiRequest = ({
   (id_images || []).map(image => bodyFormData.append('id_images[]', image));
   (registeration_card_images || []).map(image => bodyFormData.append('registeration_card_images[]', image));
   (vin_images || []).map(image => bodyFormData.append('vin_images[]', image));
+  (insurance_images || []).map(image => bodyFormData.append('insurance_images[]', image));
 
   
   return bodyFormData;

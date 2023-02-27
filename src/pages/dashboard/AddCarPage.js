@@ -15,15 +15,11 @@ import FormProvider from '../../components/hook-form';
 import Iconify from '../../components/iconify';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useAuthContext } from '../../auth/useAuthContext';
-// sections
-import {
-  AccountGeneral,
-  AccountBilling,
-  AccountSocialLinks,
-  AccountNotifications,
-  AccountChangePassword,
-} from '../../sections/@dashboard/user/account';
 
+// routes
+import { PATH_DASHBOARD } from '../../routes/paths';
+
+// sections
 import SummaryStep from '../../sections/AddCar/SummaryStep';
 import { AllSchema, AllDefaultValues } from '../../sections/AddCar/AllSteps';
 import ExteriorCondition from '../../sections/AddCar/ExteriorConditionStep';
@@ -35,6 +31,8 @@ import TyresStep from '../../sections/AddCar/TyresStep';
 import PhotosStep from '../../sections/AddCar/PhotosStep';
 import PrivateStep from '../../sections/AddCar/PrivateStep';
 
+import { useSnackbar } from '../../components/snackbar';
+import { useNavigate } from 'react-router-dom';
 // _mock_
 import { _userPayment, _userAddressBook, _userInvoices, _userAbout, _userList} from '../../_mock/arrays';
 import { current } from '@reduxjs/toolkit';
@@ -47,7 +45,10 @@ import axiosInstance from '../../utils/axios';
 export default function AddCarPage() {
   const { themeStretch } = useSettingsContext();
   const {user} = useAuthContext();
-  const currentUser =user; 
+
+
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   
   const [currentTab, setCurrentTab] = useState('general');
   const [currentStep, setCurrentStep] = useState(0);
@@ -152,7 +153,16 @@ export default function AddCarPage() {
 
   const onSubmit = async(data) => {
     const mergedData = CarApi.mapFormDataToApiRequest(data);
+    try {
     const res = await axiosInstance.post('inspector/car', mergedData)
+    enqueueSnackbar('Car added successfully', { variant: 'success' })
+    navigate(PATH_DASHBOARD.car.list);
+    console.log(res);
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar('Something went wrong', { variant: 'error' })
+      navigate(PATH_DASHBOARD.car.list);
+    }
   };
 
   useEffect(() => {
@@ -219,7 +229,7 @@ export default function AddCarPage() {
             size="large"
             type="submit"
             variant="contained"
-            loading={false}
+            loading={isSubmitting}
             sx={{
             ml: 'auto' ,
             bgcolor: 'text.primary',

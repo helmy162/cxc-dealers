@@ -25,8 +25,8 @@ return (
     {!isSpecs && (
         <div className='flex font-semibold justify-end basis-[50%] text-[#AFAFAF] text-[14px] text-right' 
             style={
-            value == 'Bad' || value == 'False' ? {color:'#FD4353'}: 
-            value == "No Visible Fault" || value == 'True' || value == 'Available' ? {color:'#5AC35A'} 
+            value == 'Bad' || value == 'False' || value == 'Accident Reported' || value == 'Damaged' || value == 'To Be Repaired' ? {color:'#FD4353'}: 
+            value == "Good" || value == 'True' || value == 'Available' || value == 'No Accident' || value == 'None'  ? {color:'#5AC35A'} 
             : {} }
         >
             
