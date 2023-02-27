@@ -11,7 +11,7 @@ import Status from './Status';
 
 export default function InfoRow({ data }) {
   const image = useMemo(() => {
-    return data.images && data?.images[0] ? `https://api.carsxchange.com/${data.images[0]}` : ''
+    return data.images && data?.images[0] ? `https://api.carsxchange.com/storage/car_images/${data.images[0]}` : ''
   }, [data])
 
   const [auctionID, setAuctionID] = useState(null);

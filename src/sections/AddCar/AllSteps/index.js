@@ -148,18 +148,18 @@ export const AllSchema = Yup.object().shape({
   SpareTyre: Yup.boolean(),
 
   // Images
-  images: Yup.array().required('images: Please add at least one image').min(1)
+  images: Yup.array().required('images: Please add at least one image').min(1, 'images: Please add at least one image')
 });
 
 export const AllDefaultValues = {
   // General
   seller_id: '',
   seller_price: '',
-  year: "",
+  year: null,
   make: '',
   model: '',
   generation: '',
-  trim: '',
+  trim: null,
   mileage: 0,
   registered_emirates: "",
   engine: "",

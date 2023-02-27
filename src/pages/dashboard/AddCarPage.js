@@ -152,8 +152,7 @@ export default function AddCarPage() {
 
   const onSubmit = async(data) => {
     const mergedData = CarApi.mapFormDataToApiRequest(data);
-    console.log(mergedData);
-    const res = await axiosInstance.post('inspector/add/car/general-info', mergedData)
+    const res = await axiosInstance.post('inspector/car', mergedData)
   };
 
   useEffect(() => {
@@ -220,7 +219,7 @@ export default function AddCarPage() {
             size="large"
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            loading={false}
             sx={{
             ml: 'auto' ,
             bgcolor: 'text.primary',

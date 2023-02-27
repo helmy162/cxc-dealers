@@ -84,7 +84,7 @@ export default function ProductDetailsCarousel({ product }) {
 
   const [selectedImage, setSelectedImage] = useState(-1);
 
-  const mainImages = product?.images?.map((img) => ('https://api.carsxchange.com'+ img));
+  const mainImages = product?.images?.map((img) => ('https://api.carsxchange.com/storage/car_images/'+ img));
   const imagesLightbox = mainImages?.map((img) => ({ src: img }));
 
   const handleOpenLightbox = (imageUrl) => {

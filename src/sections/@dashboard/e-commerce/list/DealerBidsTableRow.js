@@ -95,7 +95,7 @@ export default function DealerBidsTableRow({
     };
   }, []);
 
-  const mainImages = images?.map((img) => ('https://api.carsxchange.com'+ img));
+  const mainImages = images?.map((img) => ('https://api.carsxchange.com/storage/car_images/'+ img));
 
   if(row && details && livestatus){
     return (

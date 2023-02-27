@@ -42,7 +42,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
     useEffect(() => {
         if(product && !isLoading || noLoading){
             if (product) {
-                setDefectImages(product.exterior.markers.map(marker => 'https://api.carsxchange.com'+ marker.photo));
+                setDefectImages(product.exterior.markers.map(marker => 'https://api.carsxchange.com/storage/defect_images/'+ marker.photo));
                 Object.keys(product).forEach(key => {
                     if (typeof product[key] === 'object' && key !== 'exterior' && key !== 'images' && key !=='seller_id' && key !=='seller' && key !=='auction' && key !=='bids') {
                         let listItems = []
@@ -184,7 +184,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
                         
                                 
                                 return(
-                                <Tooltip key={index} title={point.defect} arrow onClick={() => handleOpenLightbox('https://api.carsxchange.com'+ point.photo)}>
+                                <Tooltip key={index} title={point.defect} arrow onClick={() => handleOpenLightbox('https://api.carsxchange.com/storage/defect_images/'+ point.photo)}>
                                     <div  className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
                                         {index+1}
                                     </div>
