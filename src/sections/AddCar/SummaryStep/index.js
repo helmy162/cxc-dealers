@@ -4,7 +4,7 @@ import { Stack, Alert, Box, MenuItem, Typography, InputAdornment} from '@mui/mat
 
 import { RHFAutocomplete, RHFCheckbox, RHFDatePicker, RHFSelect, RHFSwitch, RHFTextField } from '../../../components/hook-form';
 import useAddCarAutocompletes from 'src/hooks/useAddCarAutocompletes';
-import { isOptionEqualToValue, renderAddCarSelect } from 'src/utils/forms';
+import { hasSameName, isOptionEqualToValue, renderAddCarSelect } from 'src/utils/forms';
 import { fYear } from 'src/utils/formatTime';
 import EngineCard from './EngineCard';
 import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS } from '../constants';
@@ -163,7 +163,8 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           name="generation"
           label="Generation"
           options={generations}
-          isOptionEqualToValue={isOptionEqualToValue}
+          isOptionEqualToValue={hasSameName}
+          placeholder="Select Generation"
           getOptionLabel={(option) => option.name ?? ''}
           onChange={(e, value) => {
             setValue('year', null);

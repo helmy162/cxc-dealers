@@ -1,20 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 import { useEffect } from 'react';
-import { paramCase } from 'change-case';
 import { useParams } from 'react-router-dom';
 // @mui
-import { Container } from '@mui/material';
+import { Container, Typography} from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProducts } from '../../redux/slices/product';
-// routes
-import { PATH_DASHBOARD } from '../../routes/paths';
-// components
-import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
+import { getProductAsAdmin } from '../../redux/slices/product';
+
 import { useSettingsContext } from '../../components/settings';
 // sections
-import ProductNewEditForm from '../../sections/@dashboard/e-commerce/ProductNewEditForm';
-
+import AddCar from '../../sections/AddCar';
 // ----------------------------------------------------------------------
 
 export default function EcommerceProductEditPage() {
@@ -23,35 +18,27 @@ export default function EcommerceProductEditPage() {
   const dispatch = useDispatch();
 
   const { name } = useParams();
+  const { productAsAdmin} = useSelector((state) => state.product);
 
-  const currentProduct = useSelector((state) =>
-    state.product.products.find((product) => paramCase(product.name) === name)
-  );
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+    if (name) {
+      dispatch(getProductAsAdmin(name));
+    }
+  }, [dispatch, name]);
 
   return (
     <>
       <Helmet>
-        <title> Cars: Edit product | CarsXchange</title>
+        <title> Cars: Edit Car | CarsXchange</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Edit product"
-          links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            {
-              name: 'E-Commerce',
-              href: PATH_DASHBOARD.eCommerce.root,
-            },
-            { name: currentProduct?.name },
-          ]}
-        />
-
-        <ProductNewEditForm isEdit currentProduct={currentProduct} />
+      <Container maxWidth={themeStretch ? false : 'xl'}>
+        <Typography variant="h3" component="h1" paragraph>
+          Edit car
+        </Typography>
+        
+        <AddCar car={productAsAdmin} isEdit={true} />
       </Container>
     </>
   );
