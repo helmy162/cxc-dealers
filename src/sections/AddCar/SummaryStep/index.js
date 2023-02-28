@@ -165,7 +165,7 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           options={generations}
           isOptionEqualToValue={hasSameName}
           placeholder="Select Generation"
-          getOptionLabel={(option) => option.name ?? ''}
+          getOptionLabel={(option) =>option?  option.name + ' [ ' + option.yearFrom + ' to ' + (option.yearTo?? 'Now') + ' ]'  : ''}
           onChange={(e, value) => {
             setValue('year', null);
             resetField("trim");
