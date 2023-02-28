@@ -119,21 +119,22 @@ const shiftInterlockOptions = [
 
 const chassisOptions = [
   { value: 'good', label: 'Good' },
-  { value: 'to_be_repaired', label: 'To be repaired' },
+  { value: 'repaired', label: 'Repaired' },
   { value: 'damaged', label: 'Damaged' },
 ]
 
 const oilLeaksOptions = [
   { value: 'none', label: 'No Leaks' },
-  { value: 'cover', label: 'Engine Valve cover oil leak' },
-  { value: 'sum', label: 'Oil Sum Leak' },
+  { value: 'engine_oil_leak', label: 'Engine Oil Leak' },
+  { value: 'engine_valve_cover_oil_leak', label: 'Engine Valve cover oil leak' },
+  { value: 'oil_sum_leak', label: 'Oil Sum Leak' },
 ]
 
 const waterSladgeOptions = [
   { value: 'none', label: 'None'},
-  { value: 'engine', label: 'Engine oil water mix' },
-  { value: 'gear', label: 'Gear oil water mix' },
-  { value: 'radiator', label: 'Radiator oil water mix' },
+  { value: 'engine_oil_water_mix', label: 'Engine oil water mix' },
+  { value: 'gear_oil_water_mix', label: 'Gear oil water mix' },
+  { value: 'radiator_oil_water_mix', label: 'Radiator oil water mix' },
 ]
 
 export {

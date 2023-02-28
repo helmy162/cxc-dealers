@@ -50,7 +50,7 @@ const SEAT_CONTROLS_OPTIONS = [
 const BOOT_TRUNK_AREA_OPTIONS = [
 { value: 'good', label: 'Good' },
 { value: 'average', label: 'Average' },
-{ value: 'to_be_repaired', label: 'To be repaired' },
+{ value: 'repaired', label: 'Repaired' },
 { value: 'damaged', label: 'Damaged' },
 ];
 
@@ -147,7 +147,7 @@ const AC_HEATING_OPTIONS = [
 
 const AIRBAG_OPTIONS = [
     { value: 'good', label: 'Good' },
-    { value: 'deployed', label: 'Deplyed' },
+    { value: 'deployed', label: 'Deployed' },
 ]
 
 export {
