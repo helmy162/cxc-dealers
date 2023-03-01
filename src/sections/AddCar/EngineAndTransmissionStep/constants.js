@@ -108,6 +108,7 @@ const gearShiftingOptions = [
 ];
 
 const shiftInterlockOptions = [
+  { value: 'not_available', label: 'Not Available' },
   { value: 'good', label: 'Good' },
   { value: 'average', label: 'Average' },
   { value: 'to_be_repaired', label: 'To Be Repaired' },
@@ -118,6 +119,15 @@ const shiftInterlockOptions = [
 ];
 
 const chassisOptions = [
+  { value: 'good', label: 'Good' },
+  { value: 'repaired', label: 'Repaired' },
+  { value: 'bulkhead_repaired', label: 'Bulkhead Repaired' },
+  { value: 'radiator_support_repaired', label: 'Radiator Support Repaired' },
+  { value: 'fender_frame_repaired', label: 'Fender Frame Repaired' },
+  { value: 'damaged', label: 'Damaged' },
+]
+
+const chassisExtensionOptions = [
   { value: 'good', label: 'Good' },
   { value: 'repaired', label: 'Repaired' },
   { value: 'damaged', label: 'Damaged' },
@@ -155,6 +165,7 @@ export {
   gearShiftingOptions,
   shiftInterlockOptions,
   chassisOptions,
+  chassisExtensionOptions,
   oilLeaksOptions,
   waterSladgeOptions
 };

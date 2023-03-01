@@ -154,7 +154,7 @@ export const AllSchema = Yup.object().shape({
 export const AllDefaultValues = (carData) => ( {
   // General
   seller_id: carData?.seller_id || '',
-  seller_price: carData?.details?.seller_price || '',
+  seller_price: carData?.details?.seller_price || 0,
   year: carData?.details.year || null,
   make: carData?.details.make || '',
   model: carData?.details.model || '',

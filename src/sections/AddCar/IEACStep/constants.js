@@ -42,6 +42,7 @@ const HEADLINER_OPTIONS = [
 ];
 
 const SEAT_CONTROLS_OPTIONS = [
+{ value: 'not_available', label: 'Not Available' },
 { value: 'good', label: 'Good' },
 { value: 'average', label: 'Average' },
 { value: 'to_be_repaired', label: 'To be repaired' },

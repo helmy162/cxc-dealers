@@ -17,6 +17,7 @@ import { ENGINE_AND_TRANSMISSION_OPTIONS,
   batteryConditionOptions,
   gearShiftingOptions,
   chassisOptions,
+  chassisExtensionOptions,
   oilLeaksOptions,
   waterSladgeOptions,
   shiftInterlockOptions} from './constants';
@@ -78,7 +79,7 @@ const fields = [
   { name: 'Gear_Shifting', label: 'Gear Shifting', options: gearShiftingOptions},
   { name: 'Shift_Interlock_Condition', label: 'Shift Interlock (4x4) Condition', options: shiftInterlockOptions },
   { name: 'Chassis', label: 'Chassis', options: chassisOptions},
-  { name: 'Chassis_Extension', label: 'Chassis Extension', options: chassisOptions},
+  { name: 'Chassis_Extension', label: 'Chassis Extension', options: chassisExtensionOptions},
   { name: 'Oil_Leaks', label: 'Oil Leaks', options: oilLeaksOptions},
   { name: 'Water_Sladge', label: 'Water Sladge', options: waterSladgeOptions},
 ];

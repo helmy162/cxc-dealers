@@ -47,7 +47,7 @@ export const SummarySchema = Yup.object().shape({
 
 export const SummaryDefaultValues = {
   seller_id: null,
-  seller_price: null,
+  seller_price: 0,
   year: "",
   make: null,
   model: null,

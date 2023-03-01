@@ -21,7 +21,6 @@ const mapFormDataToApiRequest = ({
   ...rest 
 }) => {
  
-  
   // Map summary data
   const summaryData = {
     ...rest,
@@ -30,23 +29,29 @@ const mapFormDataToApiRequest = ({
     year: fYear(year),
     trim: trim.trim + ' ' + trim.series,
     generation: generation.name,
-    engine: {
-      type: engine.engineType,
-      size: engine.capacityCm3,
-      cylinders: engine.numberOfCylinders,
-      horsepower_hp: engine.engineHp,
-      transmission: engine.transmission,
-    },
     Front_Left_Year: fYear(FrontLeft),
     Front_Right_Year: fYear(FrontRight),
     Rear_Left_Year: fYear(RearLeft),
     Rear_Right_Year: fYear(RearRight),
-
   };
+
+  // Create a new object with the engine properties
+  const engineData = {
+    type: engine.engineType,
+    size: engine.capacityCm3,
+    cylinders: engine.numberOfCylinders,
+    horsepower_hp: engine.engineHp,
+    transmission: engine.transmission,
+  };
+
   const bodyFormData = new FormData();
   Object.keys(summaryData).forEach((key) => {
     bodyFormData.append(key, summaryData[key]);
   });
+
+  // Append the engine data under the key "engine"
+  bodyFormData.append('engine', JSON.stringify(engineData));
+
   
   // Map exterior condition data
   markers.map((marker, idx) =>  {

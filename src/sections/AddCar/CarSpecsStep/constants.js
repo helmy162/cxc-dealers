@@ -30,6 +30,7 @@ const WheelsType = [
 ];
 
 const ConvertibleType = [
+{ value: 'not_available', label: 'Not Available' },
 { value: 'hard_top', label: 'Hard top' },
 { value: 'soft_top', label: 'Soft top' }
 ];
