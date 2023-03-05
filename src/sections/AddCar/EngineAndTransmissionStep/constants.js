@@ -140,7 +140,7 @@ const oilLeaksOptions = [
   { value: 'oil_sum_leak', label: 'Oil Sum Leak' },
 ]
 
-const waterSladgeOptions = [
+const waterSludgeOptions = [
   { value: 'none', label: 'None'},
   { value: 'engine_oil_water_mix', label: 'Engine oil water mix' },
   { value: 'gear_oil_water_mix', label: 'Gear oil water mix' },
@@ -167,5 +167,5 @@ export {
   chassisOptions,
   chassisExtensionOptions,
   oilLeaksOptions,
-  waterSladgeOptions
+  waterSludgeOptions
 };

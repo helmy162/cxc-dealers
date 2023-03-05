@@ -99,7 +99,7 @@ export default function ExteriorCondition({ watch, setValue, markers, setMarkers
     <Grid container spacing={2}>
       <Grid item sm={6}>
         <ImageMarker
-          src="/assets/illustrations/CarSkeleton.png"
+          src="/assets/illustrations/CarSkeleton2.png"
           markers={markers}
           onAddMarker={onAddMarker}
         />

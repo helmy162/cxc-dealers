@@ -7,26 +7,26 @@ const MAX_SIZE = 1000000; // 1 MB
 
 export const PrivateSchema = Yup.object().shape({
   id_images: Yup.array(),
-  registeration_card_images: Yup.array(),
+  registration_card_images: Yup.array(),
   vin_images: Yup.array(),
   insurance_images: Yup.array(),
 });
 export const PrivateDefaultValues = {
   id_images: [],
-  registeration_card_images: [],
+  registration_card_images: [],
   vin_images: [],
   insurance_images: [],
 };
 
-export default function Private ({ watch, setValue, idImages, setIDImages, registerationCardImages, setRegistrationCardImages, vinImages, setVinImages, insuranceImages, setInsuranceImages }) {
+export default function Private ({ watch, setValue, idImages, setIDImages, registrationCardImages, setRegistrationCardImages, vinImages, setVinImages, insuranceImages, setInsuranceImages }) {
 
 
   useEffect(() => {
     setValue("id_images", idImages);
-    setValue("registeration_card_images", registerationCardImages);
+    setValue("registration_card_images", registrationCardImages);
     setValue("vin_images", vinImages);
     setValue("insurance_images", insuranceImages);
-  }, [idImages, registerationCardImages, vinImages, insuranceImages]);
+  }, [idImages, registrationCardImages, vinImages, insuranceImages]);
 
   const handleIdImagesDrop = useCallback(
     async (acceptedFiles) => {
@@ -41,9 +41,9 @@ export default function Private ({ watch, setValue, idImages, setIDImages, regis
     async (acceptedFiles) => {
       // Process and set state for registration card images
       const newFiles = await processImages(acceptedFiles);
-      setRegistrationCardImages([...registerationCardImages, ...newFiles]);
+      setRegistrationCardImages([...registrationCardImages, ...newFiles]);
     },
-    [registerationCardImages]
+    [registrationCardImages]
   );
 
   const handleVinImagesDrop = useCallback(
@@ -72,8 +72,8 @@ export default function Private ({ watch, setValue, idImages, setIDImages, regis
         newIDImages.splice(idx, 1);
         setIDImages(newIDImages);
         break;
-      case "registerationCardImages":
-        const newRegistrationCardImages = [...registerationCardImages];
+      case "registrationCardImages":
+        const newRegistrationCardImages = [...registrationCardImages];
         newRegistrationCardImages.splice(idx, 1);
         setRegistrationCardImages(newRegistrationCardImages);
         break;
@@ -159,13 +159,13 @@ export default function Private ({ watch, setValue, idImages, setIDImages, regis
           />
         </Box>
         <Box>
-          <Typography variant="h4" >Registeration Card Images</Typography>
+          <Typography variant="h4" > Registration Card Images</Typography>
           <RHFUpload
-            name="registeration_card_images"
+            name="registration_card_images"
             multiple
             thumbnail
             onDrop={handleRegistrationCardImagesDrop}
-            onRemove={(removedFile, idx) => handleRemoveFile(removedFile, idx, "registerationCardImages")}
+            onRemove={(removedFile, idx) => handleRemoveFile(removedFile, idx, "registrationCardImages")}
           />
         </Box>
         <Box>

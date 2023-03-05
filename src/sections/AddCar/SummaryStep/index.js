@@ -7,7 +7,7 @@ import useAddCarAutocompletes from 'src/hooks/useAddCarAutocompletes';
 import { hasSameName, isOptionEqualToValue, renderAddCarSelect } from 'src/utils/forms';
 import { fYear } from 'src/utils/formatTime';
 import EngineCard from './EngineCard';
-import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS } from '../constants';
+import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS, WARRANTY_OPTIONS, BANK_FINANCE_OPTIONS } from '../constants';
 import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 const INTERIOR_TYPES = ["Full Leather",	"Fabric",	"Double Ton leather/fabric mix"];
 const exteriorColors = ["White", "Black", "Silver", "Gray", "Red", "Blue", "Green", "Yellow", "Brown", "Orange", "Other"];
 const interiorColors = ["Black", "Gray", "Beige", "Brown", "White", "Other"];
+const firstOwnerOptions = ["Yes", "No", "Unknown"];
 const UAEEmirates = ["Abu Dhabi", "Ajman", "Al Ain", "Dubai", "Fujairah", "Ras Al Khaimah", "Sharjah", "Umm Al Quwain"];
 const SPECIFICATIONS = ["GCC", "American", "Other"];
 
@@ -231,7 +232,7 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           name="keys"
           label="No. of keys"
         >
-          {[1, 2, 3].map(key => <MenuItem key={key} value={key}>{key}</MenuItem>)}
+          {['1', '2', '2+'].map(key => <MenuItem key={key} value={key}>{key}</MenuItem>)}
         </RHFSelect>
         <RHFSelect
           disabled={!values?.model && !values?.make}
@@ -249,20 +250,24 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
         </RHFSelect>
 
         <RHFAutocomplete
-          disabled={!values?.model && !values?.make && !values?.trim}
+
           name="exterior_color"
           label="Exterior Color"
           options={exteriorColors}
         />
 
         <RHFAutocomplete
-          disabled={!values?.model && !values?.make && !values?.trim}
           name="interior_color"
           label="Interior Color"
           options={interiorColors}
         />
-        <RHFSwitch name="is_new" label="Is new" />
-        <RHFSwitch name="first_owner" label="First owner" />
+
+        <RHFAutocomplete
+          name="first_owner"
+          label="First Owner"
+          options={firstOwnerOptions}
+        />
+        
       </Box>
       <Typography variant="h4">Car History</Typography>
       <Box
@@ -277,9 +282,10 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
       >
         { renderAddCarSelect({ name: 'service_history', label: 'Service History', options: SERVICE_HISTORY_OPTIONS }) }
         { renderAddCarSelect({ name: 'manuals', label: 'Manuals', options: MANUALS_OPTIONS })}
-        <RHFCheckbox name="warranty" label="Warranty" />
+        { renderAddCarSelect({ name: 'warranty', label: 'Warranty', options: WARRANTY_OPTIONS })}
         { renderAddCarSelect({ name: 'accident_history', label: 'Accident History', options: ACCIDENT_HISTORY_OPTIONS })}
-        <RHFCheckbox name="bank_finance" label="Mortgage/Bank Finance" />
+        { renderAddCarSelect({ name: 'bank_finance', label: 'Mortgage/Bank Finance', options: BANK_FINANCE_OPTIONS })}
+        {/* <RHFCheckbox name="bank_finance" label="Mortgage/Bank Finance" /> */}
         <RHFTextField name="car_history_comment" label="Additional Information" multiline />
       </Box>
   </Stack>);

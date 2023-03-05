@@ -40,6 +40,17 @@ const MANUALS_OPTIONS = [
   { value: 'Unknown', label: 'Unknown'}	
 ];
 
+const WARRANTY_OPTIONS = [
+  { value: 'Available', label: 'Available '},
+  { value: 'Not Available', label: 'Not Available' },
+  { value: 'Needs to be verified', label: 'Needs to be verified'}
+];
+
+const BANK_FINANCE_OPTIONS = [
+  { value: 'yes', label: 'Yes '},
+  { value: 'no', label: 'No' },
+];
+
 const ACCIDENT_HISTORY_OPTIONS = [
   { value: 'Accident reported', label: 'Accident reported '},
   { value: 'Unknown', label: 'Unknown' },
@@ -78,6 +89,8 @@ export {
   ENGINE_SMOKE_OPTIONS,
   SERVICE_HISTORY_OPTIONS,
   MANUALS_OPTIONS,
+  WARRANTY_OPTIONS,
+  BANK_FINANCE_OPTIONS,
   ACCIDENT_HISTORY_OPTIONS,
   ADD_CAR_STEPS,
   STEPS_QUEUE,

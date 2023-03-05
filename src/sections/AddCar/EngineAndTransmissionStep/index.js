@@ -19,7 +19,7 @@ import { ENGINE_AND_TRANSMISSION_OPTIONS,
   chassisOptions,
   chassisExtensionOptions,
   oilLeaksOptions,
-  waterSladgeOptions,
+  waterSludgeOptions,
   shiftInterlockOptions} from './constants';
 import { renderAddCarSelect, renderAddCarSwitch } from 'src/utils/forms';
 import { RHFTextField, RHFCheckbox } from 'src/components/hook-form';
@@ -81,7 +81,7 @@ const fields = [
   { name: 'Chassis', label: 'Chassis', options: chassisOptions},
   { name: 'Chassis_Extension', label: 'Chassis Extension', options: chassisExtensionOptions},
   { name: 'Oil_Leaks', label: 'Oil Leaks', options: oilLeaksOptions},
-  { name: 'Water_Sladge', label: 'Water Sladge', options: waterSladgeOptions},
+  { name: 'Water_Sludge', label: 'Water Sludge', options: waterSludgeOptions},
 ];
 
 export default function EngineAndTransmissionStep() {

@@ -18,19 +18,18 @@ export const AllSchema = Yup.object().shape({
   interior_color: Yup.string().nullable(),
   interior_type: Yup.string(),
   specification: Yup.string(),
-  is_new: Yup.boolean(),
-  first_owner: Yup.boolean(),
+  first_owner: Yup.string(),
   keys: Yup.string(),
   service_history: Yup.string(),
   manuals: Yup.string(),
-  warranty: Yup.boolean(),
+  warranty: Yup.string(),
   accident_history: Yup.string(),
-  bank_finance: Yup.boolean(),
+  bank_finance: Yup.string(),
   car_history_comment: Yup.string(),
 
   // Documents
   id_images: Yup.array(),
-  registeration_card_images: Yup.array(),
+  registration_card_images: Yup.array(),
   vin_images: Yup.array(),
   insurance_images: Yup.array(),
 
@@ -57,7 +56,7 @@ export const AllSchema = Yup.object().shape({
   Chassis: Yup.string(),
   Chassis_Extension: Yup.string(),
   Oil_Leaks: Yup.string(),
-  Water_Sladge: Yup.string(),
+  Water_Sludge: Yup.string(),
   Engine_Comment: Yup.string(),
   Warning_Signal: Yup.boolean(),
 
@@ -146,6 +145,7 @@ export const AllSchema = Yup.object().shape({
   RearLeft: Yup.string(),
   RearRight: Yup.string(),
   SpareTyre: Yup.boolean(),
+  tyres_comment: Yup.string(),
 
   // Images
   images: Yup.array().required('images: Please add at least one image').min(1, 'images: Please add at least one image')
@@ -168,19 +168,18 @@ export const AllDefaultValues = (carData) => ( {
   interior_color: carData?.details.interior_color || '',
   interior_type: carData?.details.interior_type || "",
   specification: carData?.details.specification || "",
-  is_new: carData?.details.is_new || true,
-  first_owner: carData?.details.first_owner || false,
+  first_owner: carData?.details.first_owner || "",
   keys: carData?.details.keys || "",
   service_history: carData?.history.service_history || "",
   manuals: carData?.history.manuals || "",
-  warranty: carData?.history.warranty || true,
+  warranty: carData?.history.warranty || "",
   accident_history: carData?.history.accident_history || "",
-  bank_finance: carData?.history.bank_finance || false,
+  bank_finance: carData?.history.bank_finance || "",
   car_history_comment: carData?.history.car_history_comment || "",
 
   // Documents
   id_images: carData?.documents?.id_images || [],
-  registeration_card_images: carData?.documents?.registeration_card_images || [],
+  registration_card_images: carData?.documents?.registration_card_images || [],
   vin_images: carData?.documents?.vin_images || [],
   insurance_images: carData?.documents?.insurance_images || [],
 
@@ -207,7 +206,7 @@ export const AllDefaultValues = (carData) => ( {
   Chassis: carData?.engine_transmission?.Chassis || 'good',
   Chassis_Extension : carData?.engine_transmission?.Chassis_Extension || 'good',
   Oil_Leaks: carData?.engine_transmission?.Oil_Leaks || 'none',
-  Water_Sladge: carData?.engine_transmission?.Water_Sladge ||'none',
+  Water_Sludge: carData?.engine_transmission?.Water_Sludge ||'none',
   Engine_Comment: carData?.engine_transmission?.Engine_Comment || '',
   Warning_Signal: carData?.engine_transmission?.Warning_Signal || true,
 
@@ -296,6 +295,7 @@ export const AllDefaultValues = (carData) => ( {
   RearLeft: carData?.wheels?.RearLeft || "",
   RearRight: carData?.wheels?.RearRight || "",
   Spare_Tyre: carData?.wheels?.Spare_Tyre || false,
+  tyres_comment: carData?.wheels?.Tyre_Comment || "",
 
   // Images
   images: [],

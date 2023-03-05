@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 // @mui
 import { Stack, Alert, Box } from '@mui/material';
-import { RHFCheckbox, RHFDatePicker } from 'src/components/hook-form';
+import { RHFSwitch, RHFDatePicker, RHFTextField} from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 export const TyresSchema = Yup.object().shape({
@@ -10,6 +10,7 @@ export const TyresSchema = Yup.object().shape({
   RearLeft: Yup.string(),
   RearRight: Yup.string(),
   SpareTyre: Yup.boolean(),
+
 });
 
 export const TyresDefaultValues = {
@@ -47,7 +48,8 @@ export default function TyresStep() {
           disableFuture
           key={field.name}
         />) }
-        <RHFCheckbox name='Spare_Tyre' label={'Spare tyre'} />
+        <RHFTextField name="tyres_comment" label="Comments" multiline />
+        <RHFSwitch name='Spare_Tyre' label={'Spare tyre'} />
       </Box>
   </Stack>);
 }
