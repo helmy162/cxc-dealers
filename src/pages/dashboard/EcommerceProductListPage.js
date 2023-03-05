@@ -52,6 +52,7 @@ const TABLE_HEAD = [
   { id: 'model', label: 'Model', align: 'left' },
   { id: 'year', label: 'Year', align: 'left' },
   { id: 'seller_name', label: 'Seller Name', align: 'left' },
+  { id: 'inspection_date', label: 'Inspection Date', align: 'left' },
   { id: 'status', label: 'Auction', align: 'center', width: 180 },
   { id: '' },
 ];
