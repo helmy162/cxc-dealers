@@ -72,6 +72,37 @@ export default function CarDetails({withImages = true, noLoading=false}) {
         setAllAccordions(accordions);
     }, [product, isLoading]);
 
+    // Exterior Condition
+    allAccordions.splice( 
+        1, 0,
+        (<Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+        <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+            <div className="secondary-heading block">
+                <h2 className="text-[20px] font-semibold capitalize mb-3">
+                    Exterior Condition
+                </h2>
+            </div>
+        </AccordionSummary>
+        <AccordionDetails>
+        <div className='relative max-h-[75vh] w-fit m-auto' >
+            <img src="/assets/illustrations/CarSkeleton2.png" alt="Markers" className='w-auto max-h-[75vh]'/>
+            {product && product.exterior.markers.map((point, index) => {
+        
+                
+                return(
+                <Tooltip key={index} title={point.defect} arrow onClick={() => handleOpenLightbox('https://api.carsxchange.com/storage/defect_images/'+ point.photo)}>
+                    <div  className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
+                        {index+1}
+                    </div>
+                </Tooltip>
+                
+            )
+            })}
+        </div>
+        </AccordionDetails>
+    </Accordion>),
+    )
+
 
     
       const imagesLightbox = defectImages.map((img) => ({ src: img }));
@@ -167,34 +198,6 @@ export default function CarDetails({withImages = true, noLoading=false}) {
                     }
 
                     {allAccordions}
-                
-                    
-                    <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
-                        <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                            <div className="secondary-heading block">
-                                <h2 className="text-[20px] font-semibold capitalize mb-3">
-                                    Exterior Condition
-                                </h2>
-                            </div>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                        <div className='relative max-h-[75vh] w-fit m-auto' >
-                            <img src="/assets/illustrations/CarSkeleton.png" alt="Markers" className='w-auto max-h-[75vh]'/>
-                            {product && product.exterior.markers.map((point, index) => {
-                        
-                                
-                                return(
-                                <Tooltip key={index} title={point.defect} arrow onClick={() => handleOpenLightbox('https://api.carsxchange.com/storage/defect_images/'+ point.photo)}>
-                                    <div  className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
-                                        {index+1}
-                                    </div>
-                                </Tooltip>
-                                
-                            )
-                            })}
-                        </div>
-                        </AccordionDetails>
-                    </Accordion>
 
                     <Lightbox
                         index={selectedImage}
