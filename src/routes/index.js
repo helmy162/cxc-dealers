@@ -116,7 +116,7 @@ export default function Router() {
             { path: 'new', element: <UserCreatePage /> },
             { path: ':name/edit', element: <UserEditPage /> },
             { path: 'list', element: <UserListPage /> },
-            { path: ':name/account', element: <UserAccountPage /> },
+            // { path: ':name/account', element: <UserAccountPage /> },
           ],
         },
         {
@@ -126,7 +126,7 @@ export default function Router() {
             { path: 'new', element: <SellerCreatePage /> },
             { path: ':name/edit', element: <SellerEditPage /> },
             { path: 'list', element: <SellerListPage /> },
-            { path: ':name/account', element: <UserAccountPage /> },
+            // { path: ':name/account', element: <UserAccountPage /> },
           ],
         }
       ],
