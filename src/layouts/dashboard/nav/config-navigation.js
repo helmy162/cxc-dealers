@@ -17,6 +17,7 @@ const ICONS = {
   car: icon('ic_car'),
   profile: icon('ic_profile'),
   bid: icon('ic_bid'),
+  garage: icon('ic_garage'),
 };
 
 const dealerNavConfig = [
@@ -24,7 +25,7 @@ const dealerNavConfig = [
   // MANAGEMENT
   // ----------------------------------------------------------------------
   {
-    subheader: 'bidding',
+    subheader: 'auction',
     items: [
       {
         title: 'Cars',
@@ -70,7 +71,7 @@ const adminNavConfig = [
       {
         title: 'cars',
         path: PATH_DASHBOARD.car.list,
-        icon: ICONS.car,
+        icon: ICONS.garage,
       },
       {
         title: 'My Account',
@@ -80,7 +81,7 @@ const adminNavConfig = [
     ],
   },
   {
-    subheader: 'bidding',
+    subheader: 'auction',
     items: [
       {
         title: 'Cars',

@@ -22,7 +22,7 @@ const OPTIONS = [
   },
   {
     label: 'Profile',
-    linkTo: '/',
+    linkTo: '/dealer/profile',
   },
 ];
 
