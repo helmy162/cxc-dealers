@@ -20,6 +20,6 @@ export default function ThemeLocalization({ children }) {
   const theme = createTheme(outerTheme, currentLang.systemValue);
 
   return <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <ThemeProvider theme={theme}> {children} </ThemeProvider>;
+      <ThemeProvider theme={theme}> {children} </ThemeProvider>
     </LocalizationProvider>
 }
