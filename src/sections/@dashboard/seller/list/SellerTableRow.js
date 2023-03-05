@@ -35,7 +35,15 @@ SellerTableRow.propTypes = {
 export default function SellerTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectAccount }) {
   const navigate = useNavigate();
 
-  const { id, name, phone, email} = row;
+  const { id, name, phone, email, created_at} = row;
+
+  const created_date = new Date(created_at).toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
 
 
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -86,6 +94,8 @@ export default function SellerTableRow({ row, selected, onEditRow, onSelectRow, 
           <TableCell align="left">{email}</TableCell>
 
           <TableCell align="left">{phone}</TableCell>
+
+          <TableCell align="left">{created_date}</TableCell>
 
 
           <TableCell align="right">

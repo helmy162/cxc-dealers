@@ -63,6 +63,7 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Name', align: 'left' },
   { id: 'email', label: 'Email', align: 'left' },
   { id: 'phone', label: 'Phone Number', align: 'left' },
+  { id: 'created_at', label: 'Created At', align: 'left' },
   { id: '' },
 ];
 

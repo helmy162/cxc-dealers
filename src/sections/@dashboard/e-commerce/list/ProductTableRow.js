@@ -41,7 +41,15 @@ export default function ProductTableRow({
   onEditRow,
   onViewRow,
 }) {
-  const { id, details, livestatus, timeRemaining } = row;
+  const { id, details, livestatus, timeRemaining, seller, created_at } = row;
+
+  const inspection_date = new Date(created_at).toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -88,8 +96,8 @@ export default function ProductTableRow({
           <TableCell>{details.make}</TableCell>
           <TableCell>{details.model}</TableCell>
           <TableCell>{details.year}</TableCell>
-          {/* Missing Seller Name */}
-          <TableCell>{details.seller_name}</TableCell> 
+          <TableCell>{seller?.name}</TableCell>
+          <TableCell>{inspection_date}</TableCell>
   
           <TableCell align="center">
             <Label
