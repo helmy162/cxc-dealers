@@ -236,32 +236,18 @@ export default function EcommerceProductDetailsPage() {
       value: 'inspection',
       label: 'Inspection Details',
       component: productAsAdmin ? <Markdown children={`
-      \n<p><strong> Inspection Status:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Online Price:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Asked Price:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Offered Price:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Inspector:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Inspector ID:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      `} /> : null,
-    },
-    {
-      value: 'auction',
-      label: `Auction Details`,
-      component: productAsAdmin ? <Markdown children={`
-      \n<p><strong> Seller's Price:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Start Time:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Auction Date:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Auction Duration:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Inspection Status:</strong> <small> Inspected </small> </p>
+      \n<p><strong> Asked Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>
+      \n<p><strong> Inspector Name:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
       `} /> : null,
     },
     {
       value: 'seller',
       label: `Seller's Details`,
       component: productAsAdmin ? <Markdown children={`
-      \n<p><strong> Seller's Name:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Seller's Email:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Seller's Phone:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
-      \n<p><strong> Selling Date:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Seller's Name:</strong> <small> ${productAsAdmin?.seller?.name} </small> </p>
+      \n<p><strong> Seller's Email:</strong> <small> ${productAsAdmin?.seller?.email} </small> </p>
+      \n<p><strong> Seller's Phone:</strong> <small> ${productAsAdmin?.seller?.phone} </small> </p>
       `} /> : null,
     }
   ];
