@@ -10,6 +10,7 @@ export default function OffersCount({ count }) {
         display: 'flex',
         alignItems: 'center',
         gap: '10px',
+        margin:'auto',
         marginBottom: '20px'
       }}
     >
@@ -29,7 +30,7 @@ export default function OffersCount({ count }) {
           fontWeight: 500
         }}
       >
-        {count} Offers
+        {count} Cars
       </Typography>
     </Box>
   )

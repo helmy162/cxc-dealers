@@ -40,7 +40,7 @@ export default function CarsListingPage() {
   return (
     <Box
       sx={{
-        backgroundColor: '#F8FBFD',
+        // backgroundColor: '#F8FBFD',
       }}
     >
       <Helmet>
@@ -58,14 +58,14 @@ export default function CarsListingPage() {
           paddingTop: '110px'
         }}
       >
-        <Filters
+        {/* <Filters
           sx={{
             display: {
               xs: 'none',
               md: 'block'
             }
           }}
-        />
+        /> */}
         <Box sx={{
           width: '100%',
         }}>
@@ -76,8 +76,8 @@ export default function CarsListingPage() {
               justifyContent: 'space-between',
             }}
           >
-            <OffersCount count="237" />
-            <Button
+            <OffersCount count={cars.length} />
+            {/* <Button
               variant="contained"
               sx={{
                 display: {
@@ -88,10 +88,10 @@ export default function CarsListingPage() {
               onClick={toggleFilter}
             >
               Filter
-            </Button>
+            </Button> */}
           </Box>
-          {isFilterVisible && <Filters sx={{ marginBottom: '20px' }} />}
-          <AppliedFilters />
+          {/* {isFilterVisible && <Filters sx={{ marginBottom: '20px' }} />} */}
+          {/* <AppliedFilters /> */}
           <CarsList cars={cars} />
           <Box sx={{ display: 'flex' }}>
             {isLoadMoreButtonVisible && (

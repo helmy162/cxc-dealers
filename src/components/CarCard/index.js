@@ -24,7 +24,7 @@ export default function CarCard({
   return (
     <Card sx={{
       ...sx,
-      maxWidth: 797,
+      // maxWidth: 797,
       minHeight: 254,
       p: '0px',
       position: 'relative',

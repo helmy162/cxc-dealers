@@ -52,7 +52,8 @@ export default function InfoRow({ data }) {
       sx={{
         mt: '10px',
         display: 'flex',
-        flexDirection: { xs: 'column', sm: 'row' }
+        flexDirection: { xs: 'column', sm: 'row' },
+        width: '100%',
       }}
     >
       <Box sx={{
