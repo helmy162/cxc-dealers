@@ -42,28 +42,10 @@ export default function UserAccountPage({isProfile = false}) {
       component: <AccountGeneral user={currentUser}/>,
     },
     {
-      value: 'billing',
-      label: 'Billing',
-      icon: <Iconify icon="ic:round-receipt" />,
-      component: (
-        <AccountBilling
-          cards={_userPayment}
-          addressBook={_userAddressBook}
-          invoices={_userInvoices}
-        />
-      ),
-    },
-    {
       value: 'notifications',
       label: 'Notifications',
       icon: <Iconify icon="eva:bell-fill" />,
       component: <AccountNotifications user={currentUser} />,
-    },
-    {
-      value: 'social_links',
-      label: 'Social links',
-      icon: <Iconify icon="eva:share-fill" />,
-      component: <AccountSocialLinks socialLinks={_userAbout.socialLinks} />,
     },
     {
       value: 'change_password',

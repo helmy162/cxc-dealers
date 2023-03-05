@@ -1,25 +1,23 @@
 import * as Yup from 'yup';
 import { useCallback } from 'react';
 // form
-import { useForm } from 'react-hook-form';
+import { useForm, Controller} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography } from '@mui/material';
+import { Box, Grid, Card, Stack, Typography, FormControlLabel, Switch} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// auth
-import { useAuthContext } from '../../../../auth/useAuthContext';
-// utils
-import { fData } from '../../../../utils/formatNumber';
-// assets
-import { countries } from '../../../../assets/data';
+
 // components
 import { useSnackbar } from '../../../../components/snackbar';
+import Label from '../../../../components/label';
 import FormProvider, {
   RHFSwitch,
   RHFSelect,
   RHFTextField,
   RHFUploadAvatar,
 } from '../../../../components/hook-form';
+
+import { MuiTelInput } from 'mui-tel-input'
 
 // ----------------------------------------------------------------------
 
@@ -28,28 +26,19 @@ export default function AccountGeneral({user}) {
   const UpdateUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    photoURL: Yup.string().required('Avatar is required').nullable(true),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    country: Yup.string().required('Country is required'),
-    address: Yup.string().required('Address is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    zipCode: Yup.string().required('Zip code is required'),
-    about: Yup.string().required('About is required'),
+    phone: Yup.string().required('Phone is required'),
+    company: Yup.string().required('Company is required'),
+    isVerified: Yup.boolean(),
+    status: Yup.string(),
   });
 
   const defaultValues = {
     name: user?.name || '',
     email: user?.email || '',
-    photoURL: user?.photoURL || null,
-    phoneNumber: user?.phoneNumber || '',
-    country: user?.country || '',
-    address: user?.address || '',
-    state: user?.state || '',
-    city: user?.city || '',
-    zipCode: user?.zipCode || '',
-    about: user?.about || '',
-    isPublic: user?.isPublic || false,
+    phone: user?.phone || '',
+    company: user?.company || '',
+    isVerified: user?.is_verified == '1' || false,
+    status: user?.status || (!false && 'active') || 'pending',
   };
 
   const methods = useForm({
@@ -57,12 +46,18 @@ export default function AccountGeneral({user}) {
     defaultValues,
   });
 
+  
+
   const {
     setValue,
+    watch,
+    control,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
+  const values = watch();
+  
   const onSubmit = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -91,35 +86,33 @@ export default function AccountGeneral({user}) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <RHFUploadAvatar
-              name="photoURL"
-              maxSize={3145728}
-              onDrop={handleDrop}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 2,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.secondary',
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
-                </Typography>
-              }
-            />
+      <Grid item xs={12} md={4}>
+          <Card sx={{ pt: 5, pb: 5, px: 3, gap:'20px', display:'flex', flexDirection: 'column' }}>
 
-            <RHFSwitch
-              name="isPublic"
-              labelPlacement="start"
-              label="Public Profile"
-              sx={{ mt: 5 }}
-            />
+              <Stack direction='row' justifyContent='space-between'>
+                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                  Account Status
+                </Typography>
+                <Label
+                  color={values.status === 'active' ? 'success' : 'warning'}
+                  sx={{ textTransform: 'uppercase',}}
+                >
+                  {values.status}
+                </Label>
+              </Stack>
+
+              <Stack direction='row' justifyContent='space-between'>
+                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                  Email Verified
+                </Typography>
+                <Label
+                  color={values.isVerified == true ? 'success' : 'error'}
+                  sx={{ textTransform: 'uppercase',}}
+                >
+                  {values.isVerified ? 'Verified' : 'Not Verified'}
+                </Label>
+              </Stack>
+
           </Card>
         </Grid>
 
@@ -138,29 +131,25 @@ export default function AccountGeneral({user}) {
 
               <RHFTextField name="email" label="Email Address" />
 
-              <RHFTextField name="phoneNumber" label="Phone Number" />
+              <Controller
+                name="phone"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <MuiTelInput
+                    {...field}
+                    fullWidth
+                    value={typeof field.value === 'number' && field.value === 0 ? '' : field.value}
+                    error={!!error}
+                    label="Phone Number"
+                    defaultCountry="ae"
+                  />
+                )}
+              />
 
-              <RHFTextField name="address" label="Address" />
-
-              <RHFSelect native name="country" label="Country" placeholder="Country">
-                <option value="" />
-                {countries.map((country) => (
-                  <option key={country.code} value={country.label}>
-                    {country.label}
-                  </option>
-                ))}
-              </RHFSelect>
-
-              <RHFTextField name="state" label="State/Region" />
-
-              <RHFTextField name="city" label="City" />
-
-              <RHFTextField name="zipCode" label="Zip/Code" />
+              <RHFTextField name="company" label="Company" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <RHFTextField name="about" multiline rows={4} label="About" />
-
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 Save Changes
               </LoadingButton>
