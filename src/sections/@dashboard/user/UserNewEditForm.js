@@ -63,7 +63,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       email: currentUser?.email || '',
       phoneNumber: currentUser?.phone || '+971',
       isVerified: currentUser?.is_verified == '1' || false,
-      status: currentUser?.status || (!isEdit && 'active') || 'pending',
+      status: currentUser?.status || (!isEdit && 'active') || 'inactive',
       company: currentUser?.company || '',
       role: currentUser?.type || 'dealer',
       bidLimit: currentUser?.bid_limit || '0',
@@ -154,7 +154,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                         {...field}
                         checked={field.value === 'active'}
                         onChange={(event) =>
-                          field.onChange(event.target.checked ? 'active' : 'pending')
+                          field.onChange(event.target.checked ? 'active' : 'inactive')
                         }
                       />
                     )}

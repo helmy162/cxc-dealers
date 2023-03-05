@@ -38,7 +38,7 @@ export default function AccountGeneral({user}) {
     phone: user?.phone || '',
     company: user?.company || '',
     isVerified: user?.is_verified == '1' || false,
-    status: user?.status || (!false && 'active') || 'pending',
+    status: user?.status || (!false && 'active') || 'inactive',
   };
 
   const methods = useForm({
