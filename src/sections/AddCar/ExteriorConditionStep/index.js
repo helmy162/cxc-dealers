@@ -119,7 +119,7 @@ export default function ExteriorCondition({ watch, setValue, markers, setMarkers
             type="button"
             onClick={onSubmitButton} 
             variant="outlined"
-            disabled={!defect || !file || error}
+            disabled={!defect  || error}
           >
             Add marker</Button>
         </Paper>}
