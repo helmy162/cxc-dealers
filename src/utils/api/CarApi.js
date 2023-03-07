@@ -29,10 +29,10 @@ const mapFormDataToApiRequest = ({
     year: fYear(year),
     trim: trim.trim + ' ' + trim.series,
     generation: generation.name,
-    Front_Left_Year: fYear(FrontLeft),
-    Front_Right_Year: fYear(FrontRight),
-    Rear_Left_Year: fYear(RearLeft),
-    Rear_Right_Year: fYear(RearRight),
+    FrontLeft: fYear(FrontLeft),
+    FrontRight: fYear(FrontRight),
+    RearLeft: fYear(RearLeft),
+    RearRight: fYear(RearRight),
   };
 
   // Create a new object with the engine properties
