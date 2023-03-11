@@ -3,5 +3,6 @@ export const DEFECTS_OPTIONS = [
   "Cosmetic Paint",
   "Dent",
   "Repainted",
-  "Repair"
+  "Repair",
+  "Replaced"
 ];

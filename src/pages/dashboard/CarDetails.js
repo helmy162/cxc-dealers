@@ -91,7 +91,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
             {product && product.exterior.markers.map((point, index) => {
                 return(
                 <Tooltip key={index} title={point.defect} arrow onClick={() => handleOpenLightbox('https://api.carsxchange.com/storage/defect_images/'+ point.photo)}>
-                    <div  className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
+                    <div  className='w-[20px] h-[20px] text-[12px] sm:text-[16px] sm:w-[25px]  sm:h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
                         {index+1}
                     </div>
                 </Tooltip>
