@@ -15,11 +15,13 @@ import {
     AccordionSummary,
     AccordionDetails,
     Tooltip,
-    Button,
+    Button, List
   } from '@mui/material';
 
 import Iconify from '../../components/iconify';
 import ProductDetailsCarousel from './ProductDetailsCarousel';
+
+import MarkerRow from 'src/sections/AddCar/ExteriorConditionStep/MarkerRow';
 
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProduct, getProducts } from '../../redux/slices/product';
@@ -83,21 +85,23 @@ export default function CarDetails({withImages = true, noLoading=false}) {
                 </h2>
             </div>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails className='flex justify-between'>
         <div className='relative max-h-[75vh] w-fit m-auto' >
             <img src="/assets/illustrations/CarSkeleton2.png" alt="Markers" className='w-auto max-h-[75vh]'/>
             {product && product.exterior.markers.map((point, index) => {
-        
-                
                 return(
                 <Tooltip key={index} title={point.defect} arrow onClick={() => handleOpenLightbox('https://api.carsxchange.com/storage/defect_images/'+ point.photo)}>
                     <div  className='w-[25px]  h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
                         {index+1}
                     </div>
                 </Tooltip>
-                
             )
             })}
+        </div>
+        <div className='basis-1/2'>
+        <List>
+          { product && product.exterior.markers.map((marker, key) => <MarkerRow  marker={marker} key={key} id={key} />)}
+        </List>
         </div>
         </AccordionDetails>
     </Accordion>),
