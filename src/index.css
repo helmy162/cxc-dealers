@@ -46,6 +46,11 @@
 .image-marker__image{
     max-height: 500px;
     width: auto !important;
+    margin: unset;
+}
+
+.image-marker{
+    width: fit-content;
 }
 
 
