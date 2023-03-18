@@ -165,7 +165,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
             {
                 withImages &&
                 <Helmet>
-                    <title> {`${product.details.make} ${product.details.model} ${product.details.year} Insepction Report`} </title>
+                    <title> {`${product.details.make} ${product.details.model} ${product.details.year} Inspection Report`} </title>
                 </Helmet>
             }
                 <section className='flex flex-col gap-[10px] details-section'>
