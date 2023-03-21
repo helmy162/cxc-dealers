@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 
-export default function EngineCard ({ option, obj }) {
+export default function EngineCard ({ option, obj, ...other }) {
   return <Box
     rowGap={0}
     columnGap={0}
@@ -10,6 +10,7 @@ export default function EngineCard ({ option, obj }) {
       sm: 'repeat(2, 1fr)',
     }}
     {...option}
+    {...other}
   >
     <Typography variant="caption" display="block">EngineCC</Typography>
     <Typography variant="subtitle2">{obj.capacityCm3}</Typography>

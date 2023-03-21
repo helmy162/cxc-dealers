@@ -46,10 +46,7 @@ export default function AddCar({isEdit, car}) {
   
     const [images, setImages] = useState([]);
   
-    const [idImages, setIDImages] = useState([]);
-    const [registrationCardImages, setRegistrationCardImages] = useState([]);
-    const [vinImages, setVinImages] = useState([]);
-    const [insuranceImages, setInsuranceImages] = useState([]);
+
     
     const [markers, setMarkers] = useState([]);
     const [activeMarker, setActiveMarker] = useState(null);
@@ -63,6 +60,9 @@ export default function AddCar({isEdit, car}) {
       defaultValues: AllDefaultValues(car),
       values
     });
+
+
+
   
   
     const {
@@ -88,7 +88,7 @@ export default function AddCar({isEdit, car}) {
         value: 'documents',
         label: 'Documents',
         icon: <Iconify icon="fa:drivers-license" />,
-        component: createElement( PrivateStep,{ setValue, watch, idImages, setIDImages, registrationCardImages, setRegistrationCardImages, vinImages, setVinImages, insuranceImages, setInsuranceImages })
+        component: createElement( PrivateStep,{ setValue, watch })
       },
       {
         value: 'exterior',
@@ -213,7 +213,7 @@ export default function AddCar({isEdit, car}) {
             size="large"
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            loading={false}
             sx={{
             ml: 'auto' ,
             bgcolor: 'text.primary',

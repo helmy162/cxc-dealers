@@ -22,37 +22,41 @@ function useAddCarAutocompletes ({ year, make, model, trim, generation }) {
   useEffect(() => {
     async function fetchOptions() {
       if (make) {
-        const models = await RapidApi.fetchModels(make.id);
+        const carId = makes.find(carMake => carMake.name === make)?.id;
+        const models = await RapidApi.fetchModels(carId);
         setModels(models);
       }
     }
     fetchOptions();
-  }, [make]);
+  }, [make, makes]);
 
   useEffect(() => {
     async function fetchOptions() {
-      if (model) {
-        const generations = await RapidApi.fetchGenerations(model.id);
+      const modelId = models.find(carModel => carModel.name == model)?.id;
+      if (model && modelId) {
+        const generations = await RapidApi.fetchGenerations(modelId);
         setGenerations(generations);
       }
     }
     fetchOptions();
-  }, [model]);
+  }, [model, models, make , makes]);
 
   useEffect(() => {
     async function fetchOptions() {
-      if (make && model && generation) {
-        const trims = await RapidApi.fetchTrims(generation.id);
+      const generationId = generations.find(carGeneration => carGeneration.name === generation)?.id;
+      if (make && model && generation && generationId) {
+        const trims = await RapidApi.fetchTrims(generationId);
         setTrims(trims);
-        if (trim) {
-          const specs = await RapidApi.fetchSpecs(trim.id);
+        const trimId = trims.find(trimmm => (trimmm.trim + ' ' + trimmm.series) == trim)?.id;
+        if (trim && trimId) {
+          const specs = await RapidApi.fetchSpecs(trimId);
           setEngines(specs);
         }
       }
       
     }
     fetchOptions();
-  }, [generation , trim]);
+  }, [generation , trim, generations]);
 
   return { makes, models, generations, years, trims, engines };
 }

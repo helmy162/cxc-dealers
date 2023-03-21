@@ -4,5 +4,6 @@ export const DEFECTS_OPTIONS = [
   "Dent",
   "Repainted",
   "Repair",
-  "Replaced"
+  "Replaced",
+  "Full Repainted",
 ];

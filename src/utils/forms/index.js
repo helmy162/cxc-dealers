@@ -1,7 +1,7 @@
 import { MenuItem } from "@mui/material";
 import { RHFSelect, RHFSwitch } from "src/components/hook-form";
 
-const isOptionEqualToValue = (option, value) => option.id === value.id
+const isOptionEqualToValue = (option, value) => option.name === value.name
 
 const hasSameName = (option, value) => {
   console.log(option.name, value);

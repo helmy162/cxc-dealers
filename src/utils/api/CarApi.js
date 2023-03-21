@@ -24,11 +24,11 @@ const mapFormDataToApiRequest = ({
   // Map summary data
   const summaryData = {
     ...rest,
-    model: model.name,
-    make: make.name,
+    model: model,
+    make: make,
     year: fYear(year),
-    trim: trim.trim + ' ' + trim.series,
-    generation: generation.name,
+    trim: trim,
+    generation: generation,
     FrontLeft: fYear(FrontLeft),
     FrontRight: fYear(FrontRight),
     RearLeft: fYear(RearLeft),

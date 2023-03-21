@@ -81,9 +81,11 @@ const mapFormDataToApi = (values) => ( values ? {
   year: values.year,
 }: {})
 
+
 export default function SummaryStep({ errors, watch, setValue, resetField }) {
   const values = watch();
   const { makes, models, generations, trims, engines } = useAddCarAutocompletes(mapFormDataToApi(values))
+    
   return (
     <Stack spacing={3}>
       <Typography variant="h4">Seller Info</Typography>
@@ -132,9 +134,9 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
         <RHFAutocomplete
           name="make"
           label="Make"
-          options={makes}
+          options={makes.map(carMake => carMake.name)}
           isOptionEqualToValue={isOptionEqualToValue}
-          getOptionLabel={(option) => option.name ?? ''}
+          getOptionLabel={(option) => option ?? ''}
           onChange={(e, value) => {
             resetField("model");
             resetField("generation");
@@ -148,9 +150,9 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           disabled={!values?.make}
           name="model"
           label="Model"
-          options={models}
+          options={models.map(carModel => carModel.name)}
           isOptionEqualToValue={isOptionEqualToValue}
-          getOptionLabel={(option) => option.name ?? ''}
+          getOptionLabel={(option) => option ?? ''}
           onChange={(e, value) => {
             resetField("generation");
             resetField("year");
@@ -163,10 +165,10 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           disabled={!values?.model}
           name="generation"
           label="Generation"
-          options={generations}
-          isOptionEqualToValue={hasSameName}
+          options={generations.map(carGeneration => carGeneration.name)}
+          isOptionEqualToValue={isOptionEqualToValue}
           placeholder="Select Generation"
-          getOptionLabel={(option) =>option?  option.name + ' [ ' + option.yearFrom + ' to ' + (option.yearTo?? 'Now') + ' ]'  : ''}
+          getOptionLabel={(option) => option ?? ''}
           onChange={(e, value) => {
             setValue('year', null);
             resetField("trim");
@@ -183,7 +185,7 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           className='add-car-datepicker'
           shouldDisableYear={year => fYear(year) < values?.generation?.yearFrom || fYear(year) > values?.generation?.yearTo || fYear(year) > new Date().getFullYear()}
           disabled={!values?.generation }
-          
+
         />
         <RHFSelect
           disabled={!values?.generation }
@@ -193,12 +195,12 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           {BODY_TYPES_OPTIONS.map(bodyType => <MenuItem key={bodyType.value} value={bodyType.value}>{bodyType.label}</MenuItem>)}
         </RHFSelect>
         <RHFAutocomplete
-           disabled={!values?.generation }
+          disabled={!values?.generation }
           name="trim"
           label="Trim"
-          isOptionEqualToValue={isOptionEqualToValue}
-          options={trims}
-          getOptionLabel={(option) => option.trim + ' ' +option.series ?? ''}
+          isOptionEqualToValue={(option, value) => option.trim === value.trim}
+          options={trims.map(carTrim => carTrim?.trim + ' ' + carTrim.series )}
+          getOptionLabel={(option) => option ?? ''}
           onChange={(e, value) => {
             resetField("engine");
             setValue("trim", value);
