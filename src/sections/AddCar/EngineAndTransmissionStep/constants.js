@@ -94,7 +94,7 @@ const coolantOptions = [
 const batteryConditionOptions = [
   { value: 'good', label: 'Good' },
   { value: 'average', label: 'Average' },
-  { value: 'weak', label: 'Week' },
+  { value: 'weak', label: 'Weak' },
   { value: 'replace_soon', label: 'Need to be replaced soon' },
   { value: 'not_starting', label: 'Not starting' }
 ];

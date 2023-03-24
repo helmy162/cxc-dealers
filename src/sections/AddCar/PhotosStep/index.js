@@ -12,13 +12,11 @@ export const PhotosDefaultValues = {
   images: []
 };
 
-export default function PhotosStep ({ watch, setValue, images, setImages }) {
+export default function PhotosStep ({ watch, setValue }) {
 
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    setValue('images', images);
-  }, [images, setValue]);
+  const images = watch('images')
 
   const handleDrop = useCallback(
     async (acceptedFiles) => {
@@ -50,7 +48,7 @@ export default function PhotosStep ({ watch, setValue, images, setImages }) {
                 });
               });
               console.log(processedFiles);
-              setImages([...processedFiles, ...images]);
+              setValue('images', [...processedFiles, ...images]);
             }
           }, "image/jpeg", 0.9);
         } else {
@@ -65,7 +63,7 @@ export default function PhotosStep ({ watch, setValue, images, setImages }) {
             id: `${index}_${Date.now()}_${file.name}`
           });
         });
-        setImages([...processedFiles, ...images]);
+        setValue('images', [...processedFiles, ...images]);
       }
       
     },
@@ -75,7 +73,7 @@ export default function PhotosStep ({ watch, setValue, images, setImages }) {
   const handleRemoveFile = (_0, idx) => {
     const newFiles = [...images];
     newFiles.splice(idx, 1);
-    setImages(newFiles);
+    setValue('images', newFiles);
   };
 
   return (

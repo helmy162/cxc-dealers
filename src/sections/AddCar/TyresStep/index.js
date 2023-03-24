@@ -48,7 +48,7 @@ export default function TyresStep() {
           disableFuture
           key={field.name}
         />) }
-        <RHFTextField name="tyres_comment" label="Comments" multiline />
+        <RHFTextField name="Tyres_Comment" label="Comments" multiline />
         <RHFSwitch name='Spare_Tyre' label={'Spare tyre'} />
       </Box>
   </Stack>);

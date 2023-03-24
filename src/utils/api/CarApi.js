@@ -1,4 +1,3 @@
-import axiosInstance from "../axios";
 import { fYear } from "../formatTime";
 
 const mapFormDataToApiRequest = ({ 
@@ -24,15 +23,15 @@ const mapFormDataToApiRequest = ({
   // Map summary data
   const summaryData = {
     ...rest,
-    model: model.name,
-    make: make.name,
-    year: fYear(year),
-    trim: trim.trim + ' ' + trim.series,
-    generation: generation.name,
-    FrontLeft: fYear(FrontLeft),
-    FrontRight: fYear(FrontRight),
-    RearLeft: fYear(RearLeft),
-    RearRight: fYear(RearRight),
+    model: model,
+    make: make,
+    year: !isNaN(new Date(year))?  new Date(year).getFullYear() : fYear(parseInt(year)),
+    trim: trim,
+    generation: generation,
+    FrontLeft: !isNaN(new Date(FrontLeft))?  fYear(FrontLeft) : fYear(parseInt(FrontLeft)),
+    FrontRight: !isNaN(new Date(FrontRight))?  fYear(FrontRight) : fYear(parseInt(FrontRight)),
+    RearLeft: !isNaN(new Date(RearLeft))?  fYear(RearLeft) : fYear(parseInt(RearLeft)),
+    RearRight: !isNaN(new Date(RearRight))?  fYear(RearRight) : fYear(parseInt(RearRight)),
   };
 
   // Create a new object with the engine properties

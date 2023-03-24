@@ -18,21 +18,18 @@ export const PrivateDefaultValues = {
   insurance_images: [],
 };
 
-export default function Private ({ watch, setValue, idImages, setIDImages, registrationCardImages, setRegistrationCardImages, vinImages, setVinImages, insuranceImages, setInsuranceImages }) {
+export default function Private ({ watch, setValue}) {
 
+  const idImages = watch("id_images");
+  const registrationCardImages = watch("registration_card_images");
+  const vinImages = watch("vin_images");
 
-  useEffect(() => {
-    setValue("id_images", idImages);
-    setValue("registration_card_images", registrationCardImages);
-    setValue("vin_images", vinImages);
-    setValue("insurance_images", insuranceImages);
-  }, [idImages, registrationCardImages, vinImages, insuranceImages]);
 
   const handleIdImagesDrop = useCallback(
     async (acceptedFiles) => {
       // Process and set state for id images
       const newFiles = await processImages(acceptedFiles);
-      setIDImages([...idImages, ...newFiles]);
+      setValue("id_images", [...idImages, ...newFiles]);
     },
     [idImages]
   );
@@ -41,7 +38,7 @@ export default function Private ({ watch, setValue, idImages, setIDImages, regis
     async (acceptedFiles) => {
       // Process and set state for registration card images
       const newFiles = await processImages(acceptedFiles);
-      setRegistrationCardImages([...registrationCardImages, ...newFiles]);
+      setValue( "registration_card_images", [...registrationCardImages, ...newFiles]);
     },
     [registrationCardImages]
   );
@@ -50,19 +47,11 @@ export default function Private ({ watch, setValue, idImages, setIDImages, regis
     async (acceptedFiles) => {
       // Process and set state for vin images
       const newFiles = await processImages(acceptedFiles);
-      setVinImages([...vinImages, ...newFiles]);
+      setValue( "vin_images", [...vinImages, ...newFiles]);
     },
     [vinImages]
   );
 
-  const handleInsuranceImagesDrop = useCallback(
-    async (acceptedFiles) => {
-      // Process and set state for insurance images
-      const newFiles = await processImages(acceptedFiles);
-      setInsuranceImages([...insuranceImages, ...newFiles]);
-    },
-    [insuranceImages]
-  );
 
   const handleRemoveFile = (removedFile, idx, fieldName) => {
     // Remove file from the appropriate array based on field name
@@ -70,22 +59,17 @@ export default function Private ({ watch, setValue, idImages, setIDImages, regis
       case "idImages":
         const newIDImages = [...idImages];
         newIDImages.splice(idx, 1);
-        setIDImages(newIDImages);
+        setValue("id_images",newIDImages);
         break;
       case "registrationCardImages":
         const newRegistrationCardImages = [...registrationCardImages];
         newRegistrationCardImages.splice(idx, 1);
-        setRegistrationCardImages(newRegistrationCardImages);
+        setValue( "registration_card_images", newRegistrationCardImages);
         break;
       case "vinImages":
         const newVinImages = [...vinImages];
         newVinImages.splice(idx, 1);
-        setVinImages(newVinImages);
-        break;
-      case "insuranceImages":
-        const newInsuranceImages = [...insuranceImages];
-        newInsuranceImages.splice(idx, 1);
-        setInsuranceImages(newInsuranceImages);
+        setValue( "vin_images", newVinImages);
         break;
       default:
         break;
@@ -176,16 +160,6 @@ export default function Private ({ watch, setValue, idImages, setIDImages, regis
             thumbnail
             onDrop={handleVinImagesDrop}
             onRemove={(removedFile, idx) => handleRemoveFile(removedFile, idx, "vinImages")}
-          />
-        </Box>
-        <Box>
-          <Typography variant="h4" >Insurance Images</Typography>
-          <RHFUpload
-            name="insurance_images"
-            multiple
-            thumbnail
-            onDrop={handleInsuranceImagesDrop}
-            onRemove={(removedFile, idx) => handleRemoveFile(removedFile, idx, "insuranceImages")}
           />
         </Box>
         

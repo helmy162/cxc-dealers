@@ -163,11 +163,11 @@ export default function SingleCar(){
                           <div className="min-h-[60px] bg-[#DFDFDF] flex p-[1px] gap-[1px] rounded-lg">
                               <div className="flex flex-col items-center justify-center basis-1/3 bg-white py-[12px] rounded-l-lg">
                                   <h1 className="text-[#8184A3] text-[14px] lg:text-[16px]">Seller's Price</h1>
-                                  <h1 className="text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold">210,000 AED</h1>
+                                  <h1 className="text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold">{product.details.seller_price.toLocaleString('en-US')} AED</h1>
                               </div>
                               <div className="flex flex-col items-center justify-center basis-1/3 bg-white py-[12px]">
                                   <h1 className="text-[#8184A3] text-[14px] lg:text-[16px]">Highest Bid</h1>
-                                  <h1 className="text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold">{highestBid?.toLocaleString('en-US')} AED</h1>
+                                  <h1 className="text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold">{highestBid?.toLocaleString('en-US')?? 0} AED</h1>
                               </div>
                               <div className="flex flex-col items-center justify-center basis-1/3 bg-white py-[12px] rounded-r-lg">
                                   <h1 className="text-[#8184A3] text-[14px] lg:text-[16px]">Minimum Bid</h1>

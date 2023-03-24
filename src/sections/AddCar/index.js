@@ -43,14 +43,7 @@ export default function AddCar({isEdit, car}) {
     
     const [currentTab, setCurrentTab] = useState('general');
     const [currentStep, setCurrentStep] = useState(0);
-  
-    const [images, setImages] = useState([]);
-  
-    const [idImages, setIDImages] = useState([]);
-    const [registrationCardImages, setRegistrationCardImages] = useState([]);
-    const [vinImages, setVinImages] = useState([]);
-    const [insuranceImages, setInsuranceImages] = useState([]);
-    
+
     const [markers, setMarkers] = useState([]);
     const [activeMarker, setActiveMarker] = useState(null);
     const [submittedMarkers, setSubmittedMarkers] = useState([]);
@@ -63,6 +56,9 @@ export default function AddCar({isEdit, car}) {
       defaultValues: AllDefaultValues(car),
       values
     });
+
+
+
   
   
     const {
@@ -88,7 +84,7 @@ export default function AddCar({isEdit, car}) {
         value: 'documents',
         label: 'Documents',
         icon: <Iconify icon="fa:drivers-license" />,
-        component: createElement( PrivateStep,{ setValue, watch, idImages, setIDImages, registrationCardImages, setRegistrationCardImages, vinImages, setVinImages, insuranceImages, setInsuranceImages })
+        component: createElement( PrivateStep,{ setValue, watch })
       },
       {
         value: 'exterior',
@@ -130,7 +126,7 @@ export default function AddCar({isEdit, car}) {
         value: 'images',
         label: 'Images',
         icon: <Iconify icon="mdi:images" />,
-        component: createElement( PhotosStep,{ setValue, watch, images, setImages }),
+        component: createElement( PhotosStep,{ setValue, watch }),
       },
       
     ];
@@ -148,7 +144,7 @@ export default function AddCar({isEdit, car}) {
       const mergedData = CarApi.mapFormDataToApiRequest(data);
       try {
         let res;
-        isEdit?  res = await axiosInstance.put(`inspector/car/${car.id}`, mergedData) :  res = await axiosInstance.post('inspector/car', mergedData);
+        isEdit?  res = await axiosInstance.post(`admin/car/${car.id}`, mergedData) :  res = await axiosInstance.post('inspector/car', mergedData);
         enqueueSnackbar( isEdit? 'Car updated successfully' : 'Car added successfully', { variant: 'success' })
         navigate(PATH_DASHBOARD.car.list);
         console.log(res);

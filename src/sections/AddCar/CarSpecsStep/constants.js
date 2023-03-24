@@ -18,6 +18,7 @@ const TiptronicGears = [
 ];
 
 const SunroofType = [
+{ value: 'not_available', label: 'Not Available'},
 { value: 'sunroof', label: 'Sunroof' },
 { value: 'panorama', label: 'Panorama' },
 { value: 'moonroof', label: 'Moonroof' }
