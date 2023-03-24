@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import ImageMarker from 'react-image-marker';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Grid, Paper, Alert, MenuItem, Button, List } from '@mui/material';
 import { RHFSelect } from 'src/components/hook-form';
 import MarkerRow from './MarkerRow';
@@ -20,10 +20,12 @@ export const ExteriorConditionDefaultValues = {
   markers: [],
 };
 
-export default function ExteriorCondition({ watch, setValue, markers, setMarkers, activeMarker, setActiveMarker, submittedMarkers, setSubmittedMarkers, isErrorDisplayed, setIsErrorDisplayed, file, setFile }) {
+export default function ExteriorCondition({ watch, setValue, markers, setMarkers, activeMarker, setActiveMarker, isErrorDisplayed, setIsErrorDisplayed, file, setFile }) {
   const [defect] = watch(['defect']);
-
-  
+  const submittedMarkers = watch('markers');
+  useEffect(() => {
+    setMarkers(submittedMarkers.map(({x, y}) => ({top: y, left: x})));
+  }, [submittedMarkers]);
 
   const onAddMarker = useCallback((marker) => {
     if (!activeMarker) {
@@ -40,7 +42,7 @@ export default function ExteriorCondition({ watch, setValue, markers, setMarkers
       newMarkers.splice(key, 1);
       return newMarkers;
     });
-    setSubmittedMarkers((markers) => {
+    setValue( "markers",  (markers) => {
       const newMarkers = [...markers];
       newMarkers.splice(key, 1);
       return newMarkers;
@@ -50,7 +52,6 @@ export default function ExteriorCondition({ watch, setValue, markers, setMarkers
   const onSubmitButton = useCallback(() => {
     const lastMarker = markers[markers.length - 1];
     const newSubmittedMarkers = [...submittedMarkers, { ...lastMarker, defect, file }];
-    setSubmittedMarkers(newSubmittedMarkers);
     setValue('markers', newSubmittedMarkers);
     setActiveMarker(null);
     setFile(null);

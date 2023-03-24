@@ -81,9 +81,11 @@ const mapFormDataToApi = (values) => ( values ? {
   year: values.year,
 }: {})
 
+
 export default function SummaryStep({ errors, watch, setValue, resetField }) {
   const values = watch();
   const { makes, models, generations, trims, engines } = useAddCarAutocompletes(mapFormDataToApi(values))
+    
   return (
     <Stack spacing={3}>
       <Typography variant="h4">Seller Info</Typography>

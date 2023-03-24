@@ -6,6 +6,7 @@ export default function ListItem({ heading, value, isSpecs = true}) {
 let libasis = isSpecs ? "19%" : "49%";
 let headingbasis = isSpecs ? "100%" : "50%";
 
+
 if(heading == 'Spare Tyre') value = parseInt(value)? 'Yes' : 'No';
 
 return (

@@ -161,7 +161,7 @@ export const AllDefaultValues = (carData) => ( {
   trim: carData?.details.trim || null,
   mileage: carData?.details.mileage || 0,
   registered_emirates: carData?.details.registered_emirates || "",
-  engine: carData?.details.engine || "",
+  // engine: null,
   body_type: carData?.details.body_type || "",
   exterior_color: carData?.details.exterior_color || '',
   interior_color: carData?.details.interior_color || '',
@@ -178,6 +178,7 @@ export const AllDefaultValues = (carData) => ( {
 
   
   // Documents
+
   id_images: carData?.id_images?.map((image) => ({
     preview: `https://api.carsxchange.com/storage/id_images/${image}`,
   })) || [],

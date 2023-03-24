@@ -43,7 +43,6 @@ export default function AddCar({isEdit, car}) {
     
     const [currentTab, setCurrentTab] = useState('general');
     const [currentStep, setCurrentStep] = useState(0);
-
     const [markers, setMarkers] = useState([]);
     const [activeMarker, setActiveMarker] = useState(null);
     const [submittedMarkers, setSubmittedMarkers] = useState([]);
@@ -209,7 +208,7 @@ export default function AddCar({isEdit, car}) {
             size="large"
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            loading={false}
             sx={{
             ml: 'auto' ,
             bgcolor: 'text.primary',
