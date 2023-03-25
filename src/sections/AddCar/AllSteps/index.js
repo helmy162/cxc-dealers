@@ -34,7 +34,6 @@ export const AllSchema = Yup.object().shape({
   insurance_images: Yup.array(),
 
   // Exterior
-  defect: Yup.string().nullable(),
   markers: Yup.array(),
 
   // Engine
@@ -155,7 +154,7 @@ export const AllDefaultValues = (carData) => ( {
   // General
   seller_id: carData?.seller_id || '',
   seller_price: carData?.details?.seller_price || 0,
-  year: new Date(`${carData?.details.year}`) || null,
+  year:  Date.parse(`${carData?.details.year}`) || null,
   make: carData?.details.make || '',
   model: carData?.details.model || '',
   generation: carData?.details.generation || '',
@@ -179,19 +178,19 @@ export const AllDefaultValues = (carData) => ( {
 
   
   // Documents
-  id_images: carData?.id_images.map((image) => ({
+
+  id_images: carData?.id_images?.map((image) => ({
     preview: `https://api.carsxchange.com/storage/id_images/${image}`,
   })) || [],
   registration_card_images: carData?.registration_card_images? JSON.parse(carData?.registration_card_images).map((image) => ({
     preview: `https://api.carsxchange.com/storage/registration_card_images/${image}`,
   })) : [],
-  vin_images: carData?.vin_images.map((image) => ({
+  vin_images: carData?.vin_images?.map((image) => ({
     preview: `https://api.carsxchange.com/storage/vin_images/${image}`,
   })) || [],
   insurance_images: [],
 
   // Exterior
-  defect: carData?.exterior?.defect || "",
   markers: carData?.exterior?.markers || [],
 
   // Engine
@@ -279,7 +278,7 @@ export const AllDefaultValues = (carData) => ( {
   Memory_Seats: carData?.specs?.Memory_Seats? true : false,
   View_Camera: carData?.specs?.View_Camera? true : false,
   Blind_Spot_Indicator: carData?.specs?.Blind_Spot_Indicator? true : false,
-  Anti_Lock: carData?.specs?.Anti_Lock || true,
+  Anti_Lock: carData?.specs?.Anti_Lock? true : false,
   Adaptive_Cruise_Control: carData?.specs?.Adaptive_Cruise_Control? true : false,
   Power_Steering: carData?.specs?.Power_Steering? true : false,
   Side_Steps: carData?.specs?.Side_Steps? true : false,
@@ -297,13 +296,15 @@ export const AllDefaultValues = (carData) => ( {
   Other_Features: carData?.specs?.Other_Features || '',
 
   // Tyres
-  FrontLeft: new Date(`${carData?.wheels?.FrontLeft}`) || "",
-  FrontRight: new Date(`${carData?.wheels?.FrontRight}`) || "",
-  RearLeft: new Date(`${carData?.wheels?.RearLeft}`) || "",
-  RearRight: new Date(`${carData?.wheels?.RearRight}`) || "",
+  FrontLeft:  Date.parse(`${carData?.wheels?.FrontLeft}`) || "",
+  FrontRight:  Date.parse(`${carData?.wheels?.FrontRight}`) || "",
+  RearLeft:  Date.parse(`${carData?.wheels?.RearLeft}`) || "",
+  RearRight:  Date.parse(`${carData?.wheels?.RearRight}`) || "",
   Spare_Tyre: carData?.wheels?.Spare_Tyre || false,
   Tyres_Comment: carData?.wheels?.Tyre_Comment || "",
 
   // Images
-  images: [],
+  images: carData?.images.map((image) => ({
+    preview: `https://api.carsxchange.com/storage/car_images/${image}`,
+  })) || [],
 });

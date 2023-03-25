@@ -7,6 +7,8 @@ let libasis = isSpecs ? "19%" : "49%";
 let headingbasis = isSpecs ? "100%" : "50%";
 
 
+if(heading == 'Spare Tyre') value = parseInt(value)? 'Yes' : 'No';
+
 return (
     <li
     className={`flex flex-wrap items-center justify-between border-[1px] rounded-md px-[16px] py-[10px] min-w-[100%] sm:min-w-0 mb-[10px] `}

@@ -8,7 +8,7 @@ import { hasSameName, isOptionEqualToValue, renderAddCarSelect } from 'src/utils
 import { fYear } from 'src/utils/formatTime';
 import EngineCard from './EngineCard';
 import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS, WARRANTY_OPTIONS, BANK_FINANCE_OPTIONS } from '../constants';
-import { useEffect } from 'react';
+
 
 // ----------------------------------------------------------------------
 
@@ -168,11 +168,13 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           options={generations.map(carGeneration => carGeneration.name)}
           isOptionEqualToValue={isOptionEqualToValue}
           placeholder="Select Generation"
-          getOptionLabel={(option) => option ?? ''}
+          getOptionLabel={(option) => {
+            const thisGeneration = generations.find(carGeneration => carGeneration.name === option)
+            return thisGeneration? (thisGeneration?.name + ' [ ' + thisGeneration.yearFrom + ' to ' + (thisGeneration.yearTo?? 'Now') + ' ]')  : ''}}
           onChange={(e, value) => {
             setValue('year', null);
-            resetField("trim");
-            resetField("engine");
+            setValue("trim", null);
+            setValue("engine", null);
             setValue("generation", value);
            
           } }
@@ -183,10 +185,12 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           label="Year"
           openTo="year"
           className='add-car-datepicker'
-          shouldDisableYear={year => fYear(year) < values?.generation?.yearFrom || fYear(year) > values?.generation?.yearTo || fYear(year) > new Date().getFullYear()}
+          shouldDisableYear={year => fYear(year) < generations.find(carGeneration => carGeneration.name === values?.generation).yearFrom 
+            || fYear(year) > generations.find(carGeneration => carGeneration.name === values?.generation).yearTo 
+            || fYear(year) > new Date().getFullYear()}
           disabled={!values?.generation }
-
         />
+        
         <RHFSelect
           disabled={!values?.generation }
           name="body_type"
@@ -204,18 +208,21 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           onChange={(e, value) => {
             resetField("engine");
             setValue("trim", value);
+            setValue("engine", engines);
           } }
         />
         <RHFSelect
-           disabled={!values?.trim }
+          disabled={!values?.trim }
           name="engine"
           label="Engine"
+          defaultValue={engines}
           SelectProps={{
             renderValue: (engine) => <EngineCard obj={engine} />
           }}
         >
           <MenuItem key={engines.id} value={engines}><EngineCard obj={engines} /></MenuItem>
         </RHFSelect>
+        
         <RHFTextField
           name="mileage"
           label="Mileage (km)"

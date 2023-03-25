@@ -36,6 +36,7 @@ function useAddCarAutocompletes ({ year, make, model, trim, generation }) {
       if (model && modelId) {
         const generations = await RapidApi.fetchGenerations(modelId);
         setGenerations(generations);
+        console.log(generations);
       }
     }
     fetchOptions();
