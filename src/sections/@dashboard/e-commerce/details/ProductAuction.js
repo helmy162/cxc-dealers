@@ -1,11 +1,11 @@
 import * as Yup from 'yup';
 // form
-import { useForm } from 'react-hook-form';
+import { useForm, Controller} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {TimePicker, DatePicker} from '@mui/x-date-pickers';
+import {TimePicker, DatePicker, DateTimePicker} from '@mui/x-date-pickers';
 import { LoadingButton } from '@mui/lab';
 import { Box,Button,InputAdornment,TextField} from '@mui/material';
 
@@ -37,27 +37,18 @@ export default function ProductAuction({ productAsAdmin }) {
 
     const [isAuctioned, setIsAuctioned] = useState(!!productAsAdmin?.auction);
 
-    const [auctionDate, setAuctionDate] = useState(new Date());
-    const [auctionTime, setAuctionTime] = useState(new Date());
-    const [duration, setDuration] = useState(auctionDurations[0]);
-    const [inputValue, setInputValue] = useState('');
     const [openConfirm, setOpenConfirm] = useState(false);
     
     const NewProductSchema = Yup.object().shape({
         start_price: Yup.number().moreThan(0, 'Price should not be $0.00'),
-        duration: Yup.string().required('Duration is required'),
-        auctionDate: Yup.date().required('Auction date is required'),
-        auctionTime: Yup.date().required('Auction time is required'),
+        start_at: Yup.date().required('Start time is required'),
+        end_at: Yup.date().required('End time is required'),
       });
       const defaultValues = useMemo(
         () => ({
           start_price: productAsAdmin?.auction?.start_price || 0,
-          duration: isAuctioned? ( Math.floor((new Date(productAsAdmin?.auction?.end_at) - new Date(productAsAdmin?.auction?.start_at)) / 1000 / 60 / 60) + ' Hours')
-            : auctionDurations[0],
-          auctionDate: isAuctioned ? new Date(productAsAdmin?.auction?.start_at) 
-            : new Date(),
-          auctionTime: isAuctioned ? new Date(productAsAdmin?.auction?.start_at)
-            : new Date(),
+          start_at: productAsAdmin?.auction?.start_at || new Date(),
+          end_at: productAsAdmin?.auction?.end_at || new Date(),
         }),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [productAsAdmin]
@@ -70,6 +61,7 @@ export default function ProductAuction({ productAsAdmin }) {
     
       const {
         reset,
+        control,
         watch,
         setValue,
         handleSubmit,
@@ -78,12 +70,7 @@ export default function ProductAuction({ productAsAdmin }) {
  
     const onSubmit = async (data) => {
         try {
-        const date = new Date(data.auctionDate.getFullYear(), data.auctionDate.getMonth(), data.auctionDate.getDate(), data.auctionTime.getHours(), data.auctionTime.getMinutes());
-        const duration = data.duration;
-        var parts = duration.split(" ");
-        var hours = parts[0];
-        var isoDuration = `PT${hours}H`;
-        const mergedDate = {date: date, duration: isoDuration, start_price: data.start_price, car_id: productAsAdmin.id};
+        const mergedDate = {start_price: data.start_price, start_at: data.start_at.toISOString(), end_at: data.end_at.toISOString(), car_id: productAsAdmin.id};
         const endpoint = isAuctioned ? `admin/auctions/${productAsAdmin?.auction?.id}` : 'admin/auctions';
         const method = isAuctioned ? 'put' : 'post';
         const res = await axiosInstance[method](endpoint, mergedDate);
@@ -129,47 +116,47 @@ export default function ProductAuction({ productAsAdmin }) {
                     type: 'number',
                   }}
                 />
-
-                <DatePicker
-                  name="auctionDate"
-                  label="Auction Date"
-                  value={watch('auctionDate', defaultValues.auctionDate)}
-                  onChange={function (newValue) {
-                    setValue('auctionDate', newValue, { shouldValidate: true });
-                    setAuctionDate(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} className="!w-1/6 !min-w-1/6"/>}
-                  
+                <Controller
+                   name="start_at"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DateTimePicker
+                      {...field}
+                      label="Start Time"
+                      ampm={false}
+                      renderInput={(params) => (
+                        <TextField
+                          className="!w-1/6 !min-w-1/6"
+                          {...params}
+                          error={!!error}
+                          helperText={error?.message}
+                        />
+                      )}
+                    />
+                  )}
                 />
 
-                <TimePicker
-                  name="auctionTime"
-                  ampm={false}
-                  label="Auction Time"
-                  value={watch('auctionTime', defaultValues.auctionTime)}
-                  onChange={function (newValue) {
-                    setValue('auctionTime', newValue, { shouldValidate: true });
-                    setAuctionTime(newValue);
-                  }}
-                  renderInput={(params) => <TextField  {...params} className="!w-1/6 !min-w-1/6" />}
+                <Controller
+                  name="end_at"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DateTimePicker
+                      {...field}
+                      label="End Time"
+                      ampm={false}
+                      renderInput={(params) => (
+                        <TextField
+                          className="!w-1/6 !min-w-1/6"
+                          {...params}
+                          error={!!error}
+                          helperText={error?.message}
+                        />
+                      )}
+                    />
+                  )}
                 />
 
-                <RHFAutocomplete
-                  className="!w-1/6 !min-w-[150px]"
-                  name="duration"
-                  label="Auction Duration"
-                  value={watch('duration', defaultValues.duration)}
-                  onChange={function(_,newValue){
-                    setDuration(newValue)
-                    setValue('duration', newValue, { shouldValidate: true })
-                  }}         
-                  inputValue={inputValue}
-                  onInputChange={(_, newInputValue) => {
-                    setInputValue(newInputValue)
-                  }}     
-                  options={auctionDurations.map((option) => option)}
-                  ChipProps={{ size: 'small' }}
-                />
+                
 
                 <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
                   {!isAuctioned? 'Start Auction' : 'Update Auction'}
