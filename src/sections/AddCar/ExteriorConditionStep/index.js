@@ -1,13 +1,15 @@
 import * as Yup from 'yup';
 import ImageMarker from 'react-image-marker';
 import { useState, useCallback, useEffect } from 'react';
-import { Grid, Paper, Alert, MenuItem, Button, List } from '@mui/material';
+import { Grid, Paper, Alert, MenuItem, Button, List, Box } from '@mui/material';
 import { RHFSelect } from 'src/components/hook-form';
 import MarkerRow from './MarkerRow';
 import { Upload } from 'src/components/upload';
 import { DEFECTS_OPTIONS } from './constants';
 import imageCompression from 'browser-image-compression';
-import { reset } from 'numeral';
+import { RHFTextField, RHFCheckbox } from 'src/components/hook-form';
+import {  chassisOptions, chassisExtensionOptions, ENGINE_AND_TRANSMISSION_OPTIONS} from '../EngineAndTransmissionStep/constants';
+import { renderAddCarSelect } from 'src/utils/forms';
 // ----------------------------------------------------------------------
 
 export const ExteriorConditionSchema = Yup.object().shape({
@@ -93,6 +95,11 @@ export default function ExteriorCondition({ watch, setValue, markers, setMarkers
       }
     }
   }, []);
+
+  const fields = [  
+    { name: 'Chassis', label: 'Chassis', options: chassisOptions},
+    { name: 'Chassis_Extension', label: 'Chassis Extension', options: chassisExtensionOptions},
+  ];
   
 
 
@@ -124,6 +131,20 @@ export default function ExteriorCondition({ watch, setValue, markers, setMarkers
           >
             Add marker</Button>
         </Paper>}
+      </Grid>
+      <Grid item sm={12}>
+        <Box
+          rowGap={2}
+          columnGap={3}
+          display="grid"
+          gridTemplateColumns={{
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+          }}
+        >
+          { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
+          <RHFTextField name="Exterior_Comment" label="Comments" multiline />
+        </Box>
       </Grid>
     </Grid>
     

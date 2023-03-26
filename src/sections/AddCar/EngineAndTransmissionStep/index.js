@@ -78,8 +78,6 @@ const fields = [
   { name: 'Battery_Condition', label: 'Battery Condition', options: batteryConditionOptions },
   { name: 'Gear_Shifting', label: 'Gear Shifting', options: gearShiftingOptions},
   { name: 'Shift_Interlock_Condition', label: 'Shift Interlock (4x4) Condition', options: shiftInterlockOptions },
-  { name: 'Chassis', label: 'Chassis', options: chassisOptions},
-  { name: 'Chassis_Extension', label: 'Chassis Extension', options: chassisExtensionOptions},
   { name: 'Oil_Leaks', label: 'Oil Leaks', options: oilLeaksOptions},
   { name: 'Water_Sludge', label: 'Water Sludge', options: waterSludgeOptions},
 ];

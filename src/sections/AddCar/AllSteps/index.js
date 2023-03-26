@@ -35,6 +35,9 @@ export const AllSchema = Yup.object().shape({
 
   // Exterior
   markers: Yup.array(),
+  Chassis: Yup.string(),
+  Chassis_Extension: Yup.string(),
+  Exterior_Comment: Yup.string(),
 
   // Engine
   Radiator_Condition: Yup.string(),
@@ -52,8 +55,6 @@ export const AllSchema = Yup.object().shape({
   Battery_Condition: Yup.string(),
   Gear_Shifting: Yup.string(),
   Shift_Interlock_Condition: Yup.string(),
-  Chassis: Yup.string(),
-  Chassis_Extension: Yup.string(),
   Oil_Leaks: Yup.string(),
   Water_Sludge: Yup.string(),
   Engine_Comment: Yup.string(),
@@ -191,6 +192,9 @@ export const AllDefaultValues = (carData) => ( {
 
   // Exterior
   markers: carData?.exterior?.markers || [],
+  Chassis: carData?.engine_transmission?.Chassis || 'good',
+  Chassis_Extension : carData?.engine_transmission?.Chassis_Extension || 'good',
+  Exterior_Comment: carData?.exterior?.Exterior_Comment || '',
 
   // Engine
   Radiator_Condition: carData?.engine_transmission?.Radiator_Condition || 'good',
@@ -208,8 +212,6 @@ export const AllDefaultValues = (carData) => ( {
   Battery_Condition: carData?.engine_transmission?.Battery_Condition || 'good',
   Gear_Shifting: carData?.engine_transmission?.Gear_Shifting || 'good',
   Shift_Interlock_Condition: carData?.engine_transmission?.Shift_Interlock_Condition || 'good',
-  Chassis: carData?.engine_transmission?.Chassis || 'good',
-  Chassis_Extension : carData?.engine_transmission?.Chassis_Extension || 'good',
   Oil_Leaks: carData?.engine_transmission?.Oil_Leaks || 'none',
   Water_Sludge: carData?.engine_transmission?.Water_Sludge ||'none',
   Engine_Comment: carData?.engine_transmission?.Engine_Comment || '',
