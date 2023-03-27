@@ -66,6 +66,8 @@ import { carStatus, carTimer } from '../../utils/status';
 // websocket
 import Pusher from "pusher-js";
 import { useAuthContext } from "src/auth/useAuthContext";
+
+import ProductDetailsCarousel from './ProductDetailsCarousel';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -238,7 +240,7 @@ export default function EcommerceProductDetailsPage() {
       component: productAsAdmin ? <Markdown children={`
       \n<p><strong> Inspection Status:</strong> <small> Inspected </small> </p>
       \n<p><strong> Asked Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>
-      \n<p><strong> Inspector Name:</strong> <small> ${productAsAdmin?.seller_name} </small> </p>
+      \n<p><strong> Inspector Name:</strong> <small> Inspector Name </small> </p>
       `} /> : null,
     },
     {
@@ -249,7 +251,22 @@ export default function EcommerceProductDetailsPage() {
       \n<p><strong> Seller's Email:</strong> <small> ${productAsAdmin?.seller?.email} </small> </p>
       \n<p><strong> Seller's Phone:</strong> <small> ${productAsAdmin?.seller?.phone} </small> </p>
       `} /> : null,
-    }
+    },
+    {
+      value: 'id_images',
+      label: 'ID Images',
+      component: productAsAdmin ? <ProductDetailsCarousel product={productAsAdmin} type="id_images" /> : null,
+    },
+    {
+      value: 'registration_card_images',
+      label: 'Registration Card Images',
+      component: productAsAdmin ? <ProductDetailsCarousel product={productAsAdmin} type="registration_card_images" /> : null,
+    },
+    {
+      value: 'vin_images',
+      label: 'VIN Images',
+      component: productAsAdmin ? <ProductDetailsCarousel product={productAsAdmin} type="vin_images" /> : null,
+    },
   ];
 
   

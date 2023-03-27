@@ -143,7 +143,7 @@ export default function ExteriorCondition({ watch, setValue, markers, setMarkers
           }}
         >
           { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
-          <RHFTextField name="Exterior_Comment" label="Comments" multiline />
+          <RHFTextField name="exterior_comment" label="Comments" multiline />
         </Box>
       </Grid>
     </Grid>

@@ -69,7 +69,7 @@ ProductDetailsCarousel.propTypes = {
   product: PropTypes.object,
 };
 
-export default function ProductDetailsCarousel({ product }) {
+export default function ProductDetailsCarousel({ product, type = 'product' }) {
   const theme = useTheme();
 
   const carousel1 = useRef(null);
@@ -84,7 +84,11 @@ export default function ProductDetailsCarousel({ product }) {
 
   const [selectedImage, setSelectedImage] = useState(-1);
 
-  const mainImages = product?.images?.map((img) => ('https://api.carsxchange.com/storage/car_images/'+ img));
+  const mainImages = type == 'product' ? product?.images?.map((img) => ('https://api.carsxchange.com/storage/car_images/'+ img))
+                   : type == 'id_images' ? product?.id_images?.map((img) => ('https://api.carsxchange.com/storage/id_images/'+ img))
+                    : type == 'registration_card_images' ? product?.registration_card_images?.map((img) => ('https://api.carsxchange.com/storage/registration_card_images/'+ img))
+                    : type == 'vin_images' ? product?.vin_images?.map((img) => ('https://api.carsxchange.com/storage/vin_images/'+ img))
+                    : null;
   const imagesLightbox = mainImages?.map((img) => ({ src: img }));
 
   const handleOpenLightbox = (imageUrl) => {
