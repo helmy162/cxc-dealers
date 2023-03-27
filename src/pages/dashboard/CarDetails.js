@@ -26,6 +26,8 @@ import MarkerRow from 'src/sections/AddCar/ExteriorConditionStep/MarkerRow';
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProduct, getProducts } from '../../redux/slices/product';
 
+import Logo from '../../components/logo';
+
 export default function CarDetails({withImages = true, noLoading=false}) {
     const { themeStretch } = useSettingsContext();
     const { name } = useParams();
@@ -172,6 +174,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
                     {
                         withImages ?
                         <>
+                            <Logo/>
                             <h2 className="text-[24px] font-semibold capitalize mb-3 text-center">
                                 {product.details.make} {product.details.model} {product.details.year} - Insepction Report
                             </h2>
