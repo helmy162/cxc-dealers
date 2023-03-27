@@ -87,7 +87,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
                 </h2>
             </div>
         </AccordionSummary>
-        <AccordionDetails className='flex justify-between'>
+        <AccordionDetails className='flex justify-between flex-wrap'>
         <div className='relative max-h-[75vh] w-fit m-auto' >
             <img src="/assets/illustrations/CarSkeleton2.png" alt="Markers" className='w-auto max-h-[75vh]'/>
             {product && product.exterior.markers.map((point, index) => {
@@ -101,9 +101,14 @@ export default function CarDetails({withImages = true, noLoading=false}) {
             })}
         </div>
         <div className='basis-1/2'>
-        <List>
-          { product && product.exterior.markers.map((marker, key) => <MarkerRow  marker={marker} key={key} id={key} />)}
-        </List>
+            <List>
+            { product && product.exterior.markers.map((marker, key) => <MarkerRow  marker={marker} key={key} id={key} />)}
+            </List>
+        </div>
+        <div className='basis-full mt-5'>
+            <ListItem heading={'Exterior Comment'} value={product?.exterior?.exterior_comment} isSpecs={false}/>
+            <ListItem heading={'Chassis'} value={formatString(product?.engine_transmission?.Chassis)} isSpecs={false}/>
+            <ListItem heading={'Chassis Extension'} value={formatString(product?.engine_transmission?.Chassis_Extension)} isSpecs={false}/>
         </div>
         </AccordionDetails>
     </Accordion>),
