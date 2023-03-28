@@ -141,7 +141,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
 
 
     function formatString(str) {
-        return str.replace(/_/g, " ").toLowerCase().replace(/(^|\s)\S/g, function(t) { return t.toUpperCase(); });
+        return str?.replace(/_/g, " ")?.toLowerCase()?.replace(/(^|\s)\S/g, function(t) { return t.toUpperCase(); });
     }
 
     // just selecting last row
