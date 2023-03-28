@@ -131,25 +131,27 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <Stack spacing={2}>
-              <TextField
-                label="Seller ID"
-                className='w-fit'
-                value={sellerID? sellerID : 'Loading...'}
-                disabled
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Tooltip title="Copy">
-                        <IconButton onClick={() => onCopy(sellerID)}>
-                          <Iconify icon="eva:copy-fill" width={24} />
-                        </IconButton>
-                      </Tooltip>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Stack>
+              { isEdit &&
+                <Stack spacing={2}>
+                <TextField
+                  label="Seller ID"
+                  className='w-fit'
+                  value={sellerID? sellerID : 'Loading...'}
+                  disabled
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Tooltip title="Copy">
+                          <IconButton onClick={() => onCopy(sellerID)}>
+                            <Iconify icon="eva:copy-fill" width={24} />
+                          </IconButton>
+                        </Tooltip>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Stack>
+              }
             
               <RHFTextField name="name" label="Full Name"/>
               <RHFTextField name="email" label="Email Address"/>

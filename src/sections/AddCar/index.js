@@ -34,6 +34,9 @@ import axiosInstance from '../../utils/axios';
 import { useSnackbar } from '../../components/snackbar';
 import { useNavigate } from 'react-router-dom';
 
+
+import { getSellers, resetSeller } from '../../redux/slices/user';
+import { useDispatch, useSelector } from '../../redux/store';
 // ----------------------------------------------------------------------
 
 export default function AddCar({isEdit, car}) {
@@ -56,9 +59,12 @@ export default function AddCar({isEdit, car}) {
       values
     });
 
-
-
-  
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+      dispatch(getSellers());
+      dispatch(resetSeller());
+    }, [dispatch]);
   
     const {
       handleSubmit,

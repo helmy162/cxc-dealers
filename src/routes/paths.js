@@ -23,6 +23,7 @@ export const PATH_AUTH = {
   resetPassword: path(ROOTS_AUTH, '/reset-password'),
   newPassword: path(ROOTS_AUTH, '/new-password'),
   emailSent: path(ROOTS_AUTH, '/email-sent-successfully'),
+  accountCreated: path(ROOTS_AUTH, '/account-created-successfully'),
 };
 
 export const PATH_DEALER = {

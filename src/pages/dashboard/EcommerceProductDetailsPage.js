@@ -239,7 +239,7 @@ export default function EcommerceProductDetailsPage() {
       label: 'Inspection Details',
       component: productAsAdmin ? <Markdown children={`
       \n<p><strong> Inspection Status:</strong> <small> Inspected </small> </p>
-      \n<p><strong> Asked Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>
+      \n<p><strong> Seller Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>
       \n<p><strong> Inspector Name:</strong> <small> Inspector Name </small> </p>
       `} /> : null,
     },

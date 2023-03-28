@@ -103,44 +103,6 @@ export const CarSpecsDefaultValues = {
   
 };
 
-const clickBoxes = [
-  { name: 'Fog_Lights', label: 'Fog Lights'},
-  { name: 'Parking_Sensor', label: 'Parking Sensor'},
-  { name: 'Winch', label: 'Winch'},
-  { name: 'Roof_Rack', label: 'Roof Rack'},
-  { name: 'Spoiler', label: 'Spoiler'},
-  { name: 'Dual_Exhaust', label: 'Dual Exhaust'},
-  { name: 'Alarm', label: 'Alarm/Anti-theft system'},
-  { name: 'Rear_Video', label: 'Rear video entertainment system'},
-  { name: 'Premium_Sound', label: 'Premium Sound system'},
-  { name: 'Heads_Up_Display', label: 'Heads Up Display'},
-  { name: 'Aux_Audio', label: 'Aux Audio In'},
-  { name: 'Bluetooth', label: 'Bluetooth'},
-  { name: 'Climate_Control', label: 'Climate Control'},
-  { name: 'Keyless_Entry', label: 'Keyless Entry'},
-  { name: 'Keyless_Start', label: 'Keyless Start'},
-  { name: 'Leather_Seats', label: 'Leather Seats'},
-  { name: 'Racing_Seats', label: 'Racing Seats'},
-  { name: 'Cooled_Seats', label: 'Cooled Seats'},
-  { name: 'Heated_Seats', label: 'Heated Seats'},
-  { name: 'Power_Seats', label: 'Power Seats'},
-  { name: 'Power_Locks', label: 'Power Locks'},
-  { name: 'Power_Mirrors', label: 'Power Mirrors'},
-  { name: 'Power_Windows', label: 'Power Windows'},
-  { name: 'Memory_Seats', label: 'Memory Seats'},
-  { name: 'View_Camera', label: 'View Camera'},
-  { name: 'Blind_Spot_Indicator', label: 'Blind Spot Indicator'},
-  { name: 'Anti_Lock', label: 'Anti Lock Brakes/ABS'},
-  { name: 'Adaptive_Cruise_Control', label: 'Adaptive Cruise Control'},
-  { name: 'Power_Steering', label: 'Power Steering'},
-  { name: 'Side_Steps', label: 'Side Steps'},
-  { name: 'Carbon_Fiber_Interior', label: 'Carbon Fiber Interior'},
-  { name: 'Line_Change_Assist', label: 'Line Change Assist'},
-  { name: 'Park_Assist', label: 'Park Assist'},
-  { name: 'Adaptive_Suspension', label: 'Adaptive Suspension'},
-  { name: 'Height_Control', label: 'Height Control'},
-  { name: 'Navigation_System', label: 'Navigation System'},
-];
 
 const fields = [
   { name: 'Drives', label: 'Drives', options: Drives},
@@ -162,7 +124,7 @@ export default function CarSpecsStep() {
           md: 'repeat(3, 1fr)',
         }}
       >
-        { clickBoxes.map(field => renderAddCarSwitch({...field })) }
+        
         { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
         <RHFTextField multiline name='Other_Features' label='Other Features' />
       </Box>

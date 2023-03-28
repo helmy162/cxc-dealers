@@ -38,8 +38,8 @@ const reducer = (state, action) => {
   if (action.type === 'REGISTER') {
     return {
       ...state,
-      isAuthenticated: true,
-      user: action.payload.user,
+      isAuthenticated: false,
+      user: null,
     };
   }
   if (action.type === 'LOGOUT') {
@@ -149,7 +149,8 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'REGISTER',
       payload: {
-        user: {...user, role: 'dealer' },
+        isAuthenticated: false,
+        user: null,
       },
     });
 

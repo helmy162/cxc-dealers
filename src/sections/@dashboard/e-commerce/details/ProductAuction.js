@@ -123,7 +123,6 @@ export default function ProductAuction({ productAsAdmin }) {
                     <DateTimePicker
                       {...field}
                       label="Start Time"
-                      ampm={false}
                       renderInput={(params) => (
                         <TextField
                           className="!w-1/6 !min-w-1/6"
@@ -143,7 +142,6 @@ export default function ProductAuction({ productAsAdmin }) {
                     <DateTimePicker
                       {...field}
                       label="End Time"
-                      ampm={false}
                       renderInput={(params) => (
                         <TextField
                           className="!w-1/6 !min-w-1/6"

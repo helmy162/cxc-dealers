@@ -20,6 +20,7 @@ export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/Reset
 export const NewPasswordPage = Loadable(lazy(() => import('../pages/auth/NewPasswordPage')));
 export const VerifyCodePage = Loadable(lazy(() => import('../pages/auth/EmailSentPage')));
 export const EmailSentPage = Loadable(lazy(() => import('../pages/auth/EmailSentPage')));
+export const AccountCreatedSuccessfully = Loadable(lazy(() => import('../pages/auth/AccountCreatedSuccessfully')));
 
 // home
 export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));

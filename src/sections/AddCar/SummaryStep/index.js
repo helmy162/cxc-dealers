@@ -9,6 +9,9 @@ import { fYear } from 'src/utils/formatTime';
 import EngineCard from './EngineCard';
 import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS, WARRANTY_OPTIONS, BANK_FINANCE_OPTIONS } from '../constants';
 
+import { getSellers, resetSeller } from '../../../redux/slices/user';
+import { useDispatch, useSelector } from '../../../redux/store';
+
 
 // ----------------------------------------------------------------------
 
@@ -84,6 +87,8 @@ const mapFormDataToApi = (values) => ( values ? {
 
 export default function SummaryStep({ errors, watch, setValue, resetField }) {
   const values = watch();
+  const { sellers } = useSelector((state) => state.user);
+  console.log(sellers);
   const { makes, models, generations, trims, engines } = useAddCarAutocompletes(mapFormDataToApi(values))
     
   return (
@@ -99,10 +104,14 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
         }}
         sx={{marginBottom: '1rem'}}
       >
-        <RHFTextField
+        <RHFAutocomplete
           name="seller_id"
           label="Seller ID"
-          type="number"
+          options={sellers.map(seller => seller.id)}
+          isOptionEqualToValue={ (option, value) => option == value}
+          getOptionLabel={(option) => {
+            const thisSeller = sellers.find(seller => seller.id == option)
+            return thisSeller? (thisSeller?.name + '  - #' + thisSeller?.id) : ''}}
         />
         <RHFTextField
           name="seller_price"

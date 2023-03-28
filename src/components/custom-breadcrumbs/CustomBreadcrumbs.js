@@ -28,7 +28,7 @@ export default function CustomBreadcrumbs({
 
   return (
     <Box sx={{ mb: 5, ...sx }}>
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" alignItems="center" flexWrap="wrap" gap="20px">
         <Box sx={{ flexGrow: 1 }}>
           {/* HEADING */}
           {heading && (
@@ -52,7 +52,7 @@ export default function CustomBreadcrumbs({
           )}
         </Box>
 
-        {action && <Box sx={{ flexShrink: 0 }}> {action} </Box>}
+        {action && <Box sx={{ flexShrink: 0 }} className="basis-full md:basis-1/4 "> {action} </Box>}
       </Stack>
 
       {/* MORE LINK */}

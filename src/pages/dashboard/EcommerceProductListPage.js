@@ -58,7 +58,8 @@ const TABLE_HEAD = [
 ];
 
 const STATUS_OPTIONS = [
-  { value: 'active', label: 'Active' },
+  { value: 'live', label: 'Live' },
+  { value: 'upcoming', label: 'Upcoming' },
   { value: 'pending', label: 'Pending' },
   { value: 'expired', label: 'Expired' },
 ];
@@ -115,6 +116,8 @@ export default function EcommerceProductListPage() {
       setTableData(products);
     }
   }, [products]);
+
+
 
 
   useEffect(() => {
@@ -257,8 +260,10 @@ export default function EcommerceProductListPage() {
               to={PATH_DASHBOARD.car.new} // need to edit
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
+              className="!basis-full"
+              sx={{ flexBasis: '100%'}}
             >
-              New Car
+              Inspect &amp; Add Car
             </Button>
           }
         />
@@ -415,7 +420,7 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
   }
 
   if (filterStatus.length) {
-    inputData = inputData.filter((product) => filterStatus.includes(product.status));
+    inputData = inputData.filter((product) => filterStatus.includes(product.livestatus));
   }
 
   return inputData;

@@ -3,11 +3,15 @@ import * as Yup from 'yup';
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import { Stack, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
+
+import { PATH_AUTH } from '../../routes/paths';
+
 // components
 import Iconify from '../../components/iconify';
 import FormProvider, { RHFTextField } from '../../components/hook-form';
@@ -17,7 +21,7 @@ import { MuiTelInput } from 'mui-tel-input'
 
 export default function AuthRegisterForm() {
   const { register } = useAuthContext();
-
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
@@ -56,6 +60,7 @@ export default function AuthRegisterForm() {
     try {
       if (register) {
         await register(data.email, data.password, data.confirmPassword, data.firstName, data.lastName, data.phone);
+        navigate(PATH_AUTH.accountCreated, { replace: true });
       }
     } catch (error) {
       console.error(error);

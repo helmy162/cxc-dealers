@@ -52,7 +52,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
                         let listItems = []
                         for (let subKey in product[key]) {
                             if (product[key].hasOwnProperty(subKey) && product[key][subKey] !== null && product[key][subKey] !== "" && subKey !== 'engine' && subKey != 'seller_price' ) {
-                                listItems.push(<ListItem key={subKey} heading={formatString(subKey)} value={formatString(product[key][subKey].toString())} isSpecs={key=='specs'} />)
+                                listItems.push(<ListItem key={subKey} heading={formatString(subKey)} value={formatString(product[key][subKey].toString())} isSpecs={false} />)
                             }
                         }
                         accordions.push(
