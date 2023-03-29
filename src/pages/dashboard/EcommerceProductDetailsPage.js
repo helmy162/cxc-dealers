@@ -192,7 +192,8 @@ export default function EcommerceProductDetailsPage() {
   const [filterName, setFilterName] = useState('');
   const [filterStatus, setFilterStatus] = useState([]);
 
-
+  const [openConfirm, setOpenConfirm] = useState(false);
+  
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),

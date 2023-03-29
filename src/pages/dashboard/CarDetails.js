@@ -183,13 +183,16 @@ export default function CarDetails({withImages = true, noLoading=false}) {
                             <h2 className="text-[24px] font-semibold capitalize mb-3 text-center">
                                 {product.details.make} {product.details.model} {product.details.year} - Insepction Report
                             </h2>
-                            <Button
-                            onClick={() => {navigator.clipboard.writeText(window.location.origin + '/' + product?.id + '/inspection'); setCopySuccess('Copied!');}}
-                            variant="contained"
-                            startIcon={<Iconify icon="eva:copy-fill" />}
-                            >
-                                Copy Link
-                            </Button>
+                            <div className='flex'>
+                                <Button
+                                onClick={() => {navigator.clipboard.writeText(window.location.origin + '/' + product?.id + '/inspection'); setCopySuccess('Copied!');}}
+                                variant="contained"
+                                className='w-fit !m-auto'
+                                startIcon={<Iconify icon="eva:copy-fill" />}
+                                >
+                                    Copy Link
+                                </Button>
+                            </div>
                             <span className='text-[14px] ease-in-out'>
                                 {copySuccess}
                             </span>

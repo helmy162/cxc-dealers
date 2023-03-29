@@ -183,6 +183,7 @@ export function AuthProvider({ children }) {
       isAuthenticated: state.isAuthenticated,
       user: state.user,
       method: 'jwt',
+      initialize,
       login,
       register,
       logout,
