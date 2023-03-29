@@ -214,7 +214,7 @@ export default function AddCar({isEdit, car}) {
             size="large"
             type="submit"
             variant="contained"
-            loading={false}
+            loading={isSubmitting}
             sx={{
             ml: 'auto' ,
             bgcolor: 'text.primary',
