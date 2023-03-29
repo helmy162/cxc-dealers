@@ -80,9 +80,9 @@ export default function SingleCar(){
     if (product?.auction?.id) {
       setAuctionID(product?.auction?.id);
       setHighestBid(product?.auction?.latest_bid?.bid);
-      setHighestUserBidsOnThisCar( user?.bids.length?
+      setHighestUserBidsOnThisCar( user?.bids.length &&  user?.bids?.filter((element) => {return element.car_id == product?.id}).length ?
         user?.bids
-        ?.filter((element) => {return element.car_id == 84})
+        ?.filter((element) => {return element.car_id == product?.id})
         ?.reduce((prev, current) => {return prev.bid > current.bid ? prev : current})
         : null
       )
@@ -144,6 +144,7 @@ export default function SingleCar(){
   useEffect(() => {
     highestUserBidsOnThisCar?.bid < highestBid ? 
     enqueueSnackbar('You have been outbidden', {variant: 'error'}) :
+    highestUserBidsOnThisCar?.bid == highestBid && highestBid && highestUserBidsOnThisCar &&
     enqueueSnackbar('Your bid has been placed successfully', {variant: 'success'});
 
   }, [highestBid && highestUserBidsOnThisCar])
