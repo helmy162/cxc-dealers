@@ -1,65 +1,31 @@
 import { set } from 'lodash';
 import { useState, useEffect } from 'react';
-import RapidApi from 'src/utils/api/rapidapi';
+import carData from '../sections/AddCar/SummaryStep/carData.json'
 import { fYear } from 'src/utils/formatTime';
 
-function useAddCarAutocompletes ({ year, make, model, trim, generation }) {
-  const [ makes, setMakes ] = useState([]);
-  const [ models, setModels ] = useState([]);
-  const [ generations, setGenerations ] = useState([])
-  const [ years, setYears ] = useState([]);
-  const [ trims, setTrims ] = useState([]);
-  const [ engines, setEngines ] = useState([]);
+function useAddCarAutocompletes ({  make, model, trim}) {
+const [ makes, setMakes ] = useState(Object.keys(carData));
+const [ models, setModels ] = useState([]);
+const [ trims, setTrims ] = useState([]);
 
-  useEffect(() => {
-    async function fetchOptions() {
-      const makes = await RapidApi.fetchMakes();
-      setMakes(makes)
-    }
-    fetchOptions();
-  }, []);
+useEffect(() => {
+if (make) {
+  setModels(Object.keys(carData[make]) || ['Others']);
+  setModels(models => [...models, 'Other']);
+}
+}, [make]);
 
-  useEffect(() => {
-    async function fetchOptions() {
-      if (make) {
-        const carId = makes.find(carMake => carMake.name === make)?.id;
-        const models = await RapidApi.fetchModels(carId);
-        setModels(models);
-      }
-    }
-    fetchOptions();
-  }, [make, makes]);
+useEffect(() => {
+if (model !== 'Other' && make && model ) {
+  setTrims(Object.keys(carData[make][model]));
+  setTrims(trims => [...trims, 'Other']);
+}
+else if(model === 'Other' && make) {
+  setTrims(['Other']);
+}
+}, [ make, model]);
 
-  useEffect(() => {
-    async function fetchOptions() {
-      const modelId = models.find(carModel => carModel.name == model)?.id;
-      if (model && modelId) {
-        const generations = await RapidApi.fetchGenerations(modelId);
-        setGenerations(generations);
-        console.log(generations);
-      }
-    }
-    fetchOptions();
-  }, [model, models, make , makes]);
-
-  useEffect(() => {
-    async function fetchOptions() {
-      const generationId = generations.find(carGeneration => carGeneration.name === generation)?.id;
-      if (make && model && generation && generationId) {
-        const trims = await RapidApi.fetchTrims(generationId);
-        setTrims(trims);
-        const trimId = trims.find(trimmm => (trimmm.trim + ' ' + trimmm.series) == trim)?.id;
-        if (trim && trimId) {
-          const specs = await RapidApi.fetchSpecs(trimId);
-          setEngines(specs);
-        }
-      }
-      
-    }
-    fetchOptions();
-  }, [generation , trim, generations]);
-
-  return { makes, models, generations, years, trims, engines };
+return { makes, models, trims };
 }
 
 export default useAddCarAutocompletes;
