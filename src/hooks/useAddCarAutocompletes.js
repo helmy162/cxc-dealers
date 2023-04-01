@@ -17,7 +17,7 @@ if (make) {
 
 useEffect(() => {
 if (model !== 'Other' && make && model ) {
-  setTrims(Object.keys(carData[make][model]));
+  setTrims(carData[make][model]);
   setTrims(trims => [...trims, 'Other']);
 }
 else if(model === 'Other' && make) {
