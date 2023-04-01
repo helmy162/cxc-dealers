@@ -188,8 +188,8 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
         />
 
         <RHFTextField
-          name="engine_hp"
-          label="Engine HP"
+          name="number_of_cylinders"
+          label="Number of Cylinders"
           type="number"
         />
         

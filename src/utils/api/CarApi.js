@@ -34,24 +34,11 @@ const mapFormDataToApiRequest = ({
     RearRight: !isNaN(new Date(RearRight))?  fYear(RearRight) : fYear(parseInt(RearRight)),
   };
 
-  // Create a new object with the engine properties
-  const engineData = {
-    type: engine.engineType,
-    size: engine.capacityCm3,
-    cylinders: engine.numberOfCylinders,
-    horsepower_hp: engine.engineHp,
-    transmission: engine.transmission,
-  };
-
   const bodyFormData = new FormData();
   Object.keys(summaryData).forEach((key) => {
     bodyFormData.append(key, summaryData[key]);
   });
 
-  // Append the engine data under the key "engine"
-  bodyFormData.append('engine', JSON.stringify(engineData));
-
-  
   // Map exterior condition data
   markers.map((marker, idx) =>  {
     bodyFormData.append(`exterior_images[${idx}]`, marker.file);
