@@ -108,22 +108,22 @@ export default function InfoRow({ data }) {
           }}
         >
           <SpecItem>
-            {data.details.mileage} KM
+            {data.details?.mileage} KM
           </SpecItem>
           <SpecItem>
-            {data.details.engine.transmission}
+            {data.details?.engine_size} CC
           </SpecItem>
           <SpecItem>
-            {data.details.exterior_color}
+            {data.details?.exterior_color}
           </SpecItem>
           <SpecItem>
-            {data.details.year} year
+            {data.details?.year} year
           </SpecItem>
           <SpecItem>
-            {data.details.specification}
+            {data.details?.specification}
           </SpecItem>
           <SpecItem>
-            {data.details.engine.horsepower_hp} HP
+            {data.details?.number_of_cylinders}
           </SpecItem>
         </Box>
         
