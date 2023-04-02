@@ -172,10 +172,15 @@ export function AuthProvider({ children }) {
       const response = await axios.post('reset-password', {email});
   }, []);
 
-  // Change Password
+  // Set New Password
   const newPassword = useCallback(async (data ) => {
     const response = await axios.post('new-password', data);
   }, []);
+
+    // Change Password
+    const changePassword = useCallback(async (data ) => {
+      const response = await axios.post('new-password', data);
+    }, []);
 
   const memoizedValue = useMemo(
     () => ({
@@ -188,7 +193,8 @@ export function AuthProvider({ children }) {
       register,
       logout,
       resetPassword,
-      newPassword
+      newPassword,
+      changePassword
     }),
     [state.isAuthenticated, state.isInitialized, state.user, login, logout, register, resetPassword, newPassword]
   );
