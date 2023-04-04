@@ -181,7 +181,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
                         <>
                             <Logo/>
                             <h2 className="text-[24px] font-semibold capitalize mb-3 text-center">
-                                {product.details.make} {product.details.model} {product.details.year} - Insepction Report
+                                {product.details.make} {product.details.model} {product.details.year} - Inspection Report
                             </h2>
                             <div className='flex'>
                                 <Button
