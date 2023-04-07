@@ -77,11 +77,11 @@ const CarPartsPaint = ({ watch, setValue, markers, setMarkers, activeMarker, set
     'leftFrontBumper',
     'rightFrontDoor',
     'rightBackDoor',
-    'rightBack',
+    'rightBackPanel',
     'rightBackBumber',
     'leftFrontDoor',
     'leftBackDoor',
-    'leftBack',
+    'leftBackPanel',
     'leftBackBumper',
   ];
   const fetchedData = {
