@@ -104,6 +104,12 @@ const CarPartsPaint = ({ watch, setValue, markers, setMarkers, activeMarker, set
     trunkLid: 'Not Available',
   };
 
+  const fields = [  
+    { name: 'Chassis', label: 'Chassis', options: chassisOptions},
+    { name: 'Chassis_Extension', label: 'Chassis Extension', options: chassisExtensionOptions},
+  ];
+  
+
 
   //SET URL to fetch from api
   // const url = '';
@@ -728,6 +734,21 @@ const CarPartsPaint = ({ watch, setValue, markers, setMarkers, activeMarker, set
           <Label color={colorList[4]} title={typeList[4]} />
           <Label color={colorList[5]} title={typeList[5]} />
         </div>
+
+        <Grid item sm={12} sx={{width: '100%'}}>
+        <Box
+          rowGap={2}
+          columnGap={3}
+          display="grid"
+          gridTemplateColumns={{
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(3, 1fr)',
+          }}
+        >
+          { fields.map(field => renderAddCarSelect({...field, options: field.options || ENGINE_AND_TRANSMISSION_OPTIONS })) }
+          <RHFTextField name="exterior_comment" label="Comments" multiline />
+        </Box>
+      </Grid>
 
       </div>
       
