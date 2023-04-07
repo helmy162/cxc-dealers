@@ -171,7 +171,6 @@ const CarPartsPaint = ({ watch, setValue, markers, setMarkers, activeMarker, set
     }
   }, []);
   const handlePartClick = (idn) => {
-    if (!activeMarker || activeMarker == idn) {
       setActiveMarker(idn);
       switch (idn) {
         case 0:
@@ -226,11 +225,19 @@ const CarPartsPaint = ({ watch, setValue, markers, setMarkers, activeMarker, set
           setPartColor({ ...partColor, 16: partColor[16] + 1 });
           break;
       }
-    }
-    else {
-      setIsErrorDisplayed(true);
-    }
+      
   };
+  useEffect(() => {
+    if(activeMarker){
+      const newSubmittedMarkers2 = {...submittedMarkers, [partList[activeMarker]]: typeList[partColor[activeMarker] % 6] };
+      setSubmittedMarkers(newSubmittedMarkers2);
+      setValue('defects', newSubmittedMarkers2);
+      setActiveMarker(null);
+      setFile(null);
+      setValue('defect', '');
+      setIsErrorDisplayed(false);
+    }
+}, [partColor]);
 
 
   const handleSubmit = () => {
@@ -721,22 +728,7 @@ const CarPartsPaint = ({ watch, setValue, markers, setMarkers, activeMarker, set
           <Label color={colorList[4]} title={typeList[4]} />
           <Label color={colorList[5]} title={typeList[5]} />
         </div>
-        <div>
-          <Grid item sm={6}>
-            { isErrorDisplayed && <Alert severity='warning'>You should describe the previous mark first</Alert>}
-            {error && <Alert severity='warning'>{error}</Alert>}
-            <Paper variant="outlined" sx={ activeMarker? { borderRadius: 2, borderColor: 'divider', padding: '1rem', opacity: 1 } : {borderRadius: 2, borderColor: 'divider', padding: '1rem', opacity: 0}}>
-              <Upload accept={{ 'image/*': [] }} file={file} name={submittedMarkers.length} onDrop={handleDropSingleFile} onDelete={() => setFile(null)} sx={{marginBottom: '1rem'}} />
-              <Button
-                type="button"
-                onClick={onSubmitButton} 
-                variant="outlined"
-                disabled={error}
-              >
-                Add {typeList[partColor[activeMarker] % 6]} for {partList[activeMarker]}</Button>
-            </Paper>
-          </Grid>
-        </div>
+
       </div>
       
 
