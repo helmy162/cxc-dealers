@@ -10,7 +10,7 @@ import FormProvider from '../../components/hook-form';
 // sections
 import SummaryStep from './SummaryStep';
 import { AllSchema, AllDefaultValues } from './AllSteps';
-import ExteriorCondition from './ExteriorConditionStep';
+import ExteriorCondition from './ExteriorConditionStep/index';
 import EnginerAndTransmissionStep from './EngineAndTransmissionStep';
 import SSAStep from './SSAStep';
 import IEACStep from './IEACStep';
@@ -51,6 +51,27 @@ export default function AddCar({isEdit, car}) {
     const [submittedMarkers, setSubmittedMarkers] = useState([]);
     const [isErrorDisplayed, setIsErrorDisplayed] = useState(false);
     const [file, setFile] = useState(null);
+
+    const [partColor, setPartColor] = useState({
+      0: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      8: 0,
+      9: 0,
+      10: 0,
+      11: 0,
+      12: 0,
+      13: 0,
+      14: 0,
+      15: 0,
+      16: 0,
+    });
+    const [change, setChange] = useState(0);
   
     const values = AllDefaultValues(car);
     const methods = useForm({
@@ -95,7 +116,7 @@ export default function AddCar({isEdit, car}) {
         value: 'exterior',
         label: 'Exterior',
         icon: <Iconify icon="material-symbols:car-crash" />,
-        component: createElement( ExteriorCondition,{ setValue, watch, markers, setMarkers, activeMarker, setActiveMarker, submittedMarkers, setSubmittedMarkers, isErrorDisplayed, setIsErrorDisplayed, file, setFile }),
+        component: createElement( ExteriorCondition,{ setValue, watch, markers, setMarkers, activeMarker, setActiveMarker, submittedMarkers, setSubmittedMarkers, isErrorDisplayed, setIsErrorDisplayed, file, setFile, change, setChange, partColor, setPartColor }),
       },
       {
         value: 'engine',
