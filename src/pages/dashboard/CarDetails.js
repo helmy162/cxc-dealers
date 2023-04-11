@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from '../../redux/store';
 import { getProduct, getProducts } from '../../redux/slices/product';
 
 import Logo from '../../components/logo';
+import CarSkeletonColored from './CarSkeletonColored';
 
 export default function CarDetails({withImages = true, noLoading=false}) {
     const { themeStretch } = useSettingsContext();
@@ -46,9 +47,9 @@ export default function CarDetails({withImages = true, noLoading=false}) {
     useEffect(() => {
         if(product && !isLoading || noLoading){
             if (product) {
-                setDefectImages(product.exterior.markers.map(marker => 'https://api.carsxchange.com/storage/defect_images/'+ marker.photo));
+                setDefectImages(product?.exterior?.markers?.map(marker => 'https://api.carsxchange.com/storage/defect_images/'+ marker.photo));
                 Object.keys(product).forEach(key => {
-                    if (typeof product[key] === 'object' && key !== 'exterior' && key !== 'images' && key !=='seller_id' && key !=='seller' && key !=='auction' && key !=='bids' && key != 'registration_card_images') {
+                    if (typeof product[key] === 'object' && key !== 'exterior' && key !== 'images' && key !=='seller_id' && key !=='seller' && key !=='auction' && key !=='bids' && key != 'registration_card_images' && !Object.values(product[key]).every((val) => val == null) ) {
                         let listItems = []
                         for (let subKey in product[key]) {
                             if (product[key].hasOwnProperty(subKey) && product[key][subKey] !== null && product[key][subKey] !== "" && subKey !== 'engine' && subKey != 'seller_price' ) {
@@ -88,25 +89,9 @@ export default function CarDetails({withImages = true, noLoading=false}) {
             </div>
         </AccordionSummary>
         <AccordionDetails className='flex justify-between flex-wrap'>
-        <div className='relative max-h-[75vh] w-fit m-auto' >
-            <img src="/assets/illustrations/CarSkeleton2.png" alt="Markers" className='w-auto max-h-[75vh]'/>
-            {product && product.exterior.markers.map((point, index) => {
-                return(
-                <Tooltip key={index} title={point.defect} arrow onClick={() => handleOpenLightbox('https://api.carsxchange.com/storage/defect_images/'+ point.photo)}>
-                    <div  className='w-[20px] h-[20px] text-[12px] sm:text-[16px] sm:w-[25px]  sm:h-[25px] bg-[brown] absolute rounded-full text-white text-center cursor-pointer' style={{top: point.y + '%', left: point.x + '%'}}>
-                        {index+1}
-                    </div>
-                </Tooltip>
-            )
-            })}
-        </div>
-        <div className='basis-1/2'>
-            <List>
-            { product && product.exterior.markers.map((marker, key) => <MarkerRow  marker={marker} key={key} id={key} />)}
-            </List>
-        </div>
+            <CarSkeletonColored allDefects={product?.defects}/>
         <div className='basis-full mt-5'>
-            <ListItem heading={'Exterior Comment'} value={product?.exterior?.exterior_comment} isSpecs={false}/>
+            {product?.exterior?.exterior_comment && <ListItem heading={'Exterior Comment'} value={product?.exterior?.exterior_comment} isSpecs={false}/>}
             <ListItem heading={'Chassis'} value={formatString(product?.engine_transmission?.Chassis)} isSpecs={false}/>
             <ListItem heading={'Chassis Extension'} value={formatString(product?.engine_transmission?.Chassis_Extension)} isSpecs={false}/>
         </div>
@@ -116,7 +101,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
 
 
     
-      const imagesLightbox = defectImages.map((img) => ({ src: img }));
+      const imagesLightbox = defectImages?.map((img) => ({ src: img }));
       const [currentIndex, setCurrentIndex] = useState(0);
 
       const [selectedImage, setSelectedImage] = useState(-1);
