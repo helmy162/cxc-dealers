@@ -234,7 +234,7 @@ const CarPartsPaint = ({ watch, setValue, markers, setMarkers, activeMarker, set
       
   };
   useEffect(() => {
-    if(activeMarker){
+    if(activeMarker != null){
       const newSubmittedMarkers2 = {...submittedMarkers, [partList[activeMarker]]: typeList[partColor[activeMarker] % 6] };
       setSubmittedMarkers(newSubmittedMarkers2);
       setValue('defects', newSubmittedMarkers2);
