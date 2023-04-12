@@ -135,20 +135,16 @@ export default function EcommerceProductDetailsPage() {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [livestatus, setLiveStatus] = useState(''); //live, expired, upcoming, pending
   useEffect(() => {
-    
-    if (livestatus !== 'expired' && livestatus !== 'pending') {
       const intervalId = setInterval(() => {
-        const endAt = new Date(product?.auction?.end_at);
-        const startAt = new Date(product?.auction?.start_at);
+        const endAt = new Date(productAsAdmin?.auction?.end_at);
+        const startAt = new Date(productAsAdmin?.auction?.start_at);
         const now = new Date();
         
-        setLiveStatus(carStatus(productAsAdmin));
-        setTimeRemaining(productAsAdmin.status == 'pending'? null : carTimer(startAt > now ? startAt - now : endAt - now));
+        setLiveStatus(productAsAdmin.status == 'pending'? 'pending' : carStatus(productAsAdmin));
+        setTimeRemaining(productAsAdmin.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now));
       }, 1000);
-  
       return () => clearInterval(intervalId);
-    }
-  }, [productStatus, product, productAsAdmin, dispatch]);
+  }, [productStatus, productAsAdmin, dispatch]);
   
   // websocket for live status
   const [auctionID, setAuctionID] = useState(null);
@@ -241,7 +237,7 @@ export default function EcommerceProductDetailsPage() {
       component: productAsAdmin ? <Markdown children={`
       \n<p><strong> Inspection Status:</strong> <small> Inspected </small> </p>
       \n<p><strong> Seller Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>
-      \n<p><strong> Inspector Name:</strong> <small> Inspector Name </small> </p>
+      \n<p><strong> Inspector Name:</strong> <small> ${productAsAdmin?.inspector?.name} </small> </p>
       `} /> : null,
     },
     {
@@ -321,7 +317,7 @@ export default function EcommerceProductDetailsPage() {
                 }
                 sx={{ textTransform: 'capitalize', minWidth:'100px', fontSize:'18px', fontWeight:'600', padding:'6px 16px', minHeight:'fit-content', height:'unset', lineHeight:'unset',}}
               >
-                {timeRemaining ? timeRemaining : livestatus? sentenceCase(livestatus) : null}
+                {timeRemaining ? timeRemaining : livestatus? sentenceCase(livestatus) : null }
               </Label>
 
               <Button

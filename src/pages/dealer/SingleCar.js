@@ -249,29 +249,21 @@ export default function SingleCar(){
                           </FormProvider>
                           {/* specifications section */}
                           <div className="flex flex-wrap justify-center gap-x-5 gap-y-5 items-end">
-                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
+                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[45%]">
                                   <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/mileage.svg"/> Mileage</div>
-                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product.details.mileage}</div>
+                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product?.details?.mileage} KM</div>
                               </div>
-                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
-                                  <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/transmission.svg"/> Transmission</div>
-                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">Automatic</div>
+                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[45%]">
+                                  <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/engine.svg"/> Engine Size</div>
+                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product?.details?.engine_size} CC</div>
                               </div>
-                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
-                                  <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/engine.svg"/> Engine</div>
-                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">V10</div>
+                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[45%]">
+                                  <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/specs.svg"/> Registered Emirates</div>
+                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product?.details?.registered_emirates}</div>
                               </div>
-                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
-                                  <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/paint.svg"/> Paint</div>
-                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">Parchery repainted</div>
-                              </div>
-                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
-                                  <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/specs.svg"/> Specs</div>
-                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">GCC</div>
-                              </div>
-                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[29%]">
-                                  <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/color.svg"/> Color</div>
-                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">White</div>
+                              <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[45%]">
+                                  <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/color.svg"/> Exterior Color</div>
+                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product?.details?.exterior_color}</div>
                               </div>
                           </div>
                           {/* bid button */}
