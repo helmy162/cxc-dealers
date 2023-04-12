@@ -34,7 +34,8 @@ export const AllSchema = Yup.object().shape({
   insurance_images: Yup.array(),
 
   // Exterior
-  markers: Yup.array(),
+  // markers: Yup.array(),
+  defects: Yup.object(),
   Chassis: Yup.string(),
   Chassis_Extension: Yup.string(),
   exterior_comment: Yup.string(),
@@ -155,7 +156,8 @@ export const AllDefaultValues = (carData) => ( {
   insurance_images: [],
 
   // Exterior
-  markers: carData?.exterior?.markers || [],
+  // markers: carData?.exterior?.markers || [],
+  defects: carData?.exterior?.defects || {},
   Chassis: carData?.engine_transmission?.Chassis || 'good',
   Chassis_Extension : carData?.engine_transmission?.Chassis_Extension || 'good',
   exterior_comment: carData?.exterior?.exterior_comment || '',

@@ -10,7 +10,7 @@ import FormProvider from '../../components/hook-form';
 // sections
 import SummaryStep from './SummaryStep';
 import { AllSchema, AllDefaultValues } from './AllSteps';
-import ExteriorCondition from './ExteriorConditionStep';
+import ExteriorCondition from './ExteriorConditionStep/index';
 import EnginerAndTransmissionStep from './EngineAndTransmissionStep';
 import SSAStep from './SSAStep';
 import IEACStep from './IEACStep';
@@ -38,6 +38,14 @@ import { useNavigate } from 'react-router-dom';
 import { getSellers, resetSeller } from '../../redux/slices/user';
 import { useDispatch, useSelector } from '../../redux/store';
 // ----------------------------------------------------------------------
+const typeList = [
+  'Original',
+  'Damaged',
+  'Repainted',
+  'Portion Repainted',
+  'Foiled',
+  'Not Available',
+];
 
 export default function AddCar({isEdit, car}) {
 
@@ -49,8 +57,54 @@ export default function AddCar({isEdit, car}) {
     const [markers, setMarkers] = useState([]);
     const [activeMarker, setActiveMarker] = useState(null);
     const [submittedMarkers, setSubmittedMarkers] = useState([]);
+    useEffect(() => {
+      setSubmittedMarkers(car?.exterior?.markers || []);
+    }, [car?.exterior?.markers]);
     const [isErrorDisplayed, setIsErrorDisplayed] = useState(false);
     const [file, setFile] = useState(null);
+
+    const [partColor, setPartColor] = useState({
+      0: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      8: 0,
+      9: 0,
+      10: 0,
+      11: 0,
+      12: 0,
+      13: 0,
+      14: 0,
+      15: 0,
+      16: 0,
+    });
+    useEffect(() => {
+      setPartColor({
+        0: typeList.indexOf(car?.exterior?.markers['frontBumper']) >= 0 ? typeList.indexOf(car?.exterior?.markers['frontBumper']) : 0,
+        1: typeList.indexOf(car?.exterior?.markers['hood']) >= 0 ? typeList.indexOf(car?.exterior?.markers['hood']) : 0,
+        2: typeList.indexOf(car?.exterior?.markers['top']) >= 0 ? typeList.indexOf(car?.exterior?.markers['top']) : 0,
+        3: typeList.indexOf(car?.exterior?.markers['trunkLid']) >= 0 ? typeList.indexOf(car?.exterior?.markers['trunkLid']) : 0,
+        4: typeList.indexOf(car?.exterior?.markers['backBumper']) >= 0 ? typeList.indexOf(car?.exterior?.markers['backBumper']) : 0,
+        5: typeList.indexOf(car?.exterior?.markers['rightFrontPanel']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightFrontPanel']) : 0,
+        6: typeList.indexOf(car?.exterior?.markers['rightFrontBumper']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightFrontBumper']) : 0,
+        7: typeList.indexOf(car?.exterior?.markers['leftFrontPanel']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftFrontPanel']) : 0,
+        8: typeList.indexOf(car?.exterior?.markers['leftFrontBumper']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftFrontBumper']) : 0,
+        9: typeList.indexOf(car?.exterior?.markers['rightFrontDoor']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightFrontDoor']) : 0,
+        10: typeList.indexOf(car?.exterior?.markers['rightBackDoor']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightBackDoor']) : 0,
+        11: typeList.indexOf(car?.exterior?.markers['rightBackPanel']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightBackPanel']) : 0,
+        12: typeList.indexOf(car?.exterior?.markers['rightBackBumber']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightBackBumber']) : 0,
+        13: typeList.indexOf(car?.exterior?.markers['leftFrontDoor']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftFrontDoor']) : 0,
+        14: typeList.indexOf(car?.exterior?.markers['leftBackDoor']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftBackDoor']) : 0,
+        15: typeList.indexOf(car?.exterior?.markers['leftBackPanel']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftBackPanel']) : 0,
+        16: typeList.indexOf(car?.exterior?.markers['leftBackBumper']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftBackBumper']) : 0,
+      });
+    }, [car]);
+
+    const [change, setChange] = useState(0);
   
     const values = AllDefaultValues(car);
     const methods = useForm({
@@ -95,7 +149,7 @@ export default function AddCar({isEdit, car}) {
         value: 'exterior',
         label: 'Exterior',
         icon: <Iconify icon="material-symbols:car-crash" />,
-        component: createElement( ExteriorCondition,{ setValue, watch, markers, setMarkers, activeMarker, setActiveMarker, submittedMarkers, setSubmittedMarkers, isErrorDisplayed, setIsErrorDisplayed, file, setFile }),
+        component: createElement( ExteriorCondition,{ setValue, watch, markers, setMarkers, activeMarker, setActiveMarker, submittedMarkers, setSubmittedMarkers, isErrorDisplayed, setIsErrorDisplayed, file, setFile, change, setChange, partColor, setPartColor }),
       },
       {
         value: 'engine',
@@ -152,7 +206,6 @@ export default function AddCar({isEdit, car}) {
         isEdit?  res = await axiosInstance.post(`admin/car/${car.id}`, mergedData) :  res = await axiosInstance.post('inspector/car', mergedData);
         enqueueSnackbar( isEdit? 'Car updated successfully' : 'Car added successfully', { variant: 'success' })
         navigate(PATH_DASHBOARD.car.list);
-        console.log(res);
       } catch (error) {
         console.log(error);
         enqueueSnackbar('Something went wrong', { variant: 'error' })

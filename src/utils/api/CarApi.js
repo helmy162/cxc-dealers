@@ -12,6 +12,7 @@ const mapFormDataToApiRequest = ({
   RearLeft, 
   RearRight, 
   markers,
+  defects,
   images,
   id_images,
   registration_card_images,
@@ -39,11 +40,12 @@ const mapFormDataToApiRequest = ({
     bodyFormData.append(key, summaryData[key]);
   });
 
+  bodyFormData.append('defects', JSON.stringify(defects));
   // Map exterior condition data
-  markers.map((marker, idx) =>  {
-    bodyFormData.append(`exterior_images[${idx}]`, marker.file);
-    bodyFormData.append('markers[]', JSON.stringify({ x: marker.left, y: marker.top, defect: marker.defect, photo: idx }));
-  });
+  // markers.map((marker, idx) =>  {
+  //   bodyFormData.append(`exterior_images[${idx}]`, marker.file);
+  //   bodyFormData.append('markers[]', JSON.stringify({ x: marker.left, y: marker.top, defect: marker.defect, photo: idx }));
+  // });
 
   (images || []).map(image => bodyFormData.append('images[]', image));
   (id_images || []).map(image => bodyFormData.append('id_images[]', image));
