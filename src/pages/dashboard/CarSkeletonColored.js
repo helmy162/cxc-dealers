@@ -31,7 +31,7 @@ export default function CarSkeletonColored({allDefects}) {
         'rightFrontDoor',
         'rightBackDoor',
         'rightBackPanel',
-        'rightBackBumber',
+        'rightBackBumper',
         'leftFrontDoor',
         'leftBackDoor',
         'leftBackPanel',

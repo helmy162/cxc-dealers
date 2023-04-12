@@ -96,7 +96,7 @@ export default function AddCar({isEdit, car}) {
         9: typeList.indexOf(car?.exterior?.markers['rightFrontDoor']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightFrontDoor']) : 0,
         10: typeList.indexOf(car?.exterior?.markers['rightBackDoor']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightBackDoor']) : 0,
         11: typeList.indexOf(car?.exterior?.markers['rightBackPanel']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightBackPanel']) : 0,
-        12: typeList.indexOf(car?.exterior?.markers['rightBackBumber']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightBackBumber']) : 0,
+        12: typeList.indexOf(car?.exterior?.markers['rightBackBumper']) >= 0 ? typeList.indexOf(car?.exterior?.markers['rightBackBumper']) : 0,
         13: typeList.indexOf(car?.exterior?.markers['leftFrontDoor']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftFrontDoor']) : 0,
         14: typeList.indexOf(car?.exterior?.markers['leftBackDoor']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftBackDoor']) : 0,
         15: typeList.indexOf(car?.exterior?.markers['leftBackPanel']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftBackPanel']) : 0,
