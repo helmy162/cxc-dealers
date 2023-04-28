@@ -48,7 +48,7 @@ import Label from '../../components/label';
 import Scrollbar from '../../components/scrollbar';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct, getProductAsAdmin, getStatus} from '../../redux/slices/product';
+import { getProductAsAdmin, getStatus} from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -112,13 +112,12 @@ export default function EcommerceProductDetailsPage() {
   const {user} = useAuthContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { productAsAdmin, isLoading, checkout, product, productStatus} = useSelector((state) => state.product);
+  const { productAsAdmin, isLoading, checkout, productStatus} = useSelector((state) => state.product);
 
   useEffect(() => {
     if (name) {
       dispatch(getProductAsAdmin(name));
-      dispatch(getProduct(name));
-      dispatch(getStatus(product));
+      dispatch(getStatus(productAsAdmin));
     }
   }, [dispatch, name]);
 
@@ -149,10 +148,10 @@ export default function EcommerceProductDetailsPage() {
   // websocket for live status
   const [auctionID, setAuctionID] = useState(null);
   useEffect(() => {
-    if (product?.auction?.id) {
-      setAuctionID(product?.auction?.id);
+    if (productAsAdmin?.auction?.id) {
+      setAuctionID(productAsAdmin?.auction?.id);
     }
-  }, [product]);
+  }, [productAsAdmin]);
   
   useEffect(() => {
     const access_token = user?.accessToken;
@@ -180,7 +179,7 @@ export default function EcommerceProductDetailsPage() {
       channel.unbind("NewBid");
       pusher.unsubscribe();
     };
-  }, [auctionID, user, product]);
+  }, [auctionID, user, productAsAdmin]);
 
 
   const [currentTab, setCurrentTab] = useState('inspection');

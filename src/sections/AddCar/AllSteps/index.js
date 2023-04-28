@@ -116,31 +116,77 @@ export const AllSchema = Yup.object().shape({
   images: Yup.array().required('images: Please add at least one image').min(1, 'images: Please add at least one image')
 });
 
-export const AllDefaultValues = (carData) => ( {
+export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   // General
-  seller_id: carData?.seller_id || '',
-  seller_price: carData?.details?.seller_price || 0,
-  year:  Date.parse(`${carData?.details.year}`) || null,
-  make: carData?.details.make || '',
-  model: carData?.details.model || '',
-  trim: carData?.details.trim || '',
-  mileage: carData?.details.mileage || 0,
-  registered_emirates: carData?.details.registered_emirates || "",
-  engine_size: carData?.details.engine_size || 0,
-  number_of_cylinders: carData?.details.number_of_cylinders || 0,
-  body_type: carData?.details.body_type || "",
-  exterior_color: carData?.details.exterior_color || '',
-  interior_color: carData?.details.interior_color || '',
-  interior_type: carData?.details.interior_type || "",
-  specification: carData?.details.specification || "",
-  first_owner: carData?.details.first_owner || "",
-  keys: carData?.details.keys || "",
-  service_history: carData?.history.service_history || "",
-  manuals: carData?.history.manuals || "",
-  warranty: carData?.history.warranty || "",
-  accident_history: carData?.history.accident_history || "",
-  bank_finance: carData?.history.bank_finance || "",
-  car_history_comment: carData?.history.car_history_comment || "",
+  seller_id: 
+    isEdit? carData?.seller_id || ''
+    : savedData?.seller_id || '',
+  seller_price: 
+    isEdit? carData?.details?.seller_price || 0
+    : savedData?.seller_price || 0,
+  year:  
+    isEdit? Date.parse(`${carData?.details.year}`) || ''
+    : savedData?.year || '',
+  make:
+    isEdit? carData?.details?.make || ''
+    : savedData?.make || '',
+  model: 
+    isEdit? carData?.details?.model || ''
+    : savedData?.model || '',
+  trim: 
+    isEdit? carData?.details?.trim || ''
+    : savedData?.trim || '',
+  mileage: 
+    isEdit? carData?.details?.mileage || 0
+    : savedData?.mileage || 0,
+  registered_emirates: 
+    isEdit? carData?.details?.registered_emirates || ''
+    : savedData?.registered_emirates || '',
+  engine_size: 
+    isEdit? carData?.details?.engine_size || 0
+    : savedData?.engine_size || 0,
+  number_of_cylinders: 
+    isEdit? carData?.details?.number_of_cylinders || 0
+    : savedData?.number_of_cylinders || 0,
+  body_type: 
+    isEdit? carData?.details?.body_type || ''
+    : savedData?.body_type || '',
+  exterior_color: 
+    isEdit? carData?.details?.exterior_color || ''
+    : savedData?.exterior_color || '',
+  interior_color: 
+    isEdit? carData?.details?.interior_color || ''
+    : savedData?.interior_color || '',
+  interior_type: 
+    isEdit? carData?.details?.interior_type || ''
+    : savedData?.interior_type || '',
+  specification: 
+    isEdit? carData?.details?.specification || ''
+    : savedData?.specification || '',
+  first_owner: 
+    isEdit? carData?.details?.first_owner || ''
+    : savedData?.first_owner || '',
+  keys: 
+    isEdit? carData?.details?.keys || ''
+    : savedData?.keys || '',
+  service_history: 
+    isEdit? carData?.history?.service_history || ''
+    : savedData?.service_history || '',
+  manuals: 
+    isEdit? carData?.history?.manuals || ''
+    : savedData?.manuals || '',
+  warranty: 
+    isEdit? carData?.history?.warranty || ''
+    : savedData?.warranty || '',
+  accident_history: 
+    isEdit? carData?.history?.accident_history || ''
+    : savedData?.accident_history || '',
+  bank_finance: 
+    isEdit? carData?.history?.bank_finance || ''
+    : savedData?.bank_finance || '',
+  car_history_comment: 
+    isEdit? carData?.history?.car_history_comment || ''
+    : savedData?.car_history_comment || '',
 
   
   // Documents
@@ -157,85 +203,220 @@ export const AllDefaultValues = (carData) => ( {
 
   // Exterior
   // markers: carData?.exterior?.markers || [],
-  defects: carData?.exterior?.defects || {},
-  Chassis: carData?.engine_transmission?.Chassis || 'good',
-  Chassis_Extension : carData?.engine_transmission?.Chassis_Extension || 'good',
-  exterior_comment: carData?.exterior?.exterior_comment || '',
+  defects: 
+    isEdit? carData?.exterior?.defects || {}
+    : savedData?.defects || {},
+  Chassis: 
+    isEdit? carData?.engine_transmission?.Chassis || 'good'
+    : savedData?.Chassis || 'good',
+  Chassis_Extension : 
+    isEdit? carData?.engine_transmission?.Chassis_Extension || 'good'
+    : savedData?.Chassis_Extension || 'good',
+  exterior_comment: 
+    isEdit? carData?.exterior?.exterior_comment || ''
+    : savedData?.exterior_comment || '',
 
   // Engine
-  Radiator_Condition: carData?.engine_transmission?.Radiator_Condition || 'good',
-  Silencer: carData?.engine_transmission?.Silencer || 'normal',
-  Axels: carData?.engine_transmission?.Axels || 'good',
-  Engine_Belts: carData?.engine_transmission?.Engine_Belts || 'good',
-  Gear_Lever: carData?.engine_transmission?.Gear_Lever || 'good',
-  Radiator_Fan: carData?.engine_transmission?.Radiator_Fan || 'good',
-  Engine_Idling: carData?.engine_transmission?.Engine_Idling || 'normal',
-  Engine_Noise: carData?.engine_transmission?.Engine_Noise || 'normal',
-  Engine_Oil: carData?.engine_transmission?.Engine_Oil || 'good',
-  Engine_Smoke: carData?.engine_transmission?.Engine_Smoke || 'normal',
-  Exhaust: carData?.engine_transmission?.Exhaust || 'normal',
-  Coolant: carData?.engine_transmission?.Coolant || 'good',
-  Battery_Condition: carData?.engine_transmission?.Battery_Condition || 'good',
-  Gear_Shifting: carData?.engine_transmission?.Gear_Shifting || 'good',
-  Shift_Interlock_Condition: carData?.engine_transmission?.Shift_Interlock_Condition || 'good',
-  Oil_Leaks: carData?.engine_transmission?.Oil_Leaks || 'none',
-  Water_Sludge: carData?.engine_transmission?.Water_Sludge ||'none',
-  Engine_Comment: carData?.engine_transmission?.Engine_Comment || '',
-  Warning_Signal: carData?.engine_transmission?.Warning_Signal == 1 ? true : false,
+  Radiator_Condition: 
+    isEdit ? carData?.engine_transmission?.Radiator_Condition || 'good'
+    : savedData?.Radiator_Condition || 'good',
+  Silencer: 
+    isEdit ? carData?.engine_transmission?.Silencer || 'normal'
+    : savedData?.Silencer || 'normal',
+  Axels: 
+    isEdit ? carData?.engine_transmission?.Axels 
+    : savedData?.Axels || 'good',
+  Engine_Belts: 
+    isEdit ? carData?.engine_transmission?.Engine_Belts || 'good'
+    : savedData?.Engine_Belts || 'good',
+  Gear_Lever: 
+    isEdit ? carData?.engine_transmission?.Gear_Lever  || 'good'
+    : savedData?.Gear_Lever || 'good',
+  Radiator_Fan: 
+    isEdit ? carData?.engine_transmission?.Radiator_Fan || 'good'
+    : savedData?.Radiator_Fan || 'good',
+  Engine_Idling: 
+    isEdit ? carData?.engine_transmission?.Engine_Idling || 'normal'
+    : savedData?.Engine_Idling || 'normal',
+  Engine_Noise: 
+    isEdit ? carData?.engine_transmission?.Engine_Noise || 'normal'
+    : savedData?.Engine_Noise || 'normal',
+  Engine_Oil: 
+    isEdit ? carData?.engine_transmission?.Engine_Oil || 'good'
+    : savedData?.Engine_Oil || 'good',
+  Engine_Smoke: 
+    isEdit ? carData?.engine_transmission?.Engine_Smoke || 'normal'
+    : savedData?.Engine_Smoke || 'normal',
+  Exhaust: 
+    isEdit ? carData?.engine_transmission?.Exhaust || 'normal'
+    : savedData?.Exhaust || 'normal',
+  Coolant: 
+    isEdit ? carData?.engine_transmission?.Coolant || 'good'
+    : savedData?.Coolant || 'good',
+  Battery_Condition: 
+    isEdit ? carData?.engine_transmission?.Battery_Condition || 'good'
+    : savedData?.Battery_Condition || 'good',
+  Gear_Shifting: 
+    isEdit ? carData?.engine_transmission?.Gear_Shifting || 'good'
+    : savedData?.Gear_Shifting || 'good',
+  Shift_Interlock_Condition: 
+    isEdit ? carData?.engine_transmission?.Shift_Interlock_Condition || 'good'
+    : savedData?.Shift_Interlock_Condition || 'good',
+  Oil_Leaks: 
+    isEdit ? carData?.engine_transmission?.Oil_Leaks || 'none'
+    : savedData?.Oil_Leaks || 'none',
+  Water_Sludge: 
+    isEdit ? carData?.engine_transmission?.Water_Sludge || 'none'
+    : savedData?.Water_Sludge || 'none',
+  Engine_Comment: 
+    isEdit ? carData?.engine_transmission?.Engine_Comment || ''
+    : savedData?.Engine_Comment || '',
+  Warning_Signal: 
+    isEdit? carData?.engine_transmission?.Warning_Signal == 1 ? true : false
+    : savedData?.Warning_Signal == 1 ? true : false,
+
 
   // SSA
-  Brake_Pads: carData?.steering?.Brake_Pads || "good",
-  Brake_Discs_Or_Lining: carData?.steering?.Brake_Discs_Or_Lining || "good",
-  Parking_Brake_Operations: carData?.steering?.Parking_Brake_Operations || "good",
-  Suspension: carData?.steering?.Suspension || "good",
-  Shock_Absorber_Operation: carData?.steering?.Shock_Absorber_Operation || "good",
-  Steering_Operation: carData?.steering?.Steering_Operation || "good",
-  Steering_Alignment: carData?.steering?.Steering_Alignment || "good",
-  Wheel_Alignment: carData?.steering?.Wheel_Alignment || "good",
-  Steering_Comment: carData?.steering?.Steering_Comment || "",
+  Brake_Pads: 
+    isEdit? carData?.steering?.Brake_Pads || 'good'
+    : savedData?.Brake_Pads || 'good',
+  Brake_Discs_Or_Lining:
+    isEdit? carData?.steering?.Brake_Discs_Or_Lining  || 'good'
+    : savedData?.Brake_Discs_Or_Lining || 'good',
+  Parking_Brake_Operations: 
+    isEdit? carData?.steering?.Parking_Brake_Operations || 'good'
+    : savedData?.Parking_Brake_Operations || 'good',
+  Suspension: 
+    isEdit? carData?.steering?.Suspension || 'good'
+    : savedData?.Suspension || 'good',
+  Shock_Absorber_Operation: 
+    isEdit? carData?.steering?.Shock_Absorber_Operation || 'good'
+    : savedData?.Shock_Absorber_Operation || 'good',
+  Steering_Operation: 
+    isEdit? carData?.steering?.Steering_Operation || 'good'
+    : savedData?.Steering_Operation || 'good',
+  Steering_Alignment: 
+    isEdit? carData?.steering?.Steering_Alignment || 'good'
+    : savedData?.Steering_Alignment || 'good',
+  Wheel_Alignment: 
+    isEdit? carData?.steering?.Wheel_Alignment || 'good'
+    : savedData?.Wheel_Alignment || 'good',
+  Steering_Comment: 
+    isEdit? carData?.steering?.Steering_Comment || ''
+    : savedData?.Steering_Comment || '',
 
   // IEAC
-  Dashboard_Condition: carData?.interior?.Dashboard_Condition || "good",
-  Steering_Mounted_Controls: carData?.interior?.Steering_Mounted_Controls ||  "good",
-  Center_Console_Box: carData?.interior?.Center_Console_Box ||  "good",
-  Speedometer_Cluster: carData?.interior?.Speedometer_Cluster || "good",
-  Door_Trim_Panels: carData?.interior?.Door_Trim_Panels || "good",
-  Headliner: carData?.interior?.Headliner || "good",
-  Seat_Controls: carData?.interior?.Seat_Controls || "good",
-  Boot_Trunk_Area: carData?.interior?.Boot_Trunk_Area || "good",
-  Central_Lock_Operation: carData?.interior?.Central_Lock_Operation || "good",
-  Music_Multimedia_System: carData?.interior?.Music_Multimedia_System || "good",
-  Navigation_Control: carData?.interior?.Navigation_Control || "good",
-  Headlights: carData?.interior?.Headlights || "good",
-  Tail_Lights: carData?.interior?.Tail_Lights || "good",
-  Sunroof_Condition: carData?.interior?.Sunroof_Condition || "good",
-  Windows_Controls_Condition: carData?.interior?.Windows_Controls_Condition || "good",
-  Cruise_Control: carData?.interior?.Cruise_Control || "average",
-  Push_Stop_Button: carData?.interior?.Push_Stop_Button || "good",
-  AC_Cooling: carData?.interior?.AC_Cooling || "good",
-  Convertible_Operations: carData?.interior?.Convertible_Operations || "good",
-  AC_Heating: carData?.interior?.AC_Heating || "good",
-  Airbag: carData?.interior?.Airbag || "good",
-  Interior_Comment: carData?.interior?.Interior_Comment || "",
+  Dashboard_Condition: 
+  isEdit ? carData?.interior?.Dashboard_Condition || 'good'
+  : savedData?.Dashboard_Condition || 'good',
+Steering_Mounted_Controls: 
+  isEdit ? carData?.interior?.Steering_Mounted_Controls || 'good'
+  : savedData?.Steering_Mounted_Controls || 'good',
+Center_Console_Box: 
+  isEdit ? carData?.interior?.Center_Console_Box || 'good'
+  : savedData?.Center_Console_Box || 'good',
+Speedometer_Cluster: 
+  isEdit ? carData?.interior?.Speedometer_Cluster || 'good'
+  : savedData?.Speedometer_Cluster || 'good',
+Door_Trim_Panels: 
+  isEdit ? carData?.interior?.Door_Trim_Panels || 'good'
+  : savedData?.Door_Trim_Panels || 'good',
+Headliner: 
+  isEdit ? carData?.interior?.Headliner || 'good'
+  : savedData?.Headliner || 'good',
+Seat_Controls: 
+  isEdit ? carData?.interior?.Seat_Controls || 'good'
+  : savedData?.Seat_Controls || 'good',
+Boot_Trunk_Area: 
+  isEdit ? carData?.interior?.Boot_Trunk_Area || 'good'
+  : savedData?.Boot_Trunk_Area || 'good',
+Central_Lock_Operation: 
+  isEdit ? carData?.interior?.Central_Lock_Operation || 'good'
+  : savedData?.Central_Lock_Operation || 'good',
+Music_Multimedia_System: 
+  isEdit ? carData?.interior?.Music_Multimedia_System || 'good'
+  : savedData?.Music_Multimedia_System || 'good',
+Navigation_Control: 
+  isEdit ? carData?.interior?.Navigation_Control || 'good'
+  : savedData?.Navigation_Control || 'good',
+Headlights: 
+  isEdit ? carData?.interior?.Headlights || 'good'
+  : savedData?.Headlights || 'good',
+Tail_Lights: 
+  isEdit ? carData?.interior?.Tail_Lights || 'good'
+  : savedData?.Tail_Lights || 'good',
+Sunroof_Condition: 
+  isEdit ? carData?.interior?.Sunroof_Condition || 'good'
+  : savedData?.Sunroof_Condition || 'good',
+Windows_Controls_Condition: 
+  isEdit ? carData?.interior?.Windows_Controls_Condition || 'good'
+  : savedData?.Windows_Controls_Condition || 'good',
+Cruise_Control: 
+  isEdit ? carData?.interior?.Cruise_Control || 'average'
+  : savedData?.Cruise_Control || 'average',
+Push_Stop_Button: 
+  isEdit ? carData?.interior?.Push_Stop_Button || 'good'
+  : savedData?.Push_Stop_Button || 'good',
+AC_Cooling: 
+  isEdit ? carData?.interior?.AC_Cooling || 'good'
+  : savedData?.AC_Cooling || 'good',
+Convertible_Operations: 
+  isEdit ? carData?.interior?.Convertible_Operations || 'good'
+  : savedData?.Convertible_Operations || 'good',
+AC_Heating: 
+  isEdit ? carData?.interior?.AC_Heating || 'good'
+  : savedData?.AC_Heating || 'good',
+Airbag: 
+  isEdit ? carData?.interior?.Airbag || 'good'
+  : savedData?.Airbag || 'good',
+Interior_Comment: 
+  isEdit ? carData?.interior?.Interior_Comment || ''
+  : savedData?.Interior_Comment || '',
 
   // Specs
-  Drives: carData?.specs?.Drives || 'good',
-  Tiptronic_Gears: carData?.specs?.Tiptronic_Gears || 'working',
-  Convertible: carData?.specs?.Convertible || 'hard_top',
-  Sunroof_Type: carData?.specs?.Sunroof_Type || 'not_available',
-  Wheel_Type: carData?.specs?.Wheel_Type || '2wd',
-  Other_Features: carData?.specs?.Other_Features || '',
+  Drives: 
+    isEdit ? carData?.specs?.Drives || 'good'
+    : savedData?.Drives || 'good',
+  Tiptronic_Gears: 
+    isEdit ? carData?.specs?.Tiptronic_Gears || 'working'
+    : savedData?.Tiptronic_Gears || 'working',
+  Convertible: 
+    isEdit ? carData?.specs?.Convertible || 'hard_top'
+    : savedData?.Convertible || 'hard_top',
+  Sunroof_Type: 
+    isEdit ? carData?.specs?.Sunroof_Type || 'not_available'
+    : savedData?.Sunroof_Type || 'not_available',
+  Wheel_Type: 
+    isEdit ? carData?.specs?.Wheel_Type || '2wd'
+    : savedData?.Wheel_Type || '2wd',
+  Other_Features: 
+    isEdit ? carData?.specs?.Other_Features || ''
+    : savedData?.Other_Features || '',
 
   // Tyres
-  FrontLeft:  Date.parse(`${carData?.wheels?.FrontLeft}`) || "",
-  FrontRight:  Date.parse(`${carData?.wheels?.FrontRight}`) || "",
-  RearLeft:  Date.parse(`${carData?.wheels?.RearLeft}`) || "",
-  RearRight:  Date.parse(`${carData?.wheels?.RearRight}`) || "",
-  Spare_Tyre: carData?.wheels?.Spare_Tyre || false,
-  Tyres_Comment: carData?.wheels?.Tyre_Comment || "",
+  FrontLeft:
+    isEdit ? Date.parse(`${carData?.wheels?.FrontLeft}`) || ''
+    : savedData?.FrontLeft || '',
+  FrontRight: 
+    isEdit ? Date.parse(`${carData?.wheels?.FrontRight}`) || ''
+    : savedData?.FrontRight || '',
+  RearLeft:  
+    isEdit ? Date.parse(`${carData?.wheels?.RearLeft}`) || ''
+    : savedData?.RearLeft || '',
+  RearRight:  
+    isEdit ? Date.parse(`${carData?.wheels?.RearRight}`) || ''
+    : savedData?.RearRight || '',
+  Spare_Tyre: 
+    isEdit ?carData?.wheels?.Spare_Tyre || false
+    : savedData?.Spare_Tyre || false,
+  Tyres_Comment: 
+    isEdit ? carData?.wheels?.Tyres_Comment || ''
+    : savedData?.Tyres_Comment || '',
 
   // Images
-  images: carData?.images.map((image) => ({
+  images: 
+  isEdit? carData?.images.map((image) => ({
     preview: `https://api.carsxchange.com/storage/car_images/${image}`,
-  })) || [],
+  })) 
+  :   [],
 });

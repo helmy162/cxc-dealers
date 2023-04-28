@@ -57,11 +57,27 @@ export default function AddCar({isEdit, car}) {
     const [markers, setMarkers] = useState([]);
     const [activeMarker, setActiveMarker] = useState(null);
     const [submittedMarkers, setSubmittedMarkers] = useState([]);
+    const [savedData, setSavedData] = useState(JSON.parse(localStorage.getItem('carForm')));
+
     useEffect(() => {
       setSubmittedMarkers(car?.exterior?.markers || []);
     }, [car?.exterior?.markers]);
+    useEffect(() => {
+      if(!isEdit) {
+        setSubmittedMarkers(savedData?.defects);
+      }
+    }, [savedData]);
+
     const [isErrorDisplayed, setIsErrorDisplayed] = useState(false);
     const [file, setFile] = useState(null);
+    
+    useEffect(() => {
+      if(!isEdit) {
+        setSavedData(JSON.parse(localStorage.getItem('carForm')));
+      }
+    }, []);
+
+
 
     const [partColor, setPartColor] = useState({
       0: 0,
@@ -103,13 +119,38 @@ export default function AddCar({isEdit, car}) {
         16: typeList.indexOf(car?.exterior?.markers['leftBackBumper']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftBackBumper']) : 0,
       });
     }, [car]);
+    useEffect(() => {
+      if(!isEdit)
+      {
+        setPartColor({
+          0: typeList.indexOf(savedData?.defects['frontBumper']) >= 0 ? typeList.indexOf(savedData?.defects['frontBumper']) : 0,
+          1: typeList.indexOf(savedData?.defects['hood']) >= 0 ? typeList.indexOf(savedData?.defects['hood']) : 0,
+          2: typeList.indexOf(savedData?.defects['top']) >= 0 ? typeList.indexOf(savedData?.defects['top']) : 0,
+          3: typeList.indexOf(savedData?.defects['trunkLid']) >= 0 ? typeList.indexOf(savedData?.defects['trunkLid']) : 0,
+          4: typeList.indexOf(savedData?.defects['backBumper']) >= 0 ? typeList.indexOf(savedData?.defects['backBumper']) : 0,
+          5: typeList.indexOf(savedData?.defects['rightFrontPanel']) >= 0 ? typeList.indexOf(savedData?.defects['rightFrontPanel']) : 0,
+          6: typeList.indexOf(savedData?.defects['rightFrontBumper']) >= 0 ? typeList.indexOf(savedData?.defects['rightFrontBumper']) : 0,
+          7: typeList.indexOf(savedData?.defects['leftFrontPanel']) >= 0 ? typeList.indexOf(savedData?.defects['leftFrontPanel']) : 0,
+          8: typeList.indexOf(savedData?.defects['leftFrontBumper']) >= 0 ? typeList.indexOf(savedData?.defects['leftFrontBumper']) : 0,
+          9: typeList.indexOf(savedData?.defects['rightFrontDoor']) >= 0 ? typeList.indexOf(savedData?.defects['rightFrontDoor']) : 0,
+          10: typeList.indexOf(savedData?.defects['rightBackDoor']) >= 0 ? typeList.indexOf(savedData?.defects['rightBackDoor']) : 0,
+          11: typeList.indexOf(savedData?.defects['rightBackPanel']) >= 0 ? typeList.indexOf(savedData?.defects['rightBackPanel']) : 0,
+          12: typeList.indexOf(savedData?.defects['rightBackBumper']) >= 0 ? typeList.indexOf(savedData?.defects['rightBackBumper']) : 0,
+          13: typeList.indexOf(savedData?.defects['leftFrontDoor']) >= 0 ? typeList.indexOf(savedData?.defects['leftFrontDoor']) : 0,
+          14: typeList.indexOf(savedData?.defects['leftBackDoor']) >= 0 ? typeList.indexOf(savedData?.defects['leftBackDoor']) : 0,
+          15: typeList.indexOf(savedData?.defects['leftBackPanel']) >= 0 ? typeList.indexOf(savedData?.defects['leftBackPanel']) : 0,
+          16: typeList.indexOf(savedData?.defects['leftBackBumper']) >= 0 ? typeList.indexOf(savedData?.defects['leftBackBumper']) : 0,
+        });
+      }
+    }, [savedData]);
 
     const [change, setChange] = useState(0);
   
-    const values = AllDefaultValues(car);
+    const values = AllDefaultValues(car, isEdit, savedData);
+    console.log(car, isEdit, savedData);
     const methods = useForm({
       resolver: yupResolver(AllSchema),
-      defaultValues: AllDefaultValues(car),
+      defaultValues: AllDefaultValues(car, isEdit, savedData),
       values
     });
 
@@ -129,8 +170,13 @@ export default function AddCar({isEdit, car}) {
       resetField,
       formState: { errors, isSubmitting, isDirty },
     } = methods;
-  
     const values1 = watch();
+
+    useEffect(() => {
+      if(!isEdit){
+        localStorage.setItem('carForm', JSON.stringify(values1));
+      }
+    }, [values1]);
   
     const TABS = [
       {
