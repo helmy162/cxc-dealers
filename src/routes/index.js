@@ -33,6 +33,7 @@ import {
   CarDetails,
   HomePage,
   SingleCar,
+  OfferCar,
   BidsPage
 } from './elements';
 import { PATH_AUTH } from './paths';
@@ -84,6 +85,8 @@ export default function Router() {
         { element: <Navigate to={'cars'} replace />, index: true }, // this is the default page for the dealer
         { path: 'cars', element: <CarsListingPage /> }, // this is the car listing page
         { path: 'cars/:name', element: <SingleCar />}, // this is the single car details page
+        { path: 'offers', element: <CarsListingPage expired={true}/> }, // this is the offers listing page
+        { path: 'offers/:name', element: <OfferCar />}, // this is the single car offer page
         { path: 'profile', element: <UserAccountPage isProfile={true} /> },
         { path: 'bids', element: <BidsPage /> },
         // other dealer pages...

@@ -11,7 +11,7 @@ const endpoints = {
   GET_CARS: `${process.env.REACT_APP_HOST_API_KEY}cars`
 }
 
-export default function useCarsListingPage() {
+export default function useCarsListingPage(expired) {
   const [cars, setCars] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setLoading] = useState(false)
@@ -24,8 +24,7 @@ export default function useCarsListingPage() {
   const getCars = async (page) => {
     try {
       setLoading(true);
-      const { data: response } = await axiosInstance.get(`cars?page=${page}`);
-
+      const { data: response } = await axiosInstance.get(expired? `cars/expired-auction?page=${page}`:`cars?page=${page}`);
       if (!total) {
         setTotal(response.total);
       }

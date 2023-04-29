@@ -13,12 +13,12 @@ import OffersCount from './OffersCount';
 import AppliedFilters from './AppliedFilters';
 
 import useCarsListingPage from './useCarsListingPage';
-import LoadingScreen from '../../components/loading-screen';
+import LoadingScreen from '../../../components/loading-screen';
 
-import { resetProduct } from '../../redux/slices/product';
-import { useDispatch } from '../../redux/store';
+import { resetProduct } from '../../../redux/slices/product';
+import { useDispatch } from '../../../redux/store';
 
-export default function CarsListingPage() {
+export default function CarsListingPage({ expired = false}) {
   const [isFilterVisible, setFilterVisible] = useState(false);
   
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ export default function CarsListingPage() {
     cars,
     isLoadMoreButtonVisible,
     loadMore
-  } = useCarsListingPage();
+  } = useCarsListingPage(expired);
 
   const toggleFilter = () => {
     setFilterVisible((oldValue) => !oldValue);
@@ -92,7 +92,7 @@ export default function CarsListingPage() {
           </Box>
           {/* {isFilterVisible && <Filters sx={{ marginBottom: '20px' }} />} */}
           {/* <AppliedFilters /> */}
-          <CarsList cars={cars} />
+          <CarsList cars={cars} expired={expired} />
           <Box sx={{ display: 'flex' }}>
             {isLoadMoreButtonVisible && (
               <LoadingButton

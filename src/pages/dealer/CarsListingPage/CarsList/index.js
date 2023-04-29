@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 
-import CarCard from '../../../components/CarCard';
+import CarCard from '../../../../components/CarCard';
 
-export default function CarsList({ cars }) {
+export default function CarsList({ cars, expired }) {
   return (
     <Box>
       
@@ -10,6 +10,7 @@ export default function CarsList({ cars }) {
       cars.length > 0 ?
       cars.map((car) => (
         <CarCard
+          expired={expired}
           key={car.id}
           data={car}
           sx={{
