@@ -40,10 +40,11 @@ export default function DealerBidsTableRow({
   row,
   onViewRow,
   bid,
-  user
+  user,
+  auction
 }) {
  
-  const { id, details, livestatus, timeRemaining, images, auction} = row;
+  const { id, details, livestatus, timeRemaining, images} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -84,7 +85,7 @@ export default function DealerBidsTableRow({
         },
       },
     });
-    const channel = pusher.subscribe(`private-car.auction.${auction.id}`);
+    const channel = pusher.subscribe(`private-car.auction.${auction?.id}`);
     channel.bind("NewBid", (data) => {
       setHighestBid(data.auction.last_bid)
     });
