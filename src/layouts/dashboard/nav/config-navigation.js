@@ -18,6 +18,8 @@ const ICONS = {
   profile: icon('ic_profile'),
   bid: icon('ic_bid'),
   garage: icon('ic_garage'),
+  soldCar: icon('ic_sold_car'),
+  cashback: icon('ic_cashback'),
 };
 
 const dealerNavConfig = [
@@ -32,6 +34,26 @@ const dealerNavConfig = [
         path: PATH_DEALER.cars,
         icon: ICONS.car,
       },
+      {
+        title: 'My Bids',
+        path: PATH_DEALER.bids,
+        icon: ICONS.bid,
+      }
+    ],
+  },
+  {
+    subheader: 'make an offer',
+    items: [
+      {
+        title: 'Sold Cars',
+        path: PATH_DEALER.soldCar,
+        icon: ICONS.soldCar,
+      },
+      {
+        title: 'My Offers',
+        path: PATH_DEALER.offers,
+        icon: ICONS.cashback,
+      }
     ],
   },
   {
@@ -42,11 +64,7 @@ const dealerNavConfig = [
         path: PATH_DEALER.account,
         icon: ICONS.profile,
       },
-      {
-        title: 'My Bids',
-        path: PATH_DEALER.bids,
-        icon: ICONS.bid,
-      }
+      
     ],
   },
 ];
@@ -92,6 +110,21 @@ const adminNavConfig = [
         title: 'My Bids',
         path: PATH_DEALER.bids,
         icon: ICONS.bid,
+      }
+    ],
+  },
+  {
+    subheader: 'make an offer',
+    items: [
+      {
+        title: 'Sold Cars',
+        path: PATH_DEALER.soldCars,
+        icon: ICONS.soldCar,
+      },
+      {
+        title: 'My Offers',
+        path: PATH_DEALER.offers,
+        icon: ICONS.cashback,
       }
     ],
   },
