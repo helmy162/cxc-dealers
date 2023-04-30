@@ -9,9 +9,8 @@ import { LoadingButton } from '@mui/lab';
 
 import Filters from './Filters';
 import CarsList from './CarsList';
-import OffersCount from './OffersCount';
+import CarsCount from './CarsCount';
 import AppliedFilters from './AppliedFilters';
-
 import useCarsListingPage from './useCarsListingPage';
 import LoadingScreen from '../../../components/loading-screen';
 
@@ -29,7 +28,11 @@ export default function CarsListingPage({ expired = false}) {
   const {
     isLoading,
     cars,
+    cars2,
+    total,
+    total2,
     isLoadMoreButtonVisible,
+    isLoadMoreButtonVisible2,
     loadMore
   } = useCarsListingPage(expired);
 
@@ -76,7 +79,7 @@ export default function CarsListingPage({ expired = false}) {
               justifyContent: 'space-between',
             }}
           >
-            <OffersCount count={cars.length} />
+            <CarsCount count={expired ? total2 : total} />
             {/* <Button
               variant="contained"
               sx={{
@@ -92,9 +95,9 @@ export default function CarsListingPage({ expired = false}) {
           </Box>
           {/* {isFilterVisible && <Filters sx={{ marginBottom: '20px' }} />} */}
           {/* <AppliedFilters /> */}
-          <CarsList cars={cars} expired={expired} />
+          <CarsList cars={expired? cars2 : cars} expired={expired} />
           <Box sx={{ display: 'flex' }}>
-            {isLoadMoreButtonVisible && (
+            {(( expired && isLoadMoreButtonVisible2 ) || (!expired && isLoadMoreButtonVisible)) && (
               <LoadingButton
                 sx={{
                   margin: 'auto'
