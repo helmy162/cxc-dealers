@@ -1,6 +1,6 @@
 import ProductDetailsCarousel from "../dashboard/ProductDetailsCarousel"
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct, getStatus, resetProduct, extendEndtime} from '../../redux/slices/product';
+import { getProduct, getStatus, resetProduct, extendEndtime, getUserBids} from '../../redux/slices/product';
 import {useEffect, useMemo} from 'react';
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
@@ -26,7 +26,7 @@ import { useSnackbar } from '../../components/snackbar';
 export default function SingleCar(){
     const {name} = useParams();
     const {user, initialize} = useAuthContext();
-    const { product, isLoading, checkout, productStatus } = useSelector((state) => state.product);
+    const { product, isLoading, checkout, productStatus, userBids } = useSelector((state) => state.product);
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -35,6 +35,10 @@ export default function SingleCar(){
         dispatch(getProduct(name));
         dispatch(getStatus(product));
   }, [dispatch, name]);
+
+   useEffect(() => {
+    dispatch(getUserBids());
+  }, [dispatch, user]);
 
 
 
@@ -80,8 +84,8 @@ export default function SingleCar(){
     if (product?.auction?.id) {
       setAuctionID(product?.auction?.id);
       setHighestBid(product?.auction?.latest_bid?.bid);
-      setHighestUserBidsOnThisCar( user?.bids.length &&  user?.bids?.filter((element) => {return element.car_id == product?.id}).length ?
-        user?.bids
+      setHighestUserBidsOnThisCar( userBids.length &&  userBids.filter((element) => {return element.car_id == product?.id}).length ?
+        userBids
         ?.filter((element) => {return element.car_id == product?.id})
         ?.reduce((prev, current) => {return prev.bid > current.bid ? prev : current})
         : null
@@ -153,7 +157,7 @@ export default function SingleCar(){
     try {
         reset();
         setOpenConfirm(false);
-        if(productStatus <= 30000) dispatch(extendEndtime(product.auction.id));
+        if(productStatus <= 60000) dispatch(extendEndtime(product.auction.id));
         const mergedDate = {bid: data.bid, auction_id: product.auction.id, car_id: product.id};
         const res = await axiosInstance.post('dealer/bid', mergedDate);
         setHighestUserBidsOnThisCar(data);
