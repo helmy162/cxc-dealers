@@ -27,8 +27,9 @@ export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));
 
 // dealer
 export const SingleCar = Loadable(lazy(() => import('../pages/dealer/SingleCar')));
-export const OfferCar = Loadable(lazy(() => import('../pages/dealer/OfferCar')));
+export const SoldCar = Loadable(lazy(() => import('../pages/dealer/SoldCar')));
 export const BidsPage = Loadable(lazy(() => import('../pages/dealer/BidsPage')));
+export const OffersPage = Loadable(lazy(() => import('../pages/dealer/OffersPage')));
 export const CarsListingPage = Loadable(lazy(() => import('../pages/dealer/CarsListingPage')));
 
 // admin

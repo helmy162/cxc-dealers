@@ -30,10 +30,11 @@ export const PATH_DEALER = {
   root: ROOTS_Dealer,
   cars: path(ROOTS_Dealer, '/cars'),
   car: (name) => path(ROOTS_Dealer, `/cars/${name}`),
-  offers: path(ROOTS_Dealer, '/offers'),
-  offer: (name) => path(ROOTS_Dealer, `/offers/${name}`),
+  soldCars: path(ROOTS_Dealer, '/sold-cars'),
+  soldCar: (name) => path(ROOTS_Dealer, `/sold-cars/${name}`),
   account: path(ROOTS_Dealer, '/profile'),
   bids: path(ROOTS_Dealer, '/bids'),
+  offers : path(ROOTS_Dealer, '/offers'),
 }
 
 export const PATH_INSPECTOR = {
