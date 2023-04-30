@@ -31,18 +31,13 @@ import axiosInstance from 'src/utils/axios';
 BidTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
-  onViewRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
-  onDeleteRow: PropTypes.func,
+  onSelectAccount: PropTypes.func,
+  hasWinner: PropTypes.bool,
 };
 
 export default function BidTableRow({
   row,
   selected,
-  onDeleteRow,
-  onEditRow,
-  onViewRow,
   onSelectAccount,
   hasWinner,
 }) {
