@@ -42,7 +42,7 @@ export default function CarCard({
         :
           new Date(data?.auction?.end_at) < new Date() 
           ?
-            PATH_DEALER.offer(data.id)
+            PATH_DEALER.soldCar(data.id)
           :
           null
       }
