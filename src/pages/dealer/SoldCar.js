@@ -102,7 +102,7 @@ export default function SoldCar(){
                 product &&
                 <div>
                     <Helmet>
-                      <title> {`${product.details.make} ${product.details.model} ${product.details.year} Bid`} </title>
+                      <title> {`${product.details.make} ${product.details.model} ${product.details.year} | Make an offer`} </title>
                     </Helmet>
                     <div className="flex flex-col p-[24px] gap-[44px] lg:flex-row ">
                       <div className="w-full lg:w-1/2">
@@ -112,7 +112,7 @@ export default function SoldCar(){
                           {/* car name and timer */}
                           <div className="flex justify-between items-center">
                               <h1 className="text-[24px] font-semibold">{product.details.make} {product.details.model} {product.details.year}</h1>
-                              <h2 className="text-[#8184A3] text-[16px] font-medium"> <span className="text-[#E32519]"> { 'Sold Car'} </span></h2>
+                              <h2 className="text-[#8184A3] text-[16px] font-medium"> <span className="text-[#E32519]"> { 'Expired Auction'} </span></h2>
                           </div>
                           {/* prices section */}
                           <div>

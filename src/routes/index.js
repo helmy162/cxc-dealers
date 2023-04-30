@@ -86,8 +86,8 @@ export default function Router() {
         { element: <Navigate to={'cars'} replace />, index: true }, // this is the default page for the dealer
         { path: 'cars', element: <CarsListingPage /> }, // this is the car listing page
         { path: 'cars/:name', element: <SingleCar />}, // this is the single car details page
-        { path: 'sold-cars', element: <CarsListingPage expired={true}/> }, // this is the sold cars listing page
-        { path: 'sold-cars/:name', element: <SoldCar />}, // this is the single sold car page
+        { path: 'completed-auctions', element: <CarsListingPage expired={true}/> }, // this is the completed auctions listing page
+        { path: 'completed-auctions/:name', element: <SoldCar />}, // this is the single completed auction page
         { path: 'profile', element: <UserAccountPage isProfile={true} /> },
         { path: 'bids', element: <BidsPage /> },
         { path: 'offers', element: <OffersPage /> },

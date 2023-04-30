@@ -45,7 +45,7 @@ const dealerNavConfig = [
     subheader: 'make an offer',
     items: [
       {
-        title: 'Sold Cars',
+        title: 'Completed Auctions',
         path: PATH_DEALER.soldCar,
         icon: ICONS.soldCar,
       },
@@ -117,7 +117,7 @@ const adminNavConfig = [
     subheader: 'make an offer',
     items: [
       {
-        title: 'Sold Cars',
+        title: 'Completed Auctions',
         path: PATH_DEALER.soldCars,
         icon: ICONS.soldCar,
       },
