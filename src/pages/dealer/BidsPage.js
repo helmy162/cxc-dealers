@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProducts, getStatus } from '../../redux/slices/product';
+import { getUserBids } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD, PATH_DEALER } from '../../routes/paths';
 // components
@@ -96,7 +96,7 @@ export default function BidsPage() {
 
   const dispatch = useDispatch();
 
-  const { products, isLoading, productStatus } = useSelector((state) => state.product);
+  const { isLoading, productStatus, userBids} = useSelector((state) => state.product);
 
   const [tableData, setTableData] = useState([]);
 
@@ -109,14 +109,14 @@ export default function BidsPage() {
   
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+    dispatch(getUserBids());
+  }, [dispatch, user]);
 
   useEffect(() => {
-    if (products && products.length) {
-      setTableData(products);
+    if (userBids && userBids.length) {
+      setTableData(userBids);
     }
-  }, [products]);
+  }, [userBids]);
 
 
 
@@ -124,16 +124,19 @@ export default function BidsPage() {
   useEffect(() => {
     
       const intervalId = setInterval(() => {
-        if(tableData.length > 0){
+        if(userBids.length > 0){
           setTableData(
-            tableData.map((product) => {
-              const endAt = new Date(product?.auction?.end_at);
-              const startAt = new Date(product?.auction?.start_at);
+            userBids.map((bid) => {
+              const endAt = new Date(bid?.auction?.end_at);
+              const startAt = new Date(bid?.auction?.start_at);
               const now = new Date();
               return {
-                ...product,
-                livestatus: product.status == 'pending'? 'pending' : carStatus(product),
-                timeRemaining: product.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
+                ...bid,
+                car: {
+                ...bid?.car,
+                livestatus: bid.car.status == 'pending'? 'pending' : carStatus(bid),
+                timeRemaining: bid.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
+                }
               };
             })
           )
@@ -143,20 +146,22 @@ export default function BidsPage() {
   
       return () => clearInterval(intervalId);
     
-  }, [productStatus, products,  dispatch, tableData]);
+  }, [userBids,  dispatch, tableData]);
   
   const dataFiltered = applyFilter({
-    inputData: user?.bids.reduce((acc, currentBid) => {
-        const existingBid = acc.find(bid => bid.auction_id === currentBid.auction_id);
-        if (existingBid) {
-          if (existingBid.bid < currentBid.bid) {
-            existingBid.bid = currentBid.bid;
-          }
-          return acc;
+    inputData: userBids.reduce((acc, currentBid) => {
+      const existingBidIndex = acc.findIndex(bid => bid.auction_id === currentBid.auction_id);
+      if (existingBidIndex !== -1) {
+        const existingBid = acc[existingBidIndex];
+        if (existingBid.bid < currentBid.bid) {
+          const updatedBid = {...existingBid, bid: currentBid.bid}; // create a new object with the updated bid property
+          acc.splice(existingBidIndex, 1, updatedBid); // replace the existing object with the updated one
         }
-        acc.push(currentBid);
         return acc;
-      }, []),
+      }
+      acc.push(currentBid);
+      return acc;
+    }, []),
     comparator: getComparator(order, orderBy),
     filterName,
     filterStatus,
@@ -251,7 +256,7 @@ export default function BidsPage() {
 
   const getCarFromBid = (id) => {
     try {
-        const car = tableData.find(car=> car.id == id);
+        const car = tableData.find(bid=> bid.car_id == id);
         if (car) {
             return car;
         }
@@ -324,14 +329,14 @@ export default function BidsPage() {
                   {(isLoading ? [...Array(rowsPerPage)] : dataFiltered)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) =>
-                        row && getCarFromBid(row.car_id) ? (            
+                        row && row.car && getCarFromBid(row.car_id) ? (            
                         <DealerBidsTableRow
                           key={row.id}
-                          row={getCarFromBid(row.car_id)}
+                          row={getCarFromBid(row.car_id).car}
                           bid={row.bid}
                           user={user}
-                          
-                          onViewRow={() => handleViewRow(getCarFromBid(row.car_id).id)}
+                          auction={row.auction}
+                          onViewRow={() => handleViewRow(row.car_id)}
                         />
                       ) : (
                         !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />
