@@ -21,6 +21,7 @@ import PrivateStep from './PrivateStep';
 
 // components
 import Iconify from '../../components/iconify';
+import ConfirmDialog from '../../components/confirm-dialog';
 import { LoadingButton } from '@mui/lab';
 
 // routes
@@ -58,6 +59,8 @@ export default function AddCar({isEdit, car}) {
     const [activeMarker, setActiveMarker] = useState(null);
     const [submittedMarkers, setSubmittedMarkers] = useState([]);
     const [savedData, setSavedData] = useState(JSON.parse(localStorage.getItem('carForm')));
+
+    const [openConfirm, setOpenConfirm] = useState(false);
 
     useEffect(() => {
       setSubmittedMarkers(car?.exterior?.markers || []);
@@ -147,7 +150,6 @@ export default function AddCar({isEdit, car}) {
     const [change, setChange] = useState(0);
   
     const values = AllDefaultValues(car, isEdit, savedData);
-    console.log(car, isEdit, savedData);
     const methods = useForm({
       resolver: yupResolver(AllSchema),
       defaultValues: AllDefaultValues(car, isEdit, savedData),
@@ -278,6 +280,14 @@ export default function AddCar({isEdit, car}) {
       });
     }
 
+    const onReset = () => {
+      reset();
+      setCurrentTab(TABS[0].value);
+      localStorage.removeItem('carForm');
+      setSavedData(null);
+      setOpenConfirm(false);
+    }
+
   return (
     <>
         <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
@@ -301,38 +311,61 @@ export default function AddCar({isEdit, car}) {
               Back
             </Button>
           }
-          
-          {
-            currentStep != TABS.length - 1 ? 
-            <Button variant="outlined" color="inherit" size='large'  onClick={onNext} sx={{ ml: 'auto' }}>
-              Next
+          <div className='ml-auto flex items-center gap-5'>
+            <Button variant="outlined" color="error" size='large'  onClick={() => setOpenConfirm(true)} >
+              Clear
             </Button>
-            :
-            <LoadingButton
-            color="inherit"
-            size="large"
-            type="submit"
-            variant="contained"
-            loading={isSubmitting}
-            sx={{
-            ml: 'auto' ,
-            bgcolor: 'text.primary',
-            color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-            '&:hover': {
-                bgcolor: 'text.primary',
-                color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-            },
-            }}
-          >
-            {isEdit ? 'Update' : 'Submit'}
-          </LoadingButton>
-          }
-          
-          
-          
+
+            {
+              currentStep != TABS.length - 1 ? 
+              
+                <Button variant="outlined" color="inherit" size='large'  onClick={onNext} >
+                Next
+              </Button>
+              
+              :
+              <LoadingButton
+              color="inherit"
+              size="large"
+              type="submit"
+              variant="contained"
+              loading={isSubmitting}
+              sx={{
+              ml: 'auto' ,
+              bgcolor: 'text.primary',
+              color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
+              '&:hover': {
+                  bgcolor: 'text.primary',
+                  color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
+              },
+              }}
+            >
+              {isEdit ? 'Update' : 'Submit'}
+            </LoadingButton>
+            }
+          </div>    
           </Stack>
         </FormProvider>
-        
+
+        <ConfirmDialog
+        open={openConfirm}
+        onClose={() => setOpenConfirm(false)}
+        title="Clear"
+        content={
+          <>
+            Are you sure want to clear all form data ? This action cannot be undone.
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={onReset}
+          >
+            Clear
+          </Button>
+        }
+      />
     </>
   );
 }

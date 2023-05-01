@@ -131,8 +131,8 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
     isEdit? carData?.details?.seller_price || 0
     : savedData?.seller_price || 0,
   year:  
-    isEdit? Date.parse(`${carData?.details.year}`) || ''
-    : savedData?.year || '',
+    isEdit? Date.parse(`${carData?.details.year}`) || null
+    : savedData?.year || null,
   make:
     isEdit? carData?.details?.make || ''
     : savedData?.make || '',
