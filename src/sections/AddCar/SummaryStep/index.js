@@ -7,7 +7,7 @@ import useAddCarAutocompletes from 'src/hooks/useAddCarAutocompletes';
 import { hasSameName, isOptionEqualToValue, renderAddCarSelect } from 'src/utils/forms';
 import { fYear } from 'src/utils/formatTime';
 import EngineCard from './EngineCard';
-import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS, WARRANTY_OPTIONS, BANK_FINANCE_OPTIONS } from '../constants';
+import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS, WARRANTY_OPTIONS, BANK_FINANCE_OPTIONS, BANK_FINANCE_STATUS_OPTIONS } from '../constants';
 
 import { getSellers, resetSeller } from '../../../redux/slices/user';
 import { useDispatch, useSelector } from '../../../redux/store';
@@ -20,61 +20,12 @@ const exteriorColors = ["White", "Black", "Silver", "Gray", "Red", "Blue", "Gree
 const interiorColors = ["Black", "Gray", "Beige", "Brown", "White", "Other"];
 const firstOwnerOptions = ["Yes", "No", "Unknown"];
 const UAEEmirates = ["Abu Dhabi", "Ajman", "Al Ain", "Dubai", "Fujairah", "Ras Al Khaimah", "Sharjah", "Umm Al Quwain"];
-const SPECIFICATIONS = ["GCC", "American", "Other"];
-
-export const SummarySchema = Yup.object().shape({
-  seller_id: Yup.string().required('Seller ID is required'),
-  seller_price: Yup.number('Should be a number').required('Seller price is required'),
-  year: Yup.string().nullable().required('Year is required'),
-  make: Yup.object().nullable().required('Make is required'),
-  model: Yup.object().nullable().required('Model is required'),
-  generation: Yup.object().nullable().required('Generation is required'),
-  trim: Yup.object().nullable().required('Trim is required'),
-  mileage: Yup.number('Should be a number').nullable().required('Mileage is required'),
-  engine: Yup.object().nullable().required('Engine options are required'),
-  registered_emirates: Yup.string().nullable().required('Registered emirates is required'),
-  body_type: Yup.string(),
-  exterior_color: Yup.string().nullable(),
-  interior_color: Yup.string().nullable(),
-  interior_type: Yup.string(),
-  specification: Yup.string(),
-  is_new: Yup.boolean(),
-  first_owner: Yup.boolean(),
-  keys: Yup.string(),
-  service_history: Yup.string(),
-  manuals: Yup.string(),
-  warranty: Yup.boolean(),
-  accident_history: Yup.string(),
-  bank_finance: Yup.boolean(),
-  car_history_comment: Yup.string(),
-});
-
-export const SummaryDefaultValues = {
-  seller_id: null,
-  seller_price: 0,
-  year: "",
-  make: null,
-  model: null,
-  generation: null,
-  trim: null,
-  mileage: 0,
-  registered_emirates: "",
-  engine: "",
-  body_type: "",
-  exterior_color: null,
-  interior_color: null,
-  interior_type: "",
-  specification: "",
-  is_new: true,
-  first_owner: false,
-  keys: "",
-  service_history: "",
-  manuals: "",
-  warranty: true,
-  accident_history: "",
-  bank_finance: false,
-  car_history_comment: "",
-};
+const FUEL_TYPES = ["Petrol", "Diesel", "Electric", "Hybrid"];
+const TRANSMISSION_TYPES = ["Automatic", "Manual"];
+const WHEEL_TYPES = ["2WD", "4WD", "AWD"];
+const SAFETY_BELT_OPTIONS = ["Good", "Damaged", "Maybe Required replacement", "Maybe Required repair"]
+const CAR_OPTIONS = ['Basic Option', 'Mid Option', 'Full Option'];
+const SPECIFICATIONS = ["GCC", "American", "Japanese" , "European", "Other"];
 
 const mapFormDataToApi = (values) => ( values ? {
   make: values.make || '',
@@ -200,13 +151,12 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           {BODY_TYPES_OPTIONS.map(bodyType => <MenuItem key={bodyType.value} value={bodyType.value}>{bodyType.label}</MenuItem>)}
         </RHFSelect>
         
-        
-        
         <RHFTextField
           name="mileage"
           label="Mileage ( KM )"
           type="number"
         />
+
         <RHFAutocomplete
           name="registered_emirates"
           label="Registered Emirates"
@@ -214,6 +164,42 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           isOptionEqualToValue={isOptionEqualToValue}
           getOptionLabel={(option) => option ?? ''}
         />
+
+        <RHFSelect
+          name="fuel_type"
+          label="Fuel Type"
+        >
+          {FUEL_TYPES.map(fuelType => <MenuItem key={fuelType} value={fuelType}>{fuelType}</MenuItem>)}
+        </RHFSelect>
+
+        <RHFSelect
+          name="transmission"
+          label="Transmission "
+        >
+          {TRANSMISSION_TYPES.map(transmissionType => <MenuItem key={transmissionType} value={transmissionType}>{transmissionType}</MenuItem>)}
+        </RHFSelect>
+
+        <RHFSelect
+          name="wheel_type"
+          label="Wheel Type"
+        >
+          {WHEEL_TYPES.map(wheelType => <MenuItem key={wheelType} value={wheelType}>{wheelType}</MenuItem>)}
+        </RHFSelect>
+
+        <RHFSelect
+          name="car_options"
+          label="Car Options"
+        >
+          {CAR_OPTIONS.map(carOption => <MenuItem key={carOption} value={carOption}>{carOption}</MenuItem>)}
+        </RHFSelect>
+
+        <RHFSelect
+        name="safety_belt"
+        label="Safety Belt"
+        >
+          {SAFETY_BELT_OPTIONS.map(safetyBelt => <MenuItem key={safetyBelt} value={safetyBelt}>{safetyBelt}</MenuItem>)}
+        </RHFSelect>
+        
         
         <RHFSelect
           name="keys"
@@ -270,6 +256,7 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
         { renderAddCarSelect({ name: 'warranty', label: 'Warranty', options: WARRANTY_OPTIONS })}
         { renderAddCarSelect({ name: 'accident_history', label: 'Accident History', options: ACCIDENT_HISTORY_OPTIONS })}
         { renderAddCarSelect({ name: 'bank_finance', label: 'Mortgage/Bank Finance', options: BANK_FINANCE_OPTIONS })}
+        { renderAddCarSelect({ name: 'bank_finance_status', label: 'Mortgage/Bank Status', options: BANK_FINANCE_STATUS_OPTIONS })}
         {/* <RHFCheckbox name="bank_finance" label="Mortgage/Bank Finance" /> */}
         <RHFTextField name="car_history_comment" label="Additional Information" multiline />
       </Box>

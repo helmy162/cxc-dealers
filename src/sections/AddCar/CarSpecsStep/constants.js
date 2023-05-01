@@ -6,6 +6,7 @@ const ENGINE_AND_TRANSMISSION_OPTIONS = [
 ];
 
 const Drives = [
+{ value: 'excellent', label: 'Excellent'},
 { value: 'good', label: 'Good' },
 { value: 'average', label: 'Average' },
 { value: 'below_average', label: 'Below Average' }

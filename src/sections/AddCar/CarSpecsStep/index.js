@@ -106,9 +106,7 @@ export const CarSpecsDefaultValues = {
 
 const fields = [
   { name: 'Drives', label: 'Drives', options: Drives},
-  { name: 'Tiptronic_Gears', label: 'Tiptronic Gears', options: TiptronicGears },
   { name: 'Sunroof_Type', label: 'Sunroof Type', options: SunroofType},
-  { name: 'Wheel_Type', label: 'Wheel Type', options: WheelsType},
   { name: 'Convertible', label: 'Convertible', options: ConvertibleType},
 ];
 

@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 
 export const AllSchema = Yup.object().shape({
-  // General
+  // Details
   seller_id: Yup.string().nullable().required('General: Seller ID is required'),
   seller_price: Yup.number('General: Should be a number').nullable().required('General: Seller price is required'),
   year: Yup.string().nullable().required('General: Year is required'),
@@ -18,13 +18,21 @@ export const AllSchema = Yup.object().shape({
   interior_color: Yup.string().nullable(),
   interior_type: Yup.string(),
   specification: Yup.string(),
+  fuel_type: Yup.string(),
+  transmission: Yup.string(),
+  wheel_type: Yup.string(),
+  car_options: Yup.string(),
+  safety_belts: Yup.string(),
   first_owner: Yup.string(),
   keys: Yup.string(),
+
+  // History
   service_history: Yup.string(),
   manuals: Yup.string(),
   warranty: Yup.string(),
   accident_history: Yup.string(),
   bank_finance: Yup.string(),
+  bank_finance_status: Yup.string(),
   car_history_comment: Yup.string(),
 
   // Documents
@@ -44,20 +52,16 @@ export const AllSchema = Yup.object().shape({
   Radiator_Condition: Yup.string(),
   Silencer: Yup.string(),
   Axels: Yup.string(),
-  Engine_Belts: Yup.string(),
-  Gear_Lever: Yup.string(),
   Radiator_Fan: Yup.string(),
   Engine_Idling: Yup.string(),
   Engine_Noise: Yup.string(),
-  Engine_Oil: Yup.string(),
   Engine_Smoke: Yup.string(),
-  Exhaust: Yup.string(),
   Coolant: Yup.string(),
-  Battery_Condition: Yup.string(),
-  Gear_Shifting: Yup.string(),
+  Transmission_Condition: Yup.string(),
+  Engine_Group: Yup.string(),
+  Hoses_and_Pipes_Condition: Yup.string(),
   Shift_Interlock_Condition: Yup.string(),
   Oil_Leaks: Yup.string(),
-  Water_Sludge: Yup.string(),
   Engine_Comment: Yup.string(),
   Warning_Signal: Yup.boolean(),
 
@@ -70,6 +74,8 @@ export const AllSchema = Yup.object().shape({
   Steering_Operation: Yup.string(),
   Steering_Alignment: Yup.string(),
   Wheel_Alignment: Yup.string(),
+  Rotors_and_Drums: Yup.string(),
+  Struts_and_Shocks: Yup.string(),
   Steering_Comment: Yup.string(),
 
   // IEAC
@@ -98,9 +104,7 @@ export const AllSchema = Yup.object().shape({
 
   // Specs
   Drives: Yup.string(),
-  Tiptronic_Gears: Yup.string(),
   Sunroof_Type: Yup.string(),
-  Wheel_Type: Yup.string(),
   Convertible: Yup.string(),
   Other_Features: Yup.string(),
 
@@ -111,6 +115,8 @@ export const AllSchema = Yup.object().shape({
   RearRight: Yup.string(),
   SpareTyre: Yup.boolean(),
   Tyres_Comment: Yup.string(),
+  rim_type: Yup.string(),
+  rim_condition: Yup.string(),
 
   // Images
   images: Yup.array().required('images: Please add at least one image').min(1, 'images: Please add at least one image')
@@ -163,6 +169,23 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   specification: 
     isEdit? carData?.details?.specification || ''
     : savedData?.specification || '',
+  fuel_type:
+    isEdit? carData?.details?.fuel_type || ''
+    : savedData?.fuel_type || '',
+  transmission:
+    isEdit? carData?.details?.transmission || ''
+    : savedData?.transmission || '',
+  wheel_type:
+    isEdit? carData?.details?.wheel_type || ''
+    : savedData?.wheel_type || '',
+  car_options:
+    isEdit? carData?.details?.car_options || ''
+    : savedData?.car_options || '',
+  safety_belt:
+    isEdit? carData?.details?.safety_belt || ''
+    : savedData?.safety_belt || '',
+
+  // History
   first_owner: 
     isEdit? carData?.details?.first_owner || ''
     : savedData?.first_owner || '',
@@ -184,6 +207,9 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   bank_finance: 
     isEdit? carData?.history?.bank_finance || ''
     : savedData?.bank_finance || '',
+    bank_finance_status:
+    isEdit? carData?.history?.bank_finance_status || 'N/A'
+    : savedData?.bank_finance_status || 'N/A',
   car_history_comment: 
     isEdit? carData?.history?.car_history_comment || ''
     : savedData?.car_history_comment || '',
@@ -226,12 +252,6 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   Axels: 
     isEdit ? carData?.engine_transmission?.Axels 
     : savedData?.Axels || 'good',
-  Engine_Belts: 
-    isEdit ? carData?.engine_transmission?.Engine_Belts || 'good'
-    : savedData?.Engine_Belts || 'good',
-  Gear_Lever: 
-    isEdit ? carData?.engine_transmission?.Gear_Lever  || 'good'
-    : savedData?.Gear_Lever || 'good',
   Radiator_Fan: 
     isEdit ? carData?.engine_transmission?.Radiator_Fan || 'good'
     : savedData?.Radiator_Fan || 'good',
@@ -241,33 +261,27 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   Engine_Noise: 
     isEdit ? carData?.engine_transmission?.Engine_Noise || 'normal'
     : savedData?.Engine_Noise || 'normal',
-  Engine_Oil: 
-    isEdit ? carData?.engine_transmission?.Engine_Oil || 'good'
-    : savedData?.Engine_Oil || 'good',
   Engine_Smoke: 
     isEdit ? carData?.engine_transmission?.Engine_Smoke || 'normal'
     : savedData?.Engine_Smoke || 'normal',
-  Exhaust: 
-    isEdit ? carData?.engine_transmission?.Exhaust || 'normal'
-    : savedData?.Exhaust || 'normal',
   Coolant: 
     isEdit ? carData?.engine_transmission?.Coolant || 'good'
     : savedData?.Coolant || 'good',
-  Battery_Condition: 
-    isEdit ? carData?.engine_transmission?.Battery_Condition || 'good'
-    : savedData?.Battery_Condition || 'good',
-  Gear_Shifting: 
-    isEdit ? carData?.engine_transmission?.Gear_Shifting || 'good'
-    : savedData?.Gear_Shifting || 'good',
+  Transmission_Condition: 
+    isEdit ? carData?.engine_transmission?.Transmission_Condition || 'good'
+    : savedData?.Transmission_Condition || 'good',
+  Engine_Group:
+    isEdit ? carData?.engine_transmission?.Engine_Group || 'average'
+    : savedData?.Engine_Group || 'average',
+  Hoses_and_Pipes_Condition:
+    isEdit ? carData?.engine_transmission?.Hoses_and_Pipes_Condition || 'average'
+    : savedData?.Hoses_and_Pipes_Condition || 'average',
   Shift_Interlock_Condition: 
     isEdit ? carData?.engine_transmission?.Shift_Interlock_Condition || 'good'
     : savedData?.Shift_Interlock_Condition || 'good',
   Oil_Leaks: 
     isEdit ? carData?.engine_transmission?.Oil_Leaks || 'none'
     : savedData?.Oil_Leaks || 'none',
-  Water_Sludge: 
-    isEdit ? carData?.engine_transmission?.Water_Sludge || 'none'
-    : savedData?.Water_Sludge || 'none',
   Engine_Comment: 
     isEdit ? carData?.engine_transmission?.Engine_Comment || ''
     : savedData?.Engine_Comment || '',
@@ -301,6 +315,12 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   Wheel_Alignment: 
     isEdit? carData?.steering?.Wheel_Alignment || 'good'
     : savedData?.Wheel_Alignment || 'good',
+  Rotors_and_Drums:
+    isEdit? carData?.steering?.Rotors_and_Drums || 'good'
+    : savedData?.Rotors_and_Drums || 'good',
+  Struts_and_Shocks:
+    isEdit? carData?.steering?.Struts_and_Shocks || 'good'
+    : savedData?.Struts_and_Shocks || 'good',
   Steering_Comment: 
     isEdit? carData?.steering?.Steering_Comment || ''
     : savedData?.Steering_Comment || '',
@@ -337,8 +357,8 @@ Music_Multimedia_System:
   isEdit ? carData?.interior?.Music_Multimedia_System || 'good'
   : savedData?.Music_Multimedia_System || 'good',
 Navigation_Control: 
-  isEdit ? carData?.interior?.Navigation_Control || 'good'
-  : savedData?.Navigation_Control || 'good',
+  isEdit ? carData?.interior?.Navigation_Control || 'average'
+  : savedData?.Navigation_Control || 'average',
 Headlights: 
   isEdit ? carData?.interior?.Headlights || 'good'
   : savedData?.Headlights || 'good',
@@ -375,20 +395,14 @@ Interior_Comment:
 
   // Specs
   Drives: 
-    isEdit ? carData?.specs?.Drives || 'good'
-    : savedData?.Drives || 'good',
-  Tiptronic_Gears: 
-    isEdit ? carData?.specs?.Tiptronic_Gears || 'working'
-    : savedData?.Tiptronic_Gears || 'working',
+    isEdit ? carData?.specs?.Drives || 'excellent'
+    : savedData?.Drives || 'excellent',
   Convertible: 
     isEdit ? carData?.specs?.Convertible || 'hard_top'
     : savedData?.Convertible || 'hard_top',
   Sunroof_Type: 
     isEdit ? carData?.specs?.Sunroof_Type || 'not_available'
     : savedData?.Sunroof_Type || 'not_available',
-  Wheel_Type: 
-    isEdit ? carData?.specs?.Wheel_Type || '2wd'
-    : savedData?.Wheel_Type || '2wd',
   Other_Features: 
     isEdit ? carData?.specs?.Other_Features || ''
     : savedData?.Other_Features || '',
@@ -406,6 +420,12 @@ Interior_Comment:
   RearRight:  
     isEdit ? Date.parse(`${carData?.wheels?.RearRight}`) || ''
     : savedData?.RearRight || '',
+  rim_type:
+    isEdit ? carData?.wheels?.rim_type || 'alloy'
+    : savedData?.rim_type || 'alloy',
+  rim_condition:
+    isEdit ? carData?.wheels?.rim_condition || 'good'
+    : savedData?.rim_condition || 'good',
   Spare_Tyre: 
     isEdit ?carData?.wheels?.Spare_Tyre || false
     : savedData?.Spare_Tyre || false,

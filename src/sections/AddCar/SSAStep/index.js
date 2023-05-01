@@ -10,7 +10,10 @@ import {
   shockAbsorberOperationOptions,
   steeringOperationOptions,
   steeringAlignmentOptions,
-  wheelAlignmentOptions,} from './constants';
+  wheelAlignmentOptions,
+  rotorsOptions,
+  strutsOptions,
+} from './constants';
 import { renderAddCarSelect } from 'src/utils/forms';
 import { RHFTextField } from 'src/components/hook-form';
 
@@ -47,7 +50,9 @@ const fields = [
   { name: 'Shock_Absorber_Operation', label: 'Shock Absorber Operation', options: shockAbsorberOperationOptions},
   { name: 'Steering_Operation', label: 'Steering Operation', options: steeringOperationOptions},
   { name: 'Steering_Alignment', label: 'Steering Alignment', options: steeringAlignmentOptions},
-  { name: 'Wheel_Alignment', label: 'Wheel Alignment', options: wheelAlignmentOptions}
+  { name: 'Wheel_Alignment', label: 'Wheel Alignment', options: wheelAlignmentOptions},
+  { name: 'Rotors_and_Drums', label: 'Rotors and Drums', options: rotorsOptions},
+  { name: 'Struts_and_Shocks', label: 'Struts and Shocks', options: strutsOptions},
 ];
 
 export default function SSAStep() {

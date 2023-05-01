@@ -5,24 +5,18 @@ import { ENGINE_AND_TRANSMISSION_OPTIONS,
   radiatorConditionOptions,
   silencerOptions,
   axelsOptions,
-  engineBeltsOptions,
-  gearLeverOptions,
   radiatorFanOptions,
   engineIdlingOptions,
   engineNoiseOptions,
-  engineOilOptions,
   engineSmokeOptions,
-  exhaustOptions,
   coolantOptions,
-  batteryConditionOptions,
-  gearShiftingOptions,
-  chassisOptions,
-  chassisExtensionOptions,
+  transmissionConditionOptions,
   oilLeaksOptions,
-  waterSludgeOptions,
+  engineGroupOptions,
+  hosesConditionOptions,
   shiftInterlockOptions} from './constants';
 import { renderAddCarSelect, renderAddCarSwitch } from 'src/utils/forms';
-import { RHFTextField, RHFCheckbox } from 'src/components/hook-form';
+import { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -66,20 +60,16 @@ const fields = [
   { name: 'Radiator_Condition', label: 'Radiator Condition', options: radiatorConditionOptions},
   { name: 'Silencer', label: 'Silencer', options: silencerOptions}, 
   { name: 'Axels', label: 'Axels', options: axelsOptions },
-  { name: 'Engine_Belts', label: 'Engine_Belts', options: engineBeltsOptions},
-  { name: 'Gear_Lever', label: 'Gear Lever', options: gearLeverOptions},
   { name: 'Radiator_Fan', label: 'Radiator Fan', options: radiatorFanOptions},
   { name: 'Engine_Idling', label: 'Engine Idling', options: engineIdlingOptions},
   { name: 'Engine_Noise', label: 'Engine Noise', options: engineNoiseOptions},
-  { name: 'Engine_Oil', label: 'Engine Oil', options: engineOilOptions },
   { name: 'Engine_Smoke', label: 'Engine Smoke', options: engineSmokeOptions},
-  { name: 'Exhaust', label: 'Exhaust', options: exhaustOptions},
   { name: 'Coolant', label: 'Coolant', options: coolantOptions},
-  { name: 'Battery_Condition', label: 'Battery Condition', options: batteryConditionOptions },
-  { name: 'Gear_Shifting', label: 'Gear Shifting', options: gearShiftingOptions},
+  { name: 'Transmission_Condition', label: 'Transmission Condition', options: transmissionConditionOptions},
   { name: 'Shift_Interlock_Condition', label: 'Shift Interlock (4x4) Condition', options: shiftInterlockOptions },
   { name: 'Oil_Leaks', label: 'Oil Leaks', options: oilLeaksOptions},
-  { name: 'Water_Sludge', label: 'Water Sludge', options: waterSludgeOptions},
+  { name: 'Engine_Group', label: 'Engine Group', options: engineGroupOptions},
+  { name: 'Hoses_and_Pipes_Condition', label: 'Hoses and Pipes Condition', options: hosesConditionOptions},
 ];
 
 export default function EngineAndTransmissionStep() {
