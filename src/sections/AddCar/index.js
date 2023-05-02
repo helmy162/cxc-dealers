@@ -312,9 +312,12 @@ export default function AddCar({isEdit, car}) {
             </Button>
           }
           <div className='ml-auto flex items-center gap-5'>
-            <Button variant="outlined" color="error" size='large'  onClick={() => setOpenConfirm(true)} >
-              Clear
-            </Button>
+            {
+              !isEdit &&
+              <Button variant="outlined" color="error" size='large'  onClick={() => setOpenConfirm(true)} >
+                Clear Saved Data
+              </Button>
+            }
 
             {
               currentStep != TABS.length - 1 ? 
@@ -353,7 +356,7 @@ export default function AddCar({isEdit, car}) {
         title="Clear"
         content={
           <>
-            Are you sure want to clear all form data ? This action cannot be undone.
+            Are you sure want to clear all saved data ? This action cannot be undone.
           </>
         }
         action={
