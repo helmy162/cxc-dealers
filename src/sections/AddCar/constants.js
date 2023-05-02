@@ -51,10 +51,32 @@ const BANK_FINANCE_OPTIONS = [
   { value: 'no', label: 'No' },
 ];
 
+const BANK_FINANCE_STATUS_OPTIONS = [
+  { value: 'N/A', label: 'N/A' },
+  { value: 'Loan to be paid', label: 'Loan to be paid' },
+  { value: 'Loan Paid', label: 'Loan Paid' },
+  { value: 'Waiting for release message', label: 'Waiting for release message' },
+  { value: 'Release Message Received', label: 'Release Message Received' }
+]
+
 const ACCIDENT_HISTORY_OPTIONS = [
-  { value: 'Accident reported', label: 'Accident reported '},
+  { value: 'Accident Reported', label: 'Accident reported' },
   { value: 'Unknown', label: 'Unknown' },
-  { value: 'No Accident', label: 'No Accident'}	
+  { value: 'No Accident', label: 'No Accident' },
+  { value: 'Salvage Title', label: 'Salvage Title' },
+  { value: 'Junk Title', label: 'Junk title' },
+  { value: 'Fire Damage', label: 'Fire damage' },
+  { value: 'Fluid Damage', label: 'Fluid Damage' },
+  { value: 'Lemon Title', label: 'Lemon title' },
+  { value: 'Airbag Deployed', label: 'Airbag Deployed' },
+  { value: 'Total Loss', label: 'Total Loss' },
+  { value: 'Not Actual Mileage', label: 'Not Actual Mileage' },
+  { value: 'No Issue Reported', label: 'No Issue reported' },
+  { value: 'Odometer Problem', label: 'Odometer Problem' },
+  { value: 'Odometer Changed', label: 'Odometer Changed' },
+  { value: 'Severe Damage', label: 'Severe Damage' },
+  { value: 'Taxi', label: 'Taxi' },
+  { value: 'Recall Reported', label: 'Recall reported' }
 ];
 
 const ADD_CAR_STEPS = {
@@ -91,6 +113,7 @@ export {
   MANUALS_OPTIONS,
   WARRANTY_OPTIONS,
   BANK_FINANCE_OPTIONS,
+  BANK_FINANCE_STATUS_OPTIONS,
   ACCIDENT_HISTORY_OPTIONS,
   ADD_CAR_STEPS,
   STEPS_QUEUE,

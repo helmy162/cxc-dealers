@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 // @mui
-import { Stack, Alert, Box } from '@mui/material';
-import { RHFSwitch, RHFDatePicker, RHFTextField} from 'src/components/hook-form';
+import { Stack, Alert, Box, MenuItem } from '@mui/material';
+import { RHFSwitch, RHFDatePicker, RHFTextField, RHFSelect} from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 export const TyresSchema = Yup.object().shape({
@@ -28,6 +28,10 @@ const fields = [
   { name: 'RearRight',label: 'Rear Right' }
 ]
 
+const RIM_TYPES = ["alloy", "steel"];
+const RIM_CONDITIONS = ["good", "average", "scratched", "damaged"];
+
+
 export default function TyresStep() {
   return (
     <Stack spacing={3}>
@@ -48,7 +52,21 @@ export default function TyresStep() {
           disableFuture
           key={field.name}
         />) }
+        <RHFSelect
+          name="rim_type"
+          label="Rim Type"
+        >
+          {RIM_TYPES.map(rimType => <MenuItem key={rimType} value={rimType}>{rimType}</MenuItem>)}
+        </RHFSelect>
+        <RHFSelect
+          name="rim_condition"
+          label="Rim Condition"
+        >
+          {RIM_CONDITIONS.map(rimCondition => <MenuItem key={rimCondition} value={rimCondition}>{rimCondition}</MenuItem>)}
+        </RHFSelect>
+
         <RHFTextField name="Tyres_Comment" label="Comments" multiline />
+        
         <RHFSwitch name='Spare_Tyre' label={'Spare tyre'} />
       </Box>
   </Stack>);

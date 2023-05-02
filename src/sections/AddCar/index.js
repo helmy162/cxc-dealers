@@ -21,6 +21,7 @@ import PrivateStep from './PrivateStep';
 
 // components
 import Iconify from '../../components/iconify';
+import ConfirmDialog from '../../components/confirm-dialog';
 import { LoadingButton } from '@mui/lab';
 
 // routes
@@ -57,11 +58,29 @@ export default function AddCar({isEdit, car}) {
     const [markers, setMarkers] = useState([]);
     const [activeMarker, setActiveMarker] = useState(null);
     const [submittedMarkers, setSubmittedMarkers] = useState([]);
+    const [savedData, setSavedData] = useState(JSON.parse(localStorage.getItem('carForm')));
+
+    const [openConfirm, setOpenConfirm] = useState(false);
+
     useEffect(() => {
       setSubmittedMarkers(car?.exterior?.markers || []);
     }, [car?.exterior?.markers]);
+    useEffect(() => {
+      if(!isEdit) {
+        setSubmittedMarkers(savedData?.defects);
+      }
+    }, [savedData]);
+
     const [isErrorDisplayed, setIsErrorDisplayed] = useState(false);
     const [file, setFile] = useState(null);
+    
+    useEffect(() => {
+      if(!isEdit) {
+        setSavedData(JSON.parse(localStorage.getItem('carForm')));
+      }
+    }, []);
+
+
 
     const [partColor, setPartColor] = useState({
       0: 0,
@@ -103,13 +122,37 @@ export default function AddCar({isEdit, car}) {
         16: typeList.indexOf(car?.exterior?.markers['leftBackBumper']) >= 0 ? typeList.indexOf(car?.exterior?.markers['leftBackBumper']) : 0,
       });
     }, [car]);
+    useEffect(() => {
+      if(!isEdit)
+      {
+        setPartColor({
+          0: typeList.indexOf(savedData?.defects['frontBumper']) >= 0 ? typeList.indexOf(savedData?.defects['frontBumper']) : 0,
+          1: typeList.indexOf(savedData?.defects['hood']) >= 0 ? typeList.indexOf(savedData?.defects['hood']) : 0,
+          2: typeList.indexOf(savedData?.defects['top']) >= 0 ? typeList.indexOf(savedData?.defects['top']) : 0,
+          3: typeList.indexOf(savedData?.defects['trunkLid']) >= 0 ? typeList.indexOf(savedData?.defects['trunkLid']) : 0,
+          4: typeList.indexOf(savedData?.defects['backBumper']) >= 0 ? typeList.indexOf(savedData?.defects['backBumper']) : 0,
+          5: typeList.indexOf(savedData?.defects['rightFrontPanel']) >= 0 ? typeList.indexOf(savedData?.defects['rightFrontPanel']) : 0,
+          6: typeList.indexOf(savedData?.defects['rightFrontBumper']) >= 0 ? typeList.indexOf(savedData?.defects['rightFrontBumper']) : 0,
+          7: typeList.indexOf(savedData?.defects['leftFrontPanel']) >= 0 ? typeList.indexOf(savedData?.defects['leftFrontPanel']) : 0,
+          8: typeList.indexOf(savedData?.defects['leftFrontBumper']) >= 0 ? typeList.indexOf(savedData?.defects['leftFrontBumper']) : 0,
+          9: typeList.indexOf(savedData?.defects['rightFrontDoor']) >= 0 ? typeList.indexOf(savedData?.defects['rightFrontDoor']) : 0,
+          10: typeList.indexOf(savedData?.defects['rightBackDoor']) >= 0 ? typeList.indexOf(savedData?.defects['rightBackDoor']) : 0,
+          11: typeList.indexOf(savedData?.defects['rightBackPanel']) >= 0 ? typeList.indexOf(savedData?.defects['rightBackPanel']) : 0,
+          12: typeList.indexOf(savedData?.defects['rightBackBumper']) >= 0 ? typeList.indexOf(savedData?.defects['rightBackBumper']) : 0,
+          13: typeList.indexOf(savedData?.defects['leftFrontDoor']) >= 0 ? typeList.indexOf(savedData?.defects['leftFrontDoor']) : 0,
+          14: typeList.indexOf(savedData?.defects['leftBackDoor']) >= 0 ? typeList.indexOf(savedData?.defects['leftBackDoor']) : 0,
+          15: typeList.indexOf(savedData?.defects['leftBackPanel']) >= 0 ? typeList.indexOf(savedData?.defects['leftBackPanel']) : 0,
+          16: typeList.indexOf(savedData?.defects['leftBackBumper']) >= 0 ? typeList.indexOf(savedData?.defects['leftBackBumper']) : 0,
+        });
+      }
+    }, [savedData]);
 
     const [change, setChange] = useState(0);
   
-    const values = AllDefaultValues(car);
+    const values = AllDefaultValues(car, isEdit, savedData);
     const methods = useForm({
       resolver: yupResolver(AllSchema),
-      defaultValues: AllDefaultValues(car),
+      defaultValues: AllDefaultValues(car, isEdit, savedData),
       values
     });
 
@@ -129,8 +172,13 @@ export default function AddCar({isEdit, car}) {
       resetField,
       formState: { errors, isSubmitting, isDirty },
     } = methods;
-  
     const values1 = watch();
+
+    useEffect(() => {
+      if(!isEdit){
+        localStorage.setItem('carForm', JSON.stringify(values1));
+      }
+    }, [values1]);
   
     const TABS = [
       {
@@ -232,6 +280,14 @@ export default function AddCar({isEdit, car}) {
       });
     }
 
+    const onReset = () => {
+      reset();
+      setCurrentTab(TABS[0].value);
+      localStorage.removeItem('carForm');
+      setSavedData(null);
+      setOpenConfirm(false);
+    }
+
   return (
     <>
         <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
@@ -255,38 +311,64 @@ export default function AddCar({isEdit, car}) {
               Back
             </Button>
           }
-          
-          {
-            currentStep != TABS.length - 1 ? 
-            <Button variant="outlined" color="inherit" size='large'  onClick={onNext} sx={{ ml: 'auto' }}>
-              Next
-            </Button>
-            :
-            <LoadingButton
-            color="inherit"
-            size="large"
-            type="submit"
-            variant="contained"
-            loading={isSubmitting}
-            sx={{
-            ml: 'auto' ,
-            bgcolor: 'text.primary',
-            color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-            '&:hover': {
-                bgcolor: 'text.primary',
-                color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-            },
-            }}
-          >
-            {isEdit ? 'Update' : 'Submit'}
-          </LoadingButton>
-          }
-          
-          
-          
+          <div className='ml-auto flex items-center gap-5'>
+            {
+              !isEdit &&
+              <Button variant="outlined" color="error" size='large'  onClick={() => setOpenConfirm(true)} >
+                Clear Saved Data
+              </Button>
+            }
+
+            {
+              currentStep != TABS.length - 1 ? 
+              
+                <Button variant="outlined" color="inherit" size='large'  onClick={onNext} >
+                Next
+              </Button>
+              
+              :
+              <LoadingButton
+              color="inherit"
+              size="large"
+              type="submit"
+              variant="contained"
+              loading={isSubmitting}
+              sx={{
+              ml: 'auto' ,
+              bgcolor: 'text.primary',
+              color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
+              '&:hover': {
+                  bgcolor: 'text.primary',
+                  color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
+              },
+              }}
+            >
+              {isEdit ? 'Update' : 'Submit'}
+            </LoadingButton>
+            }
+          </div>    
           </Stack>
         </FormProvider>
-        
+
+        <ConfirmDialog
+        open={openConfirm}
+        onClose={() => setOpenConfirm(false)}
+        title="Clear"
+        content={
+          <>
+            Are you sure want to clear all saved data ? This action cannot be undone.
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={onReset}
+          >
+            Clear
+          </Button>
+        }
+      />
     </>
   );
 }

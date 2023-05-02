@@ -69,10 +69,11 @@ const MUSIC_MULTIMEDIA_SYSTEM_OPTIONS = [
 ];
 
 const NAVIGATION_CONTROL_OPTIONS = [
-{ value: 'good', label: 'Good' },
 { value: 'average', label: 'Average' },
-{ value: 'to_be_repaired', label: 'To be repaired' },
 { value: 'not_available', label: 'Not Available' },
+{ value: 'non_gcc', label: 'Non GCC' },
+{ value: 'navigation_cd_needs_update', label: 'Navigation CD Needs Update' },
+{ value: 'navigation_not_working', label: 'Navigation not working' }
 ];
 
 const HEADLIGHTS_OPTIONS = [
