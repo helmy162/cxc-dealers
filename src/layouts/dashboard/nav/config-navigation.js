@@ -46,7 +46,7 @@ const dealerNavConfig = [
     items: [
       {
         title: 'Completed Auctions',
-        path: PATH_DEALER.soldCar,
+        path: PATH_DEALER.soldCars,
         icon: ICONS.soldCar,
       },
       {
