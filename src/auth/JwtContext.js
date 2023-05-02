@@ -76,7 +76,7 @@ export function AuthProvider({ children }) {
       if (accessToken && userId && isValidToken(accessToken)) {
         setSession(accessToken, userId);
 
-        const response = await axios.get(`admin/users/${userId}`);
+        const response = await axios.get(`profile`);
 
         const user = response.data;
 
@@ -84,7 +84,7 @@ export function AuthProvider({ children }) {
           type: 'INITIAL',
           payload: {
             isAuthenticated: true,
-            user: {...user.data, role: user.UserType, accessToken: accessToken },
+            user: {...user, role: user.type, accessToken: accessToken },
           },
         });
       } else {

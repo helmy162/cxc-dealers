@@ -39,12 +39,12 @@ DealerBidsTableRow.propTypes = {
 export default function DealerBidsTableRow({
   row,
   onViewRow,
-  bid,
+  amount,
   user,
-  auction
+  isOffers = false,
 }) {
  
-  const { id, details, livestatus, timeRemaining, images} = row;
+  const { id, details, images} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -66,39 +66,12 @@ export default function DealerBidsTableRow({
     setOpenPopover(null);
   };
 
-  const [highestBid, setHighestBid] = useState( auction?.latest_bid?.bid || bid);
 
-  useEffect(() => {
-    const access_token = user?.accessToken;
-    const PUSHER_APP_KEY = "9d45400630a8fa077501";
-    const chanelAuthEndpoint =
-      "https://api.carsxchange.com/api/v1/pusher/auth-channel";
-
-    let pusher = new Pusher(PUSHER_APP_KEY, {
-      cluster: "eu",
-      channelAuthorization: {
-        endpoint: chanelAuthEndpoint,
-        transport: "ajax",
-        params: {},
-        headers: {
-          authorization: `Bearer ${access_token}`,
-        },
-      },
-    });
-    const channel = pusher.subscribe(`private-car.auction.${auction?.id}`);
-    channel.bind("NewBid", (data) => {
-      setHighestBid(data.auction.last_bid)
-    });
-  
-    return () => {
-      channel.unbind("NewBid");
-      pusher.unsubscribe();
-    };
-  }, []);
+;
 
   const mainImages = images?.map((img) => ('https://api.carsxchange.com/storage/car_images/'+ img));
 
-  if(row && details && livestatus){
+  if(row && details){
     return (
       <>
         <TableRow hover >
@@ -121,7 +94,6 @@ export default function DealerBidsTableRow({
           <TableCell>
             <Stack direction="row" alignItems="center" spacing={2}>
               {
-                livestatus === 'live' ?
                 <Link
                 noWrap
                 color="inherit"
@@ -131,8 +103,6 @@ export default function DealerBidsTableRow({
                 >
                   #{id}
                 </Link>
-                :
-                '#' + id
               }
               
             </Stack>
@@ -141,37 +111,10 @@ export default function DealerBidsTableRow({
           <TableCell>{details.model}</TableCell>
           <TableCell>{details.year}</TableCell>
   
-          <TableCell align="center">
-            <Label
-              variant="soft"
-              color={
-                (livestatus === 'expired' && 'error') ||
-                (livestatus === 'pending' && 'warning') ||
-                (livestatus === 'upcoming' && 'secondary') ||
-                (livestatus === 'live' && 'success') || 'warning'
-              }
-              sx={{ textTransform: 'capitalize', minWidth:'100px'}}
-            >
-              {timeRemaining ? timeRemaining : livestatus? sentenceCase(livestatus) : null }
-            </Label>
-          </TableCell>
-          <TableCell>{bid}</TableCell>
-          <TableCell>{highestBid}</TableCell>
-          <TableCell align="right">
-            {
-              livestatus == 'expired' && bid== highestBid && <Iconify icon="mdi:crown" width={30} sx={{color:'#BF913B'}} className='animate-[bounce_2s_ease-in-out_infinite]'/>
-            }
-            {
-              livestatus == 'live' && bid== highestBid && <Iconify icon="iconoir:leaderboard-star" width={30} sx={{color:'#BF913B'}} />
-            }
-            {
-              livestatus == 'live' && bid!= highestBid && <Iconify icon="ph:x" width={30} sx={{color:'#B71D18'}} className='animate-pulse'/>
-            }
-            {
-              livestatus == 'expired' && bid!= highestBid && <Iconify icon="mdi:close-box-outline" width={30} sx={{color:'#B71D18'}} />
-            }
-              
-          </TableCell>
+
+
+          <TableCell>{amount}</TableCell>
+
           
         </TableRow>
       </>

@@ -3,7 +3,7 @@ import {
   Typography
 } from '@mui/material';
 
-export default function OffersCount({ count }) {
+export default function SoldCarsCount({ count }) {
   return (
     <Box
       sx={{

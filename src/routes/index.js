@@ -33,7 +33,9 @@ import {
   CarDetails,
   HomePage,
   SingleCar,
-  BidsPage
+  SoldCar,
+  BidsPage,
+  OffersPage,
 } from './elements';
 import { PATH_AUTH } from './paths';
 
@@ -84,8 +86,11 @@ export default function Router() {
         { element: <Navigate to={'cars'} replace />, index: true }, // this is the default page for the dealer
         { path: 'cars', element: <CarsListingPage /> }, // this is the car listing page
         { path: 'cars/:name', element: <SingleCar />}, // this is the single car details page
+        { path: 'completed-auctions', element: <CarsListingPage expired={true}/> }, // this is the completed auctions listing page
+        { path: 'completed-auctions/:name', element: <SoldCar />}, // this is the single completed auction page
         { path: 'profile', element: <UserAccountPage isProfile={true} /> },
         { path: 'bids', element: <BidsPage /> },
+        { path: 'offers', element: <OffersPage /> },
         // other dealer pages...
       ],
     },    

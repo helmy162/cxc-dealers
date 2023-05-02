@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUserBids } from '../../redux/slices/product';
+import { getProducts, getStatus, getUserOffers } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD, PATH_DEALER } from '../../routes/paths';
 // components
@@ -38,7 +38,7 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import ConfirmDialog from '../../components/confirm-dialog';
 import { useAuthContext } from '../../auth/useAuthContext';
 // sections
-import { DealerBidsTableRow, ProductTableToolbar } from '../../sections/@dashboard/e-commerce/list';
+import { DealerOffersTableRow, ProductTableToolbar } from '../../sections/@dashboard/e-commerce/list';
 //car status
 import { carStatus, carTimer } from '../../utils/status';
 import { set } from 'lodash';
@@ -51,16 +51,7 @@ const TABLE_HEAD = [
   { id: 'make', label: 'Make', align: 'left' },
   { id: 'model', label: 'Model', align: 'left' },
   { id: 'year', label: 'Year', align: 'left' },
-  { id: 'status', label: 'Auction', align: 'center', width: 180 },
-  { id: 'bid', label: 'My Bid', align: 'left' },
-  { id: 'highest_bid', label: 'Highest Bid', align: 'left' },
-  { id: '',},
-];
-
-const STATUS_OPTIONS = [
-  { value: 'active', label: 'Active' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'expired', label: 'Expired' },
+  { id: 'offer', label: 'My Offer', align: 'left' },
 ];
 
 // ----------------------------------------------------------------------
@@ -96,7 +87,7 @@ export default function BidsPage() {
 
   const dispatch = useDispatch();
 
-  const { isLoading, productStatus, userBids} = useSelector((state) => state.product);
+  const { products, isLoading, productStatus, userOffers} = useSelector((state) => state.product);
 
   const [tableData, setTableData] = useState([]);
 
@@ -109,14 +100,15 @@ export default function BidsPage() {
   
 
   useEffect(() => {
-    dispatch(getUserBids());
+    dispatch(getProducts());
+    dispatch(getUserOffers());
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (userBids && userBids.length) {
-      setTableData(userBids);
+    if (products && products.length) {
+      setTableData(products);
     }
-  }, [userBids]);
+  }, [products]);
 
 
 
@@ -124,19 +116,16 @@ export default function BidsPage() {
   useEffect(() => {
     
       const intervalId = setInterval(() => {
-        if(userBids.length > 0){
+        if(tableData.length > 0){
           setTableData(
-            userBids.map((bid) => {
-              const endAt = new Date(bid?.auction?.end_at);
-              const startAt = new Date(bid?.auction?.start_at);
+            tableData.map((product) => {
+              const endAt = new Date(product?.auction?.end_at);
+              const startAt = new Date(product?.auction?.start_at);
               const now = new Date();
               return {
-                ...bid,
-                car: {
-                ...bid?.car,
-                livestatus: bid.car.status == 'pending'? 'pending' : carStatus(bid),
-                timeRemaining: bid.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
-                }
+                ...product,
+                livestatus: product.status == 'pending'? 'pending' : carStatus(product),
+                timeRemaining: product.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
               };
             })
           )
@@ -146,15 +135,15 @@ export default function BidsPage() {
   
       return () => clearInterval(intervalId);
     
-  }, [userBids,  dispatch, tableData]);
+  }, [productStatus, products,  dispatch, tableData]);
   
   const dataFiltered = applyFilter({
-    inputData: userBids.reduce((acc, currentBid) => {
-      const existingBidIndex = acc.findIndex(bid => bid.auction_id === currentBid.auction_id);
+    inputData: userOffers.reduce((acc, currentBid) => {
+      const existingBidIndex = acc.findIndex(offer => offer.car_id === currentBid.car_id);
       if (existingBidIndex !== -1) {
         const existingBid = acc[existingBidIndex];
-        if (existingBid.bid < currentBid.bid) {
-          const updatedBid = {...existingBid, bid: currentBid.bid}; // create a new object with the updated bid property
+        if (existingBid.amount < currentBid.amount) {
+          const updatedBid = {...existingBid, amount: currentBid.amount}; // create a new object with the updated bid property
           acc.splice(existingBidIndex, 1, updatedBid); // replace the existing object with the updated one
         }
         return acc;
@@ -256,7 +245,7 @@ export default function BidsPage() {
 
   const getCarFromBid = (id) => {
     try {
-        const car = tableData.find(bid=> bid.car_id == id);
+        const car = tableData.find(car=> car.id == id);
         if (car) {
             return car;
         }
@@ -269,7 +258,7 @@ export default function BidsPage() {
   return (
     <>
       <Helmet>
-        <title> My Bids | CarsXchange</title>
+        <title> My Offers | CarsXchange</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -281,11 +270,11 @@ export default function BidsPage() {
           action={
             <Button
               component={RouterLink}
-              to={PATH_DEALER.cars}
+              to={PATH_DEALER.soldCars}
               variant="contained"
-              startIcon={<Iconify icon="ri:auction-line" />}
+              startIcon={<Iconify icon="mdi:offer" />}
             >
-              Make a Bid
+              Make Offer
             </Button>
           }
         />
@@ -329,14 +318,14 @@ export default function BidsPage() {
                   {(isLoading ? [...Array(rowsPerPage)] : dataFiltered)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) =>
-                        row && row.car && getCarFromBid(row.car_id) ? (            
-                        <DealerBidsTableRow
+                        row && getCarFromBid(row.car_id) ? (            
+                        <DealerOffersTableRow
                           key={row.id}
-                          row={getCarFromBid(row.car_id).car}
-                          bid={row.bid}
+                          row={row.car}
+                          amount={row.amount}
                           user={user}
-                          auction={row.auction}
-                          onViewRow={() => handleViewRow(row.car_id)}
+                          isOffers={true}
+                          onViewRow={() => handleViewRow(getCarFromBid(row.car_id).id)}
                         />
                       ) : (
                         !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />

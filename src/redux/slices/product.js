@@ -14,6 +14,8 @@ const initialState = {
   product: null,
   productAsAdmin: null,
   productStatus: null,
+  userBids: [],
+  userOffers: [],
   checkout: {
     activeStep: 0,
     cart: [],
@@ -49,6 +51,18 @@ const slice = createSlice({
     getProductsSuccess(state, action) {
       state.isLoading = false;
       state.products = action.payload;
+    },
+    
+    // GET BIDS 
+    getUserBidsSuccess(state, action) {
+      state.isLoading = false;
+      state.userBids = action.payload;
+    },
+
+    // GET OFFERS 
+    getUserOffersSuccess(state, action) {
+      state.isLoading = false;
+      state.userOffers = action.payload;
     },
 
     // GET PRODUCT
@@ -294,7 +308,7 @@ export function extendEndtime(auctionID) {
       
       // Change the duration to end after 30 seconds
       const startAt = new Date(currentAuctionData.start_at).getTime();
-      const endAt = new Date().getTime() + 30000;
+      const endAt = new Date().getTime() + 60000;
       const duration = endAt - startAt;
       
       // Convert the duration to ISO 8601 format
@@ -317,6 +331,34 @@ export function extendEndtime(auctionID) {
 
     } catch (error) {
       console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getUserBids() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('profile/bids'); 
+      dispatch(slice.actions.getUserBidsSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getUserOffers() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('profile/offers'); 
+      dispatch(slice.actions.getUserOffersSuccess(response.data));
+    } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };

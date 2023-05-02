@@ -13,6 +13,7 @@ import { PATH_DEALER } from 'src/routes/paths';
 import { carStatus, carTimer } from '../../utils/status';
 
 export default function CarCard({
+  expired,
   data,
   sx
 }) {
@@ -37,9 +38,13 @@ export default function CarCard({
         && 
         new Date(data?.auction?.end_at) >= new Date()
         ?
-        PATH_DEALER.car(data.id)
+          PATH_DEALER.car(data.id)
         :
-        null
+          new Date(data?.auction?.end_at) < new Date() 
+          ?
+            PATH_DEALER.soldCar(data.id)
+          :
+          null
       }
       >
         <Box sx={{
@@ -59,7 +64,7 @@ export default function CarCard({
               <Timer product={data} />
             }
           </Box>
-          <InfoRow data={data} />
+          <InfoRow data={data} expired={expired}/>
         </Box>
         <Status product={data} />
         

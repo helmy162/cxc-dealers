@@ -57,7 +57,7 @@ import Markdown from '../../components/markdown';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import { SkeletonProductDetails } from '../../components/skeleton';
-import { BidTableRow } from '../../sections/@dashboard/e-commerce/list';
+import { BidTableRow, OfferTableRow } from '../../sections/@dashboard/e-commerce/list';
 import { ProductAuction } from '../../sections/@dashboard/e-commerce/details';
 // loading screen
 import LoadingScreen from '../../components/loading-screen';
@@ -76,6 +76,13 @@ const TABLE_HEAD = [
   { id: 'created_at', label: 'Time of bid', align: 'center' },
   { id: 'bid', label: 'Highest Bid', align: 'center' },
   { id: '', label: 'Winner?', align: 'center' },
+];
+
+const TABLE_HEAD2 = [
+  { id: 'user_id', label: 'Dealer ID', align: 'center' },
+  { id: 'user_name', label: 'Name', align: 'center' },
+  { id: 'created_at', label: 'Time of offer', align: 'center' },
+  { id: 'amount', label: 'Amount', align: 'center' },
 ];
 
 
@@ -106,6 +113,28 @@ export default function EcommerceProductDetailsPage() {
     defaultOrder: 'desc',
   });
 
+  const {
+    dense: dense2,
+    page: page2,
+    order: order2,
+    orderBy: orderBy2,
+    rowsPerPage: rowsPerPage2,
+    setPage: setPage2,
+    //
+    selected: selected2,
+    setSelected: setSelected2,
+    onSelectRow: onSelectRow2,
+    onSelectAllRows: onSelectAllRows2,
+    //
+    onSort: onSort2,
+    onChangeDense: onChangeDense2,
+    onChangePage: onChangePage2,
+    onChangeRowsPerPage: onChangeRowsPerPage2,
+  } = useTable({
+    defaultOrderBy: 'amount',
+    defaultOrder: 'desc',
+  });
+
   const { themeStretch } = useSettingsContext();
 
   const { name } = useParams();
@@ -127,6 +156,12 @@ export default function EcommerceProductDetailsPage() {
     }
     else {
       setTableData([]);
+    }
+    if(productAsAdmin && productAsAdmin?.offers) {
+      setTableData2(productAsAdmin?.offers.filter((offer) => offer.dealer !== null));
+    }
+    else {
+      setTableData2([]);
     }
   }, [productAsAdmin]);
 
@@ -184,39 +219,28 @@ export default function EcommerceProductDetailsPage() {
 
   const [currentTab, setCurrentTab] = useState('inspection');
   const [tableData, setTableData] = useState([]);
-  const [filterName, setFilterName] = useState('');
-  const [filterStatus, setFilterStatus] = useState([]);
 
-  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const [tableData2, setTableData2] = useState([]);
   
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
-    filterName,
-    filterStatus,
   });
 
-  const dataInPage = dataFiltered?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const dataFiltered2 = applyFilter({
+    inputData: tableData2,
+    comparator: getComparator(order2, orderBy2),
+  });
 
   const denseHeight = dense ? 60 : 80;
-
-  const isFiltered = filterName !== '' || !!filterStatus.length;
-
-  const isNotFound = (!dataFiltered?.length && !!filterName) || (!isLoading && !dataFiltered?.length);
+  const denseHeight2 = dense2 ? 60 : 80;
 
 
+  const isNotFound = (!dataFiltered?.length ) || (!isLoading && !dataFiltered?.length);
+  const isNotFound2 = (!dataFiltered2?.length) || (!isLoading && !dataFiltered2?.length);
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData?.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
 
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
 
   const handleAccountClick = (id) => {
     navigate(PATH_DASHBOARD.user.edit(id)); // change edit to account
@@ -373,7 +397,9 @@ export default function EcommerceProductDetailsPage() {
             <div style={{zIndex:'10000', marginBottom:'50px'}}>
               <ProductAuction productAsAdmin={productAsAdmin}/>
             </div>
-            
+            <Typography variant="h4" sx={{ mb: 5 }}>
+              Bids
+            </Typography>
             <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
               <TableSelectedAction
                 dense={dense}
@@ -423,7 +449,6 @@ export default function EcommerceProductDetailsPage() {
                             hasWinner={productAsAdmin?.auction?.winner_bid ? true : false}
                             selected={row.id === productAsAdmin?.auction?.winner_bid}
                             onSelectRow={() => onSelectRow(row.id)}
-                            onDeleteRow={() => handleDeleteRow(row.id)}
                             onSelectAccount={() => handleAccountClick(row?.dealer?.id)}
                           />
                         ) : (
@@ -451,6 +476,85 @@ export default function EcommerceProductDetailsPage() {
               dense={dense}
               onChangeDense={onChangeDense}
             />
+
+            <Typography variant="h4" sx={{ mb: 5 }}>
+              Offers
+            </Typography>
+
+            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+              <TableSelectedAction
+                dense={dense2}
+                numSelected={0}
+                rowCount={tableData2?.length}
+                onSelectAllRows={(checked) =>
+                  onSelectAllRows(
+                    checked,
+                    tableData2?.map((row) => row.id)
+                  )
+                }
+                action={
+                  <Tooltip title="Delete">
+                    <IconButton color="primary" >
+                      <Iconify icon="eva:trash-2-outline" />
+                    </IconButton>
+                  </Tooltip>
+                }
+              />
+
+              <Scrollbar>
+                <Table size={dense2 ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+                  <TableHeadCustom
+                    selectBox={false}
+                    order={order2}
+                    orderBy={orderBy2}
+                    headLabel={TABLE_HEAD2}
+                    rowCount={tableData2?.length}
+                    numSelected={0}
+                    onSort={onSort2}
+                    onSelectAllRows={(checked) =>
+                      onSelectAllRows2(
+                        checked,
+                        tableData2?.map((row) => row.id)
+                      )
+                    }
+                  />
+
+                  <TableBody>
+                    {(isLoading ? [...Array(rowsPerPage2)] : dataFiltered2)
+                      ?.slice(page2 * rowsPerPage2, page2 * rowsPerPage2 + rowsPerPage2)
+                      ?.map((row, index) =>
+                        row ? (
+                          <OfferTableRow
+                            key={row.id}
+                            row={row}
+                            selected={row.id === productAsAdmin?.auction?.winner_bid}
+                            onSelectAccount={() => handleAccountClick(row?.dealer?.id)}
+                          />
+                        ) : (
+                          !isNotFound2 && <TableSkeleton key={index} sx={{ height: denseHeight2 }} />
+                        )
+                      )}
+
+                    <TableEmptyRows
+                      height={denseHeight2}
+                      emptyRows={emptyRows(page2, rowsPerPage2, tableData2?.length)}
+                    />
+
+                    <TableNoData isNotFound={isNotFound2} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+            <TablePaginationCustom
+              count={dataFiltered2?.length}
+              page={page2}
+              rowsPerPage={rowsPerPage2}
+              onPageChange={onChangePage2}
+              onRowsPerPageChange={onChangeRowsPerPage2}
+              //
+              dense={dense2}
+              onChangeDense={onChangeDense2}
+            />
           </>
         )}
         {isLoading && <LoadingScreen />}
@@ -462,7 +566,7 @@ export default function EcommerceProductDetailsPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus }) {
+function applyFilter({ inputData, comparator }) {
   const stabilizedThis = inputData?.map((el, index) => [{
     ...el,
     user_name: el?.dealer?.name,

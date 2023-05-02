@@ -9,16 +9,15 @@ import { LoadingButton } from '@mui/lab';
 
 import Filters from './Filters';
 import CarsList from './CarsList';
-import OffersCount from './OffersCount';
+import CarsCount from './CarsCount';
 import AppliedFilters from './AppliedFilters';
-
 import useCarsListingPage from './useCarsListingPage';
-import LoadingScreen from '../../components/loading-screen';
+import LoadingScreen from '../../../components/loading-screen';
 
-import { resetProduct } from '../../redux/slices/product';
-import { useDispatch } from '../../redux/store';
+import { resetProduct } from '../../../redux/slices/product';
+import { useDispatch } from '../../../redux/store';
 
-export default function CarsListingPage() {
+export default function CarsListingPage({ expired = false}) {
   const [isFilterVisible, setFilterVisible] = useState(false);
   
   const dispatch = useDispatch();
@@ -29,9 +28,13 @@ export default function CarsListingPage() {
   const {
     isLoading,
     cars,
+    cars2,
+    total,
+    total2,
     isLoadMoreButtonVisible,
+    isLoadMoreButtonVisible2,
     loadMore
-  } = useCarsListingPage();
+  } = useCarsListingPage(expired);
 
   const toggleFilter = () => {
     setFilterVisible((oldValue) => !oldValue);
@@ -76,7 +79,7 @@ export default function CarsListingPage() {
               justifyContent: 'space-between',
             }}
           >
-            <OffersCount count={cars.length} />
+            <CarsCount count={expired ? total2 : total} />
             {/* <Button
               variant="contained"
               sx={{
@@ -92,9 +95,9 @@ export default function CarsListingPage() {
           </Box>
           {/* {isFilterVisible && <Filters sx={{ marginBottom: '20px' }} />} */}
           {/* <AppliedFilters /> */}
-          <CarsList cars={cars} />
+          <CarsList cars={expired? cars2 : cars} expired={expired} />
           <Box sx={{ display: 'flex' }}>
-            {isLoadMoreButtonVisible && (
+            {(( expired && isLoadMoreButtonVisible2 ) || (!expired && isLoadMoreButtonVisible)) && (
               <LoadingButton
                 sx={{
                   margin: 'auto'
