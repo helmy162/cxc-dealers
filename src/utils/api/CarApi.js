@@ -1,6 +1,6 @@
 import { fYear } from "../formatTime";
 
-const mapFormDataToApiRequest = ({ 
+const mapFormDataToApiRequest = ({
   make, 
   model, 
   trim, 
@@ -14,6 +14,7 @@ const mapFormDataToApiRequest = ({
   markers,
   defects,
   images,
+  deletedImages,
   id_images,
   registration_card_images,
   vin_images,
@@ -48,6 +49,8 @@ const mapFormDataToApiRequest = ({
   // });
 
   (images || []).map(image => bodyFormData.append('images[]', image));
+  (deletedImages || []).map(image => bodyFormData.append('deletedImages', image));
+
   (id_images || []).map(image => bodyFormData.append('id_images[]', image));
   (registration_card_images || []).map(image => bodyFormData.append('registration_card_images[]', image));
   (vin_images || []).map(image => bodyFormData.append('vin_images[]', image));

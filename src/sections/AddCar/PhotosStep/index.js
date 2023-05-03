@@ -17,6 +17,7 @@ export default function PhotosStep ({ watch, setValue }) {
   const [error, setError] = useState(null);
 
   const images = watch('images')
+  const deletedImages = watch('deletedImages');
 
   const handleDrop = useCallback(
     async (acceptedFiles) => {
@@ -74,6 +75,7 @@ export default function PhotosStep ({ watch, setValue }) {
     const newFiles = [...images];
     newFiles.splice(idx, 1);
     setValue('images', newFiles);
+    setValue('deletedImages', [...deletedImages, images[idx].split('/').pop()]);
   };
 
   return (
