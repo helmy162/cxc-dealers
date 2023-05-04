@@ -16,8 +16,11 @@ const mapFormDataToApiRequest = ({
   images,
   deletedImages,
   id_images,
+  deleted_id_images,
   registration_card_images,
+  deleted_registration_card_images,
   vin_images,
+  deleted_vin_images,
   insurance_images,
   ...rest 
 }) => {
@@ -49,12 +52,16 @@ const mapFormDataToApiRequest = ({
   // });
 
   (images || []).map(image => bodyFormData.append('images[]', image));
-  (deletedImages || []).map(image => bodyFormData.append('deletedImages', image));
+  (deletedImages || []).map(image => bodyFormData.append('deletedImages[]', image));
 
   (id_images || []).map(image => bodyFormData.append('id_images[]', image));
+  (deleted_id_images || []).map(image => bodyFormData.append('deleted_id_images[]', image));
+
   (registration_card_images || []).map(image => bodyFormData.append('registration_card_images[]', image));
+  (deleted_registration_card_images || []).map(image => bodyFormData.append('deleted_registration_card_images[]', image));
+
   (vin_images || []).map(image => bodyFormData.append('vin_images[]', image));
-  (insurance_images || []).map(image => bodyFormData.append('insurance_images[]', image));
+  (deleted_vin_images || []).map(image => bodyFormData.append('deleted_vin_images[]', image));
 
   
   return bodyFormData;

@@ -48,8 +48,7 @@ export default function PhotosStep ({ watch, setValue }) {
                   id: `${index}_${Date.now()}_${file.name}`
                 });
               });
-              console.log(processedFiles);
-              setValue('images', [...processedFiles, ...images]);
+              setValue('images', [...images, ...processedFiles]);
             }
           }, "image/jpeg", 0.9);
         } else {
@@ -64,7 +63,7 @@ export default function PhotosStep ({ watch, setValue }) {
             id: `${index}_${Date.now()}_${file.name}`
           });
         });
-        setValue('images', [...processedFiles, ...images]);
+        setValue('images', [...images, ...processedFiles]);
       }
       
     },
