@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 // add bid form
 import { RHFTextField } from "src/components/hook-form";
-import { InputAdornment, Box, Button } from "@mui/material";
+import { InputAdornment, Box, Button, Stack} from "@mui/material";
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,7 +21,8 @@ import { Navigate, useParams, useNavigate  } from "react-router";
 import LoadingScreen from '../../components/loading-screen';
 import ConfirmDialog from '../../components/confirm-dialog';
 import { useSnackbar } from '../../components/snackbar';
-
+import bidPlacedSound from '../../assets/sounds/cash_register.mp3';
+import errorSound from '../../assets/sounds/error.mp3';
 
 export default function SingleCar(){
     const {name} = useParams();
@@ -29,6 +30,9 @@ export default function SingleCar(){
     const { product, isLoading, checkout, productStatus, userBids } = useSelector((state) => state.product);
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
+
+    const playbidPlacedSound = new Audio(bidPlacedSound);
+    const playErrorSound = new Audio(errorSound);
 
     useEffect(() => {
         dispatch(resetProduct());
@@ -58,6 +62,12 @@ export default function SingleCar(){
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [product]
   );
+
+  useEffect(() => {
+    if (product && product?.auction?.latest_bid?.bid) {
+      setValue('bid', product?.auction?.latest_bid?.bid + 500);
+    }
+  }, [product]);
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
@@ -146,11 +156,15 @@ export default function SingleCar(){
 
 
   useEffect(() => {
-    highestUserBidsOnThisCar?.bid < highestBid ? 
-    enqueueSnackbar('You have been outbidden', {variant: 'error'}) :
-    highestUserBidsOnThisCar?.bid == highestBid && highestBid && highestUserBidsOnThisCar &&
-    enqueueSnackbar('Your bid has been placed successfully', {variant: 'success'});
-
+    if(highestUserBidsOnThisCar?.bid < highestBid)
+    {
+      playErrorSound.play();
+      enqueueSnackbar('You have been outbidden', {variant: 'error'})
+    }
+    else if (highestUserBidsOnThisCar?.bid == highestBid && highestBid && highestUserBidsOnThisCar)
+    {
+      enqueueSnackbar('Your bid has been placed successfully', {variant: 'success'});
+    }
   }, [highestBid && highestUserBidsOnThisCar])
 
   const onSubmit = async (data) => {
@@ -161,6 +175,7 @@ export default function SingleCar(){
         const mergedDate = {bid: data.bid, auction_id: product.auction.id, car_id: product.id};
         const res = await axiosInstance.post('dealer/bid', mergedDate);
         setHighestUserBidsOnThisCar(data);
+        playbidPlacedSound.play();
         
     } catch (error) {
       console.error(error);
@@ -214,6 +229,7 @@ export default function SingleCar(){
                           </div>
                           </div>
                           <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} className="flex gap-4 items-start flex-wrap justify-center w-full bg-[#D9D9D926]/10 p-[20px] rounded-lg">
+                            <div className="flex gap-4 flex-col items-center flex-wrap justify-start">
                               <RHFTextField
                                 name="bid"
                                 className="!w-2/6 !min-w-[200px] !bg-white rounded-lg"
@@ -235,6 +251,18 @@ export default function SingleCar(){
                                     type: 'number',
                                 }}
                               />
+                              <Stack direction="row" spacing={2}>
+                                <Button variant="outlined" onClick={() => setValue('bid', watch('bid') + 500)} className="max-h-[48px] !rounded">
+                                  +500
+                                </Button>
+                                <Button variant="outlined" onClick={() => setValue('bid', watch('bid') + 1000) } className="max-h-[48px] !rounded">  
+                                  +1000
+                                </Button>
+                                <Button variant="outlined" onClick={() => setValue('bid', watch('bid') + 2000)} className="max-h-[48px] !rounded">
+                                  +2000
+                                </Button>
+                              </Stack>
+                            </div>
                               <ConfirmDialog
                               
                                 open={openConfirm}
@@ -247,9 +275,12 @@ export default function SingleCar(){
                                   </Button>
                                 }
                               />
-                              <Button  variant="contained" onClick={() => setOpenConfirm(true)} className="max-h-[48px] !rounded">
+                              <Button  variant="contained" onClick={() => setOpenConfirm(true)} className="h-[44px] !rounded">
                                 Add Bid
                               </Button>
+                            
+
+                              
                           </FormProvider>
                           {/* specifications section */}
                           <div className="flex flex-wrap justify-center gap-x-5 gap-y-5 items-end">
