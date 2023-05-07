@@ -119,7 +119,8 @@ export const AllSchema = Yup.object().shape({
   rim_condition: Yup.string(),
 
   // Images
-  images: Yup.array().required('images: Please add at least one image').min(1, 'images: Please add at least one image')
+  images: Yup.array().required('images: Please add at least one image').min(1, 'images: Please add at least one image'),
+  deletedImages: Yup.array(),
 });
 
 export const AllDefaultValues = (carData, isEdit, savedData) => ( {
@@ -434,9 +435,9 @@ Interior_Comment:
     : savedData?.Tyres_Comment || '',
 
   // Images
-  images: 
-  isEdit? carData?.images.map((image) => ({
-    preview: `https://api.carsxchange.com/storage/car_images/${image}`,
-  })) 
-  :   [],
+  images: isEdit?
+    carData?.images?.length > 0 ? carData.images.map((image) => `https://api.carsxchange.com/storage/car_images/${image}`) : []
+    : [],
+
+  deletedImages: [],
 });
