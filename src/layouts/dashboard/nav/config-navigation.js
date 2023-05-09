@@ -18,7 +18,7 @@ const ICONS = {
   profile: icon('ic_profile'),
   bid: icon('ic_bid'),
   garage: icon('ic_garage'),
-  soldCar: icon('ic_sold_car'),
+  soldCar: icon('ic_complete'),
   cashback: icon('ic_cashback'),
 };
 
