@@ -16,8 +16,6 @@ import { useAuthContext } from '../../auth/useAuthContext';
 // sections
 import {
   AccountGeneral,
-  AccountBilling,
-  AccountSocialLinks,
   AccountNotifications,
   AccountChangePassword,
 } from '../../sections/@dashboard/user/account';

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useParams } from 'react-router-dom';
 // @mui
 import { Container } from '@mui/material';

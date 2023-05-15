@@ -39,8 +39,6 @@ import ConfirmDialog from '../../components/confirm-dialog';
 // sections
 import { ProductTableRow, ProductTableToolbar } from '../../sections/@dashboard/e-commerce/list';
 
-import { cars } from '../../_mock/assets/cars';
-
 //car status
 import { carStatus, carTimer } from '../../utils/status';
 

@@ -38,10 +38,9 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import ConfirmDialog from '../../components/confirm-dialog';
 import { useAuthContext } from '../../auth/useAuthContext';
 // sections
-import { DealerOffersTableRow, ProductTableToolbar } from '../../sections/@dashboard/e-commerce/list';
+import { DealerOffersTableRow } from '../../sections/@dashboard/e-commerce/list';
 //car status
 import { carStatus, carTimer } from '../../utils/status';
-import { set } from 'lodash';
 
 // ----------------------------------------------------------------------
 

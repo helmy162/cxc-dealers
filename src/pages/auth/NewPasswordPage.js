@@ -8,8 +8,6 @@ import { PATH_AUTH } from '../../routes/paths';
 import Iconify from '../../components/iconify';
 // sections
 import AuthNewPasswordForm from '../../sections/auth/AuthNewPasswordForm';
-// assets
-import { SentIcon } from '../../assets/icons';
 
 // ----------------------------------------------------------------------
 

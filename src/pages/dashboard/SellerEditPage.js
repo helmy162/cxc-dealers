@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useParams } from 'react-router-dom';
 // @mui
 import { Container } from '@mui/material';
@@ -15,7 +14,7 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import SellerNewEditForm from '../../sections/@dashboard/seller/SellerNewEditForm';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUsers, getSeller} from '../../redux/slices/user';
+import {  getSeller} from '../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
