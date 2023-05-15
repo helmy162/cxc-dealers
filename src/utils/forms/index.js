@@ -4,7 +4,6 @@ import { RHFSelect, RHFSwitch } from "src/components/hook-form";
 const isOptionEqualToValue = (option, value) => option == value
 
 const hasSameName = (option, value) => {
-  console.log(option.name, value);
   return option.name == value
 };
 const renderSelectOptions = (options => options.map(option => <MenuItem value={option.value} key={option.value}>{option.label}</MenuItem>));

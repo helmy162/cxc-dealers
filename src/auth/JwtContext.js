@@ -74,7 +74,6 @@ export function AuthProvider({ children }) {
 
   const initialize = useCallback(async () => {
     try {
-      console.log('initialize');
       const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
       const userId = storageAvailable ? localStorage.getItem('userId') : '';
 
