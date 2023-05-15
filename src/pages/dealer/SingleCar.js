@@ -124,17 +124,18 @@ export default function SingleCar(){
   }, [productStatus, product, dispatch]);
 
   useEffect(() => {
-    const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
-    channel.bind("NewBid", (data) => {
-        setHighestBid(data.auction.last_bid);
-        dispatch(getProduct(name));
-        initialize();
-    });
-  
-    return () => {
-      channel.unbind("NewBid");
-      pusher.unsubscribe();
-    };
+    if(auctionID && user){
+      const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
+      channel.bind("NewBid", (data) => {
+          setHighestBid(data.auction.last_bid);
+          dispatch(getProduct(name));
+      });
+    
+      return () => {
+        channel.unbind("NewBid");
+        pusher.unsubscribe();
+      };
+    }
   }, [auctionID, user, product]);
 
 
