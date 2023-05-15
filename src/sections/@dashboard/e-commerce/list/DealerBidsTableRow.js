@@ -22,8 +22,7 @@ import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 // websocket
-import Pusher from "pusher-js";
-
+import { useAuthContext } from "src/auth/useAuthContext";
 // ----------------------------------------------------------------------
 
 DealerBidsTableRow.propTypes = {
@@ -43,7 +42,8 @@ export default function DealerBidsTableRow({
   user,
   auction
 }) {
- 
+  const { pusher} = useAuthContext();
+
   const { id, details, livestatus, timeRemaining, images} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -69,22 +69,6 @@ export default function DealerBidsTableRow({
   const [highestBid, setHighestBid] = useState( auction?.latest_bid?.bid || bid);
 
   useEffect(() => {
-    const access_token = user?.accessToken;
-    const PUSHER_APP_KEY = "9d45400630a8fa077501";
-    const chanelAuthEndpoint =
-      "https://api.carsxchange.com/api/v1/pusher/auth-channel";
-
-    let pusher = new Pusher(PUSHER_APP_KEY, {
-      cluster: "eu",
-      channelAuthorization: {
-        endpoint: chanelAuthEndpoint,
-        transport: "ajax",
-        params: {},
-        headers: {
-          authorization: `Bearer ${access_token}`,
-        },
-      },
-    });
     const channel = pusher.subscribe(`private-car.auction.${auction?.id}`);
     channel.bind("NewBid", (data) => {
       setHighestBid(data.auction.last_bid)

@@ -14,7 +14,6 @@ import axios from 'axios';
 import FormProvider from "src/components/hook-form/FormProvider";
 import { LoadingButton } from '@mui/lab';
 import CarDetails from "../dashboard/CarDetails";
-import Pusher from "pusher-js";
 import { useAuthContext } from "src/auth/useAuthContext";
 import axiosInstance from 'src/utils/axios';
 import { Navigate, useParams, useNavigate  } from "react-router";
@@ -26,7 +25,7 @@ import errorSound from '../../assets/sounds/error.mp3';
 
 export default function SingleCar(){
     const {name} = useParams();
-    const {user, initialize} = useAuthContext();
+    const {user, initialize, pusher} = useAuthContext();
     const { product, isLoading, checkout, productStatus, userBids } = useSelector((state) => state.product);
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
@@ -125,22 +124,6 @@ export default function SingleCar(){
   }, [productStatus, product, dispatch]);
 
   useEffect(() => {
-    const access_token = user?.accessToken;
-    const PUSHER_APP_KEY = "9d45400630a8fa077501";
-    const chanelAuthEndpoint =
-      "https://api.carsxchange.com/api/v1/pusher/auth-channel";
-
-    let pusher = new Pusher(PUSHER_APP_KEY, {
-      cluster: "eu",
-      channelAuthorization: {
-        endpoint: chanelAuthEndpoint,
-        transport: "ajax",
-        params: {},
-        headers: {
-          authorization: `Bearer ${access_token}`,
-        },
-      },
-    });
     const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
     channel.bind("NewBid", (data) => {
         setHighestBid(data.auction.last_bid);

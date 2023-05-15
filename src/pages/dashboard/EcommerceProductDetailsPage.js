@@ -1,33 +1,15 @@
-import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
-import * as Yup from 'yup';
-// form
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useEffect, useState, useMemo } from 'react';
-import { useParams, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Link as RouterLink, useNavigate} from 'react-router-dom';
 // @mui
-import { alpha } from '@mui/material/styles';
-
-import { DatePicker, CalendarPicker } from '@mui/x-date-pickers';
-import {
-  TimePicker,
-  MobileTimePicker,
-  StaticTimePicker,
-  DesktopTimePicker,
-} from '@mui/x-date-pickers';
-import { LoadingButton } from '@mui/lab';
-import { Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack,
+import { Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, 
   Table,
   Button,
-  Link,
   Tooltip,
   TableBody,
   IconButton,
-  InputAdornment,
-  TextField,
   TableContainer,} from '@mui/material';
 import {
   useTable,
@@ -40,9 +22,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from '../../components/table';
-import axiosInstance from 'src/utils/axios';
-import {RHFTextField, RHFAutocomplete } from '../../components/hook-form';
-import FormProvider from '../../components/hook-form';
+
 import { sentenceCase } from 'change-case';
 import Label from '../../components/label';
 import Scrollbar from '../../components/scrollbar';
@@ -56,7 +36,6 @@ import Iconify from '../../components/iconify';
 import Markdown from '../../components/markdown';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
-import { SkeletonProductDetails } from '../../components/skeleton';
 import { BidTableRow, OfferTableRow } from '../../sections/@dashboard/e-commerce/list';
 import { ProductAuction } from '../../sections/@dashboard/e-commerce/details';
 // loading screen
@@ -64,7 +43,6 @@ import LoadingScreen from '../../components/loading-screen';
 //car status
 import { carStatus, carTimer } from '../../utils/status';
 // websocket
-import Pusher from "pusher-js";
 import { useAuthContext } from "src/auth/useAuthContext";
 
 import ProductDetailsCarousel from './ProductDetailsCarousel';
@@ -138,7 +116,7 @@ export default function EcommerceProductDetailsPage() {
   const { themeStretch } = useSettingsContext();
 
   const { name } = useParams();
-  const {user} = useAuthContext();
+  const {user, pusher} = useAuthContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { productAsAdmin, isLoading, checkout, productStatus} = useSelector((state) => state.product);
@@ -189,22 +167,6 @@ export default function EcommerceProductDetailsPage() {
   }, [productAsAdmin]);
   
   useEffect(() => {
-    const access_token = user?.accessToken;
-    const PUSHER_APP_KEY = "9d45400630a8fa077501";
-    const chanelAuthEndpoint =
-      "https://api.carsxchange.com/api/v1/pusher/auth-channel";
-
-    let pusher = new Pusher(PUSHER_APP_KEY, {
-      cluster: "eu",
-      channelAuthorization: {
-        endpoint: chanelAuthEndpoint,
-        transport: "ajax",
-        params: {},
-        headers: {
-          authorization: `Bearer ${access_token}`,
-        },
-      },
-    });
     const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
     channel.bind("NewBid", (data) => {
         dispatch(getProductAsAdmin(name));

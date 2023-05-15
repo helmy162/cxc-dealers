@@ -5,7 +5,6 @@ import {
 } from "@mui/material";
 
 import SpecItem from './SpecItem';
-import Pusher from "pusher-js";
 import { useAuthContext } from "src/auth/useAuthContext";
 import Status from './Status';
 
@@ -16,28 +15,13 @@ export default function InfoRow({ data, expired}) {
 
   const [auctionID, setAuctionID] = useState(null);
   const [highestBid, setHighestBid] = useState(0);
-  const { user } = useAuthContext();
+  const { user, pusher} = useAuthContext();
   useEffect(() => {
     if(!expired)
     {
       data?.auction?.latest_bid ? setHighestBid(data?.auction?.latest_bid?.bid) : setHighestBid(data?.auction?.start_price);
-      const access_token = user?.accessToken;
-      const PUSHER_APP_KEY = "9d45400630a8fa077501";
-      const chanelAuthEndpoint =
-        "https://api.carsxchange.com/api/v1/pusher/auth-channel";
       const auctionID = data?.auction?.id;
       setAuctionID(auctionID);
-      let pusher = new Pusher(PUSHER_APP_KEY, {
-        cluster: "eu",
-        channelAuthorization: {
-          endpoint: chanelAuthEndpoint,
-          transport: "ajax",
-          params: {},
-          headers: {
-            authorization: `Bearer ${access_token}`,
-          },
-        },
-      });
       const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
       channel.bind("NewBid", (data) => {
           setHighestBid(data.auction.last_bid);

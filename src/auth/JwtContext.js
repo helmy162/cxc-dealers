@@ -6,6 +6,8 @@ import localStorageAvailable from '../utils/localStorageAvailable';
 //
 import { isValidToken, setSession } from './utils';
 
+import Pusher from "pusher-js";
+
 // ----------------------------------------------------------------------
 
 // NOTE:
@@ -18,6 +20,7 @@ const initialState = {
   isInitialized: false,
   isAuthenticated: false,
   user: null,
+  pusher: null,
 };
 
 const reducer = (state, action) => {
@@ -26,6 +29,7 @@ const reducer = (state, action) => {
       isInitialized: true,
       isAuthenticated: action.payload.isAuthenticated,
       user: action.payload.user,
+      pusher: action.payload.pusher,
     };
   }
   if (action.type === 'LOGIN') {
@@ -70,6 +74,7 @@ export function AuthProvider({ children }) {
 
   const initialize = useCallback(async () => {
     try {
+      console.log('initialize');
       const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
       const userId = storageAvailable ? localStorage.getItem('userId') : '';
 
@@ -80,11 +85,28 @@ export function AuthProvider({ children }) {
 
         const user = response.data;
 
+        const access_token = accessToken;
+        const PUSHER_APP_KEY = "9d45400630a8fa077501";
+        const chanelAuthEndpoint =
+          "https://api.carsxchange.com/api/v1/pusher/auth-channel";
+        let pusher = new Pusher(PUSHER_APP_KEY, {
+          cluster: "eu",
+          channelAuthorization: {
+            endpoint: chanelAuthEndpoint,
+            transport: "ajax",
+            params: {},
+            headers: {
+              authorization: `Bearer ${access_token}`,
+            },
+          },
+        });
+
         dispatch({
           type: 'INITIAL',
           payload: {
             isAuthenticated: true,
             user: {...user, role: user.type, accessToken: accessToken },
+            pusher: pusher,
           },
         });
       } else {
@@ -187,6 +209,7 @@ export function AuthProvider({ children }) {
       isInitialized: state.isInitialized,
       isAuthenticated: state.isAuthenticated,
       user: state.user,
+      pusher: state.pusher,
       method: 'jwt',
       initialize,
       login,

@@ -21,8 +21,6 @@ import Image from '../../../../components/image';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-// websocket
-import Pusher from "pusher-js";
 
 // ----------------------------------------------------------------------
 

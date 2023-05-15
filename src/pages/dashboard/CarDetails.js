@@ -4,27 +4,19 @@ import { useRef, useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import { useSettingsContext } from '../../components/settings';
 import LoadingScreen from '../../components/loading-screen';
-import { cars } from '../../_mock/assets/cars';
 import Lightbox from '../../components/lightbox';
 import {
-    Box,
-    Stack,
-    Container,
     Accordion,
-    Typography,
     AccordionSummary,
     AccordionDetails,
-    Tooltip,
-    Button, List
+    Button, 
   } from '@mui/material';
 
 import Iconify from '../../components/iconify';
 import ProductDetailsCarousel from './ProductDetailsCarousel';
 
-import MarkerRow from 'src/sections/AddCar/ExteriorConditionStep/MarkerRow';
-
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct, getProducts } from '../../redux/slices/product';
+import { getProduct } from '../../redux/slices/product';
 
 import Logo from '../../components/logo';
 import CarSkeletonColored from './CarSkeletonColored';
