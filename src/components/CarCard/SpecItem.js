@@ -4,8 +4,8 @@ export default function SpecItem({ children }) {
   return (
     <Box
       sx={{
-        width: { xs: '48%', sm: 'auto', md: '30%' },
-        maxWidth: { xs: '100%', sm: 'auto', md: '150px' },
+        width: '30%',
+        // maxWidth: { xs: '100%', sm: 'auto', md: '150px' },
         minWidth: 'fit-content',
         flexGrow: 1,
         textAlign: 'center',

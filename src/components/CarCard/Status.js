@@ -9,7 +9,7 @@ const statusColors = {
   upcoming: '#0077C9',
 }
 
-export default function CarCardStatus({ product }) {
+export default function CarCardStatus({ product, mobile=false }) {
 
   const [livestatus, setLiveStatus] = useState('');
 
@@ -25,6 +25,7 @@ export default function CarCardStatus({ product }) {
 
   const backgroundColor = useMemo(() => statusColors[livestatus.toLocaleLowerCase()], [livestatus])
   return (
+    !mobile?
     <Box
       sx={{
         color: 'white',
@@ -51,6 +52,32 @@ export default function CarCardStatus({ product }) {
           borderRadius: '50px',
           background: 'white',
           mr: '6px',
+        }}
+      ></Box>
+      {livestatus}
+    </Box>
+    :
+    <Box
+      sx={{
+        color: 'white',
+        borderRadius: '4px',
+        backgroundColor: backgroundColor,
+        minWidth: 'fit-content',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '4px',
+        textTransform: 'capitalize',
+        fontSize: '8px',
+      }}
+    >
+      <Box
+        sx={{
+          width: '4px',
+          height: '4px',
+          borderRadius: '100%',
+          background: 'white',
+          mr: '4px',
         }}
       ></Box>
       {livestatus}

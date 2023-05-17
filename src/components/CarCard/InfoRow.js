@@ -8,95 +8,9 @@ import SpecItem from './SpecItem';
 import { useAuthContext } from "src/auth/useAuthContext";
 import Status from './Status';
 
-export default function InfoRow({ data, expired}) {
-  const image = useMemo(() => {
-    return data.images && data?.images[0] ? `https://api.carsxchange.com/storage/car_images/${data.images[0]}` : ''
-  }, [data])
-
-  const [auctionID, setAuctionID] = useState(null);
-  const [highestBid, setHighestBid] = useState(0);
-  const { user, pusher} = useAuthContext();
-  useEffect(() => {
-    if(!expired)
-    {
-      data?.auction?.latest_bid ? setHighestBid(data?.auction?.latest_bid?.bid) : setHighestBid(data?.auction?.start_price);
-      const auctionID = data?.auction?.id;
-      setAuctionID(auctionID);
-      const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
-      channel.bind("NewBid", (data) => {
-          setHighestBid(data.auction.last_bid);
-      });
-
-      return () => {
-        channel.unbind("NewBid");
-        pusher.disconnect();
-      };
-    }
-    else {
-      setHighestBid(data?.auction?.latest_bid?.bid ?? null);
-    }
-  }, [auctionID, user, data]);
-
+export default function InfoRow({ data, mobile=false}) {
   return (
-    <Box
-      sx={{
-        mt: '10px',
-        display: 'flex',
-        flexDirection: { xs: 'column', sm: 'row' },
-        width: '100%',
-      }}
-    >
-      <Box sx={{
-        marginRight: { xs: '0px', sm: '20px' },
-        maxWidth: { xs: '100%', sm: '265px' },
-        minWidth: { xs: '100%', sm: '265px' },
-      }}>
-        <img
-          src={image}
-          alt="car"
-          style={{
-            width: '100%',
-            aspectRatio: '16/9',
-            objectFit: 'cover',
-            borderRadius: '8px'
-          }}
-        />
-      </Box>
-      <Box sx={{
-        width: '100%'
-      }}>
-        {
-          <Box sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            fontSize: '18px',
-            marginTop: { xs: '20px', sm: 0 }
-          }}>
-            {
-              highestBid?
-              <>
-                <Typography color="#8184A3" mr={0.5} >
-                  Highest Bid:
-                </Typography>
-                <Typography color="#1D7DBD" fontWeight="bold">
-                  AED {highestBid?.toLocaleString('en-US')}
-                </Typography>
-              </>
-              :
-              <>
-                <Typography color="#8184A3" mr={0.5} >
-                  Starting Price:
-                </Typography>
-                <Typography color="#1D7DBD" fontWeight="bold">
-                  AED {data?.auction?.start_price?.toLocaleString('en-US')}
-                </Typography>
-              </>
-            }
-            
-          </Box>
-        }
-        
-
+    !mobile?
         <Box
           sx={{
             display: 'flex',
@@ -105,7 +19,6 @@ export default function InfoRow({ data, expired}) {
             gap: '10px',
             width: '100%',
             marginTop: '24px',
-            paddingBottom: { xs: '51px', sm: 0 }
           }}
         >
           <SpecItem>
@@ -118,18 +31,39 @@ export default function InfoRow({ data, expired}) {
             {data.details?.exterior_color}
           </SpecItem>
           <SpecItem>
-            {data.details?.year} year
-          </SpecItem>
-          <SpecItem>
             {data.details?.specification}
           </SpecItem>
-          <SpecItem>
-            {data.details?.number_of_cylinders}
-          </SpecItem>
         </Box>
-        
-      </Box>
-      
-    </Box>
+        :
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '10px',
+            width: '100%',
+            paddingBottom: '8px',
+            borderBottom: '1px solid #F4F6F8'
+          }}
+        >
+          <div className="flex items-center text-[#919EAB] text-[8px] gap-[2px]">
+            <img src="/assets/icons/cars/mileage.svg" width={10}/>
+            <p>
+              {data.details?.mileage} KM
+            </p>
+          </div>
+          <div className="flex items-center text-[#919EAB] text-[8px] gap-[2px]">
+            <img src="/assets/icons/cars/license.svg" width={10}/>
+            <p>
+              {data.details?.registered_emirates} 
+            </p>
+          </div>
+          <div className="flex items-center text-[#919EAB] text-[8px] gap-[2px]">
+            <img src="/assets/icons/cars/engine.svg" width={10}/>
+            <p>
+              {data.details?.engine_size} CC
+            </p>
+          </div>
+        </Box>
   )
 }

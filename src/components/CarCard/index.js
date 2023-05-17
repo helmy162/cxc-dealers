@@ -11,6 +11,9 @@ import InfoRow from './InfoRow'
 import Status from './Status';
 import { PATH_DEALER } from 'src/routes/paths';
 import { carStatus, carTimer } from '../../utils/status';
+import CarHighestBid from './CarHighestBid';
+import CarName from './CarName';
+import CarImage from './CarImage';
 
 export default function CarCard({
   expired,
@@ -22,17 +25,34 @@ export default function CarCard({
     setLiveStatus(data.status == 'pending'? 'pending' : carStatus(data))
   }, [data]);
 
+  function getCurrentDimension(){
+    return {
+      	width: window.innerWidth,
+      	height: window.innerHeight
+    }
+  }
+
+const [screenSize, setScreenSize] = useState(getCurrentDimension());
+
+useEffect(() => {
+    function handleResize() {
+        setScreenSize(getCurrentDimension());
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+}, [screenSize]);
+
+
   return (
     <Card sx={{
       ...sx,
       // maxWidth: 797,
-      minHeight: 254,
       p: '0px',
       position: 'relative',
 
     }}
     >
-      <RouterLink className='sm:flex-row flex-col-reverse' style={{display:'flex', flexDirection: { xs: 'column', sm: 'row' }}} 
+      <RouterLink className='sm:flex-row flex-row' style={{display:'flex', flexDirection: { xs: 'column', sm: 'row' }}} 
       to={ 
         new Date(data?.auction?.start_at) <= new Date()
         && 
@@ -47,26 +67,80 @@ export default function CarCard({
           null
       }
       >
-        <Box sx={{
-          width: '100%',
-          display: 'flex',
-          padding: '20px',
-          alignItems: { xs: 'flex-start', sm: 'center' },
-          justifyContent: 'space-between',
-          flexDirection: { xs: 'column', sm: 'column' }
-        }}>
-          <Box sx={{display: 'flex', alignItems:'center', justifyContent:'space-between', width:'100%', flexDirection: { xs: 'column', sm: 'row' }}}>
-            <Typography variant="h4">
-              {data.details.make + ' ' + data.details.model + ' ' + data.details.year}
-            </Typography>
-            {
-              data.status === 'approved' && 
+        {
+          screenSize.width >= 600 ?
+          <>
+          <Box sx={{
+            width: '100%',
+            display: 'flex',
+            padding: '20px',
+            alignItems: { xs: 'flex-start', sm: 'center' },
+            justifyContent: 'space-between',
+            flexDirection: { xs: 'column', sm: 'column' }
+          }}>
+            <Box sx={{display: 'flex', alignItems:'center', justifyContent:'space-between', width:'100%', flexDirection: { xs: 'column', sm: 'row' }}}>
+              <CarName data={data} />
               <Timer product={data} />
-            }
+            </Box>
+            <Box
+              sx={{
+                mt: '10px',
+                display: 'flex',
+                flexDirection: { xs: 'row', sm: 'row' },
+                width: '100%',
+              }}
+            >
+              <CarImage data={data} />
+              <Box sx={{
+                width: '100%'
+              }}>
+                <CarHighestBid data={data} expired={expired}/>
+                <InfoRow data={data}/>
+              </Box>
+            </Box>
           </Box>
-          <InfoRow data={data} expired={expired}/>
-        </Box>
-        <Status product={data} />
+          <Status product={data} />
+         </>
+         :
+         <>
+          <Box sx={{
+            width: '100%',
+            display: 'flex',
+            padding: '12px',
+            alignItems: { xs: 'center', sm: 'center' },
+            justifyContent: 'space-between',
+            flexDirection: { xs: 'row', sm: 'row' },
+            gap: '16px'
+          }}>
+            <CarImage data={data} />
+            <Box sx={{display: 'flex', alignItems:'center', justifyContent:'space-between', width:'100%', flexDirection: { xs: 'column', sm: 'row' }, gap:'4px'}}>
+              <Box sx={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '16px'
+              }}>
+                <CarName data={data} />
+                <Timer product={data} />
+              </Box>
+
+              <InfoRow data={data} mobile={true}/>
+              
+              <Box sx={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <Status product={data} mobile={true}/>
+                <CarHighestBid data={data} expired={expired} mobile={true}/>
+              </Box>
+            </Box>
+          </Box>
+         </>
+        }
+        
         
       </RouterLink>
     </Card>
