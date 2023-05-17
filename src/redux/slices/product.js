@@ -242,13 +242,21 @@ export function getProducts() {
 // ----------------------------------------------------------------------
 
 export function getProduct(name) {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-
+  return async (dispatch, getState) => {
+    // dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`cars/all`);
-      dispatch(slice.actions.getProductSuccess(response.data.find(product=> product.id == name)));
-      getStatus(response.data.find(product=> product.id == name))(dispatch);
+      const products = getState().product.products;
+      const product = products.find((product) => product.id == name);
+      if (product) {
+        dispatch(slice.actions.getProductSuccess(product));
+        getStatus(product)(dispatch);
+      } else {
+        // If the product is not found in state.products, make the request
+        const response = await axios.get(`cars/all`);
+        const foundProduct = response.data.find((product) => product.id === name);
+        dispatch(slice.actions.getProductSuccess(foundProduct));
+        getStatus(foundProduct)(dispatch);
+      }
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));

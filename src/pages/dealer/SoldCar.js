@@ -1,6 +1,6 @@
 import ProductDetailsCarousel from "../dashboard/ProductDetailsCarousel"
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct, getStatus, resetProduct, getUserOffers} from '../../redux/slices/product';
+import { getProduct, getProducts, getStatus, resetProduct, getUserOffers} from '../../redux/slices/product';
 import {useEffect, useMemo} from 'react';
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
@@ -23,16 +23,24 @@ import { useSnackbar } from '../../components/snackbar';
 export default function SoldCar(){
     const {name} = useParams();
     const {user, initialize} = useAuthContext();
-    const { product, isLoading, checkout, userOffers } = useSelector((state) => state.product);
+    const { product, products, isLoading, checkout, userOffers } = useSelector((state) => state.product);
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         dispatch(resetProduct());
-        dispatch(getProduct(name));
-        dispatch(getStatus(product));
-        dispatch(getUserOffers());
-  }, [dispatch, name, user]);
+  }, [dispatch, name]);
+
+  useEffect(() => {
+    dispatch(getUserOffers());
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    if (products.length) { 
+      dispatch(getProduct(name));
+      dispatch(getStatus(product));
+    }
+  }, [dispatch, products]);
 
 
 
