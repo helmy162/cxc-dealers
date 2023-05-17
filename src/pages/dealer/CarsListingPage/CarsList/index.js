@@ -14,7 +14,7 @@ export default function CarsList({ cars, expired }) {
           key={car.id}
           data={car}
           sx={{
-            marginBottom: '20px'
+            marginBottom: { xs: '8px', sm: '20px'}
           }}
         />
       ))

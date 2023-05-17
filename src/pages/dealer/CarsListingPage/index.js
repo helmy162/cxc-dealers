@@ -58,7 +58,7 @@ export default function CarsListingPage({ expired = false}) {
             md: 'row'
           },
           padding: '10px',
-          paddingTop: '110px'
+          paddingTop: { xs: '8px', sm: '36px' },
         }}
       >
         {/* <Filters

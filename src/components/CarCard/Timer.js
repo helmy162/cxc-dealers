@@ -26,13 +26,16 @@ export default function CarCardTimer({ product }) {
     <Box
       sx={{
         fontWeight: 500,
-        minWidth: '187px'
+        minWidth: 'fit-content',
       }}
     >
       <Typography
         variant="string"
         mr={0.5}
         color="#8184A3"
+        sx={{
+          fontSize: { xs: '8px', sm: '16px' },
+        }}
       >
         {timeRemaining} 
       </Typography>
