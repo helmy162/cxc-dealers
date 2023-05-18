@@ -72,7 +72,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
     // Exterior Condition
     allAccordions.splice( 
         1, 0,
-        (<Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+        (<Accordion key={'exterior'} style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
         <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
             <div className="secondary-heading block">
                 <h2 className="text-[20px] font-semibold capitalize mb-3">

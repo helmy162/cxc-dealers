@@ -7,9 +7,7 @@ import {
 import axios from 'axios';
 import axiosInstance from 'src/utils/axios';
 
-const endpoints = {
-  GET_CARS: `${process.env.REACT_APP_HOST_API_KEY}cars`
-}
+
 
 export default function useCarsListingPage(expired) {
   const [cars, setCars] = useState([]); const [cars2, setCars2] = useState([]);

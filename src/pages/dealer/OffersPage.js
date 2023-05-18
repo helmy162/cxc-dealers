@@ -99,7 +99,6 @@ export default function BidsPage() {
   
 
   useEffect(() => {
-    dispatch(getProducts());
     dispatch(getUserOffers());
   }, [dispatch, user]);
 

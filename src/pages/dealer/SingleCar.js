@@ -1,6 +1,6 @@
 import ProductDetailsCarousel from "../dashboard/ProductDetailsCarousel"
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct, getStatus, resetProduct, extendEndtime, getUserBids} from '../../redux/slices/product';
+import { getProduct, getProducts, getStatus, resetProduct, extendEndtime, getUserBids} from '../../redux/slices/product';
 import {useEffect, useMemo} from 'react';
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
@@ -26,7 +26,7 @@ import errorSound from '../../assets/sounds/error.mp3';
 export default function SingleCar(){
     const {name} = useParams();
     const {user, initialize, pusher} = useAuthContext();
-    const { product, isLoading, checkout, productStatus, userBids } = useSelector((state) => state.product);
+    const { product, products, isLoading, checkout, productStatus, userBids } = useSelector((state) => state.product);
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -34,14 +34,19 @@ export default function SingleCar(){
     const playErrorSound = new Audio(errorSound);
 
     useEffect(() => {
-        dispatch(resetProduct());
-        dispatch(getProduct(name));
-        dispatch(getStatus(product));
+        dispatch(resetProduct());        
   }, [dispatch, name]);
 
    useEffect(() => {
     dispatch(getUserBids());
   }, [dispatch, user]);
+
+  useEffect(() => {
+    if (products.length) { 
+      dispatch(getProduct(name));
+      dispatch(getStatus(product));
+    }
+  }, [dispatch, products]);
 
 
 
@@ -128,7 +133,7 @@ export default function SingleCar(){
       const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
       channel.bind("NewBid", (data) => {
           setHighestBid(data.auction.last_bid);
-          dispatch(getProduct(name));
+          dispatch(getProducts());
       });
     
       return () => {
