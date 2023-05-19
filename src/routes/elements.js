@@ -54,6 +54,9 @@ export const EcommerceProductDetailsPage = Loadable(
 export const CarDetails = Loadable(
   lazy(() => import('../pages/dashboard/CarDetails'))
 );
+export const CarDetailsPage = Loadable(
+  lazy(() => import('../pages/dashboard/CarDetailsPage'))
+);
 export const EcommerceProductEditPage = Loadable(
   lazy(() => import('../pages/dashboard/EcommerceProductEditPage'))
 );

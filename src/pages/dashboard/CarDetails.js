@@ -26,14 +26,17 @@ export default function CarDetails({withImages = true, noLoading=false}) {
     const { name } = useParams();
     const dispatch = useDispatch();
 
-    const { product, isLoading, checkout } = useSelector((state) => state.product);
+    const { product, products, isLoading, checkout } = useSelector((state) => state.product);
 
     let accordions = [];
     const [allAccordions, setAllAccordions]= useState([]);
+
     useEffect(() => {
+        if (products.length) { 
           dispatch(getProduct(name));
-    }, [dispatch, name]);
-    
+        }
+      }, [dispatch, products]);
+
     const [defectImages, setDefectImages] = useState([]);
 
     useEffect(() => {
@@ -72,7 +75,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
     // Exterior Condition
     allAccordions.splice( 
         1, 0,
-        (<Accordion key={'exterior'} style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+        (<Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
         <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
             <div className="secondary-heading block">
                 <h2 className="text-[20px] font-semibold capitalize mb-3">

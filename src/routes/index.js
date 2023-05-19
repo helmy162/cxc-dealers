@@ -31,6 +31,7 @@ import {
   EcommerceProductDetailsPage,
   AddCarPage,
   CarDetails,
+  CarDetailsPage,
   HomePage,
   SingleCar,
   SoldCar,
@@ -155,7 +156,7 @@ export default function Router() {
       path: ':name/inspection',
       element: 
         <div className='max-w-[1000px] p-[12px] m-auto'>
-          <CarDetails />
+          <CarDetailsPage />
         </div>,
     },
 
