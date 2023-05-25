@@ -231,7 +231,7 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   // Exterior
   // markers: carData?.exterior?.markers || [],
   defects: 
-    isEdit? carData?.exterior?.defects || {}
+    isEdit? carData?.exterior?.markers || {}
     : savedData?.defects || {},
   Chassis: 
     isEdit? carData?.engine_transmission?.Chassis || 'good'
