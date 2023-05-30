@@ -150,10 +150,6 @@ export default function SingleCar(){
       playErrorSound.play();
       enqueueSnackbar('You have been outbidden', {variant: 'error'})
     }
-    else if (highestUserBidsOnThisCar?.bid == highestBid && highestBid && highestUserBidsOnThisCar)
-    {
-      enqueueSnackbar('Your bid has been placed successfully', {variant: 'success'});
-    }
   }, [highestBid && highestUserBidsOnThisCar])
 
   const onSubmit = async (data) => {
@@ -165,6 +161,7 @@ export default function SingleCar(){
         const res = await axiosInstance.post('dealer/bid', mergedDate);
         setHighestUserBidsOnThisCar(data);
         playbidPlacedSound.play();
+        enqueueSnackbar('Your bid has been placed successfully', {variant: 'success'});
         
     } catch (error) {
       console.error(error);
