@@ -54,17 +54,11 @@ useEffect(() => {
     >
       <RouterLink className='sm:flex-row flex-row' style={{display:'flex', flexDirection: { xs: 'column', sm: 'row' }}} 
       to={ 
-        new Date(data?.auction?.start_at) <= new Date()
-        && 
         new Date(data?.auction?.end_at) >= new Date()
         ?
           PATH_DEALER.car(data.id)
         :
-          new Date(data?.auction?.end_at) < new Date() 
-          ?
-            PATH_DEALER.soldCar(data.id)
-          :
-          null
+          PATH_DEALER.soldCar(data.id)
       }
       >
         {

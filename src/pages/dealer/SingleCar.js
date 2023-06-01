@@ -20,8 +20,8 @@ import { Navigate, useParams, useNavigate  } from "react-router";
 import LoadingScreen from '../../components/loading-screen';
 import ConfirmDialog from '../../components/confirm-dialog';
 import { useSnackbar } from '../../components/snackbar';
-import bidPlacedSound from '../../assets/sounds/cash_register.mp3';
-import errorSound from '../../assets/sounds/error.mp3';
+// import bidPlacedSound from '../../assets/sounds/cash_register.mp3';
+// import errorSound from '../../assets/sounds/error.mp3';
 
 export default function SingleCar(){
     const {name} = useParams();
@@ -30,8 +30,8 @@ export default function SingleCar(){
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
 
-    const playbidPlacedSound = new Audio(bidPlacedSound);
-    const playErrorSound = new Audio(errorSound);
+    // const playbidPlacedSound = new Audio(bidPlacedSound);
+    // const playErrorSound = new Audio(errorSound);
 
     useEffect(() => {
         dispatch(resetProduct());        
@@ -141,13 +141,13 @@ export default function SingleCar(){
         pusher.unsubscribe();
       };
     }
-  }, [auctionID, user, product]);
+  }, [auctionID]);
 
 
   useEffect(() => {
     if(highestUserBidsOnThisCar?.bid < highestBid)
     {
-      playErrorSound.play();
+      // playErrorSound.play();
       enqueueSnackbar('You have been outbidden', {variant: 'error'})
     }
   }, [highestBid && highestUserBidsOnThisCar])
@@ -160,7 +160,7 @@ export default function SingleCar(){
         const mergedDate = {bid: data.bid, auction_id: product.auction.id, car_id: product.id};
         const res = await axiosInstance.post('dealer/bid', mergedDate);
         setHighestUserBidsOnThisCar(data);
-        playbidPlacedSound.play();
+        // playbidPlacedSound.play();
         enqueueSnackbar('Your bid has been placed successfully', {variant: 'success'});
         
     } catch (error) {
