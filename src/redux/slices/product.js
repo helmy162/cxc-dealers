@@ -252,10 +252,9 @@ export function getProduct(name) {
         getStatus(product)(dispatch);
       } else {
         // If the product is not found in state.products, make the request
-        const response = await axios.get(`cars/all`);
-        const foundProduct = response.data.find((product) => product.id === name);
-        dispatch(slice.actions.getProductSuccess(foundProduct));
-        getStatus(foundProduct)(dispatch);
+        const response = await axios.get(`dealer/cars/${name}`);
+        dispatch(slice.actions.getProductSuccess(response.data.car));
+        getStatus(response.data.car)(dispatch);
       }
     } catch (error) {
       console.error(error);
