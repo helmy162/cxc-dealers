@@ -26,16 +26,14 @@ export default function CarDetails({withImages = true, noLoading=false}) {
     const { name } = useParams();
     const dispatch = useDispatch();
 
-    const { product, products, isLoading, checkout } = useSelector((state) => state.product);
+    const { product, isLoading } = useSelector((state) => state.product);
 
     let accordions = [];
     const [allAccordions, setAllAccordions]= useState([]);
 
     useEffect(() => {
-        if (products.length) { 
-          dispatch(getProduct(name));
-        }
-      }, [dispatch, products]);
+        dispatch(getProduct(name));
+      }, [dispatch, name]);
 
     const [defectImages, setDefectImages] = useState([]);
 
