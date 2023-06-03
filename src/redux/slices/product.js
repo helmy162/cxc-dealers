@@ -252,7 +252,7 @@ export function getProduct(name) {
         getStatus(product)(dispatch);
       } else {
         // If the product is not found in state.products, make the request
-        const response = await axios.get(`dealer/cars/${name}`);
+        const response = await axios.get(`cars/${name}`);
         dispatch(slice.actions.getProductSuccess(response.data.car));
         getStatus(response.data.car)(dispatch);
       }
