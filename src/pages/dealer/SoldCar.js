@@ -1,6 +1,6 @@
 import ProductDetailsCarousel from "../dashboard/ProductDetailsCarousel"
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct, getProducts, getStatus, resetProduct, getUserOffers} from '../../redux/slices/product';
+import { getProduct, getStatus, resetProduct, getUserOffers} from '../../redux/slices/product';
 import {useEffect, useMemo} from 'react';
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
@@ -23,7 +23,7 @@ import { useSnackbar } from '../../components/snackbar';
 export default function SoldCar(){
     const {name} = useParams();
     const {user, initialize} = useAuthContext();
-    const { product, products, isLoading, checkout, userOffers } = useSelector((state) => state.product);
+    const { product, isLoading, checkout, userOffers } = useSelector((state) => state.product);
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -36,11 +36,11 @@ export default function SoldCar(){
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (products.length) { 
+    if (name) { 
       dispatch(getProduct(name));
       dispatch(getStatus(product));
     }
-  }, [dispatch, products]);
+  }, [dispatch, name]);
 
 
 

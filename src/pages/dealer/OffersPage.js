@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProducts, getStatus, getUserOffers } from '../../redux/slices/product';
+import { getStatus, getUserOffers } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD, PATH_DEALER } from '../../routes/paths';
 // components

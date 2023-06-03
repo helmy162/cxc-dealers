@@ -6,10 +6,6 @@ import LoadingScreen from '../components/loading-screen';
 //
 import Login from '../pages/auth/LoginPage';
 import { useAuthContext } from './useAuthContext';
-
-// redux
-import { useDispatch, useSelector } from '../redux/store';
-import { getProducts,  } from '../redux/slices/product';
 // ----------------------------------------------------------------------
 
 AuthGuard.propTypes = {
@@ -17,16 +13,7 @@ AuthGuard.propTypes = {
 };
 
 export default function AuthGuard({ children }) {
-  const { isAuthenticated, isInitialized, user} = useAuthContext();
-  const { products } = useSelector((state) => state.product);
-
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    if(isAuthenticated && (!products || products.length == 0)){
-      dispatch(getProducts());
-    }
-  }, [dispatch, user]);
+  const { isAuthenticated, isInitialized} = useAuthContext();
 
   const { pathname } = useLocation();
 

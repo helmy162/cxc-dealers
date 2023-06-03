@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getStatus } from '../../redux/slices/product';
+import { getProducts, getStatus } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -104,7 +104,9 @@ export default function EcommerceProductListPage() {
   const [openConfirm, setOpenConfirm] = useState(false);
 
   
-
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
   useEffect(() => {
     if (products && products.length) {

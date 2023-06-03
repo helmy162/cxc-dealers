@@ -231,7 +231,7 @@ export function getProducts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('cars/all'); 
+      const response = await axios.get('admin/cars'); 
       dispatch(slice.actions.getProductsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -245,17 +245,9 @@ export function getProduct(name) {
   return async (dispatch, getState) => {
     // dispatch(slice.actions.startLoading());
     try {
-      const products = getState().product.products;
-      const product = products.find((product) => product.id == name);
-      if (product) {
-        dispatch(slice.actions.getProductSuccess(product));
-        getStatus(product)(dispatch);
-      } else {
-        // If the product is not found in state.products, make the request
         const response = await axios.get(`cars/${name}`);
         dispatch(slice.actions.getProductSuccess(response.data.car));
         getStatus(response.data.car)(dispatch);
-      }
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
