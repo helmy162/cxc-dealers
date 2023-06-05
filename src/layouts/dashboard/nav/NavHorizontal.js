@@ -10,7 +10,7 @@ import { bgBlur } from '../../../utils/cssStyles';
 // components
 import { NavSectionHorizontal } from '../../../components/nav-section';
 //
-import {adminNavConfig, dealerNavConfig, inspectorNavConfig}from './config-navigation';
+import {navConfig}from './config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ function NavHorizontal( {type}) {
           }),
         }}
       >
-        <NavSectionHorizontal data={ type=='admin'? adminNavConfig : type=='inspector'? inspectorNavConfig : dealerNavConfig} />
+        <NavSectionHorizontal data={navConfig} />
       </Toolbar>
 
       <Shadow />

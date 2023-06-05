@@ -22,6 +22,91 @@ const ICONS = {
   cashback: icon('ic_cashback'),
 };
 
+const navConfig = [
+
+  // MANAGEMENT
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'management',
+    items: [
+      {
+        title: 'users',
+        path: PATH_DASHBOARD.user.list,
+        icon: ICONS.users,
+        roles: ['admin', 'sales'],
+      },
+      {
+        title: 'sellers',
+        path: PATH_DASHBOARD.seller.list,
+        icon: ICONS.user,
+        roles: ['admin', 'closer'],
+      },
+      {
+        title: 'cars',
+        path: PATH_DASHBOARD.car.list,
+        icon: ICONS.garage,
+        roles: ['admin', 'closer', 'sales'],
+      },
+      {
+        title: 'Add Car',
+        path: PATH_INSPECTOR.new,
+        icon: ICONS.car,
+        roles: ['inspector'],
+      },
+      {
+        title: 'My Account',
+        path: '/profile',
+        icon: ICONS.profile,
+        roles: ['admin', 'inspector', 'sales'],
+      },
+    ],
+    roles: ['admin', 'inspector', 'closer', 'sales'],
+  },
+  {
+    subheader: 'auction',
+    items: [
+      {
+        title: 'Cars',
+        path: PATH_DEALER.cars,
+        icon: ICONS.car,
+      },
+      {
+        title: 'My Bids',
+        path: PATH_DEALER.bids,
+        icon: ICONS.bid,
+      }
+    ],
+    roles: ['admin', 'dealer', 'sales'],
+  },
+  {
+    subheader: 'make an offer',
+    items: [
+      {
+        title: 'Completed Auctions',
+        path: PATH_DEALER.soldCars,
+        icon: ICONS.soldCar,
+      },
+      {
+        title: 'My Offers',
+        path: PATH_DEALER.offers,
+        icon: ICONS.cashback,
+      }
+    ],
+    roles: ['admin', 'dealer', 'sales'],
+  },
+  {
+    subheader: 'management',
+    items: [
+      {
+        title: 'My Account',
+        path: PATH_DEALER.account,
+        icon: ICONS.profile,
+      },
+    ],
+    roles: ['dealer'],
+  },
+];
+
 const dealerNavConfig = [
 
   // MANAGEMENT
@@ -56,17 +141,6 @@ const dealerNavConfig = [
       }
     ],
   },
-  {
-    subheader: 'management',
-    items: [
-      {
-        title: 'My Account',
-        path: PATH_DEALER.account,
-        icon: ICONS.profile,
-      },
-      
-    ],
-  },
 ];
 
 const adminNavConfig = [
@@ -97,6 +171,8 @@ const adminNavConfig = [
         icon: ICONS.profile,
       },
     ],
+    roles: ['dealer'],
+    
   },
   {
     subheader: 'auction',
@@ -151,4 +227,4 @@ const inspectorNavConfig = [
   },
 ];
 
-export { dealerNavConfig, adminNavConfig, inspectorNavConfig };
+export { navConfig };

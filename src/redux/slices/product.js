@@ -227,11 +227,11 @@ export const {
 
 // ----------------------------------------------------------------------
 
-export function getProducts() {
+export function getProducts(role) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('admin/cars'); 
+      const response = await axios.get(`${role}/cars`); 
       dispatch(slice.actions.getProductsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -241,7 +241,23 @@ export function getProducts() {
 
 // ----------------------------------------------------------------------
 
-export function getProduct(name) {
+export function getProduct(name, role) {
+  return async (dispatch, getState) => {
+    // dispatch(slice.actions.startLoading());
+    try {
+        const response = role ? await axios.get(`${role}/cars/${name}`) : await axios.get(`cars/${name}`);
+        dispatch(slice.actions.getProductSuccess(response.data.car));
+        getStatus(response.data.car)(dispatch);
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getProductDetails(name) {
   return async (dispatch, getState) => {
     // dispatch(slice.actions.startLoading());
     try {
@@ -257,13 +273,13 @@ export function getProduct(name) {
 
 // ----------------------------------------------------------------------
 
-export function getProductAsAdmin(name) {
+export function getProductAsAdmin(name, role) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
 
     try {
-      const response = await axios.get(`admin/car/${name}`);
-      dispatch(slice.actions.getProductAsAdminSuccess(response.data));
+      const response = role ? await axios.get(`${role}/cars/${name}`) : await axios.get(`admin/cars/${name}`);
+      dispatch(slice.actions.getProductAsAdminSuccess(response.data.car));
       // getStatus(response.data.find(product=> product.id == name))(dispatch);
     } catch (error) {
       console.error(error);

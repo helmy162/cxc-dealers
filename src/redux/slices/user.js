@@ -4,6 +4,7 @@ import uniqBy from 'lodash/uniqBy';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -72,11 +73,11 @@ export const {
 
 // ----------------------------------------------------------------------
 
-export function getUsers() {
+export function getUsers(role) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('admin/all-users');
+      const response = await axios.get(`${role}/users`);
       dispatch(slice.actions.getUsersSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -101,12 +102,12 @@ export function getUser(name) {
 
 // ----------------------------------------------------------------------
 
-export function getSellers(){
+export function getSellers(role){
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('admin/sellers');
-      dispatch(slice.actions.getSellersSuccess(response.data.data));
+      const response = await axios.get(`${role}/sellers`);
+      dispatch(slice.actions.getSellersSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -115,12 +116,12 @@ export function getSellers(){
 
 // ----------------------------------------------------------------------
 
-export function getSeller(name) {
+export function getSeller(name, role) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`admin/sellers/${name}`);
-      dispatch(slice.actions.getSellerSuccess(response.data.data));
+      const response = await axios.get(`${role}/sellers/${name}`);
+      dispatch(slice.actions.getSellerSuccess(response.data));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));

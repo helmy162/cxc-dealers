@@ -235,6 +235,8 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 <option value="admin">Admin</option>
                 <option value="inspector">Inspector</option>
                 <option value="dealer">Dealer</option>
+                <option value="closer">Closer</option>
+                <option value="sales">Sales</option>
               </RHFSelect>
 
               

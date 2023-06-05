@@ -4,6 +4,7 @@ import { memo } from 'react';
 import { Box, Stack } from '@mui/material';
 //
 import NavList from './NavList';
+import RoleBasedGuard from 'src/auth/RoleBasedGuard';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +25,9 @@ function NavSectionMini({ data, sx, ...other }) {
       {...other}
     >
       {data.map((group, index) => (
-        <Items key={group.subheader} items={group.items} isLastGroup={index + 1 === data.length} />
+        <RoleBasedGuard roles={group.roles}>
+          <Items key={group.subheader} items={group.items} isLastGroup={index + 1 === data.length} />
+        </RoleBasedGuard>
       ))}
     </Stack>
   );

@@ -29,6 +29,7 @@ import { MuiTelInput } from 'mui-tel-input'
 import useCopyToClipboard from '../../../hooks/useCopyToClipboard';
 
 import axiosInstance from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 
 // ----------------------------------------------------------------------
@@ -42,6 +43,8 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const {user} = useAuthContext();
 
   const { copy } = useCopyToClipboard();
 
@@ -100,7 +103,7 @@ export default function SellerNewEditForm({ isEdit = false, currentUser }) {
   const onSubmit = async (data) => {
     try {
       let res;
-      isEdit?  res = await axiosInstance.put(`admin/sellers/${currentUser.id}`, data) :  res = await axiosInstance.post('admin/sellers', data);
+      isEdit?  res = await axiosInstance.put(`${user?.role}/sellers/${currentUser.id}`, data) :  res = await axiosInstance.post(`${user?.role}/sellers`, data);
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       navigate(PATH_DASHBOARD.seller.list);
     } catch (error) {

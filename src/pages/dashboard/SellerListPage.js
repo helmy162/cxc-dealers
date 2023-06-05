@@ -37,6 +37,7 @@ import { getSellers, resetSeller } from '../../redux/slices/user';
 import { useDispatch, useSelector } from '../../redux/store';
 // axios
 import axiosInstance from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -92,6 +93,8 @@ export default function SellerListPage() {
 
   const { themeStretch } = useSettingsContext();
 
+  const {user} = useAuthContext();
+
   const { sellers, isLoading } = useSelector((state) => state.user);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -99,7 +102,7 @@ export default function SellerListPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getSellers());
+    dispatch(getSellers(user?.role));
     dispatch(resetSeller());
   }, [dispatch]);
 

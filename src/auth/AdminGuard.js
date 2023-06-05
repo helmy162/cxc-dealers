@@ -9,15 +9,16 @@ import { useAuthContext } from './useAuthContext';
 
 // ----------------------------------------------------------------------
 
-AuthGuard.propTypes = {
+AdminGuard.propTypes = {
   children: PropTypes.node,
 };
 
-export default function AuthGuard({ children }) {
+export default function AdminGuard({ children }) {
   const {user} = useAuthContext();
+  console.log('AdminGuard user: ', user);
 
   if (user.role !== 'admin') {
-    return <Navigate to={'/dealer'} />;
+    return <Navigate to={`/${user.role}`} />;
   }
 
   return <> {children} </>;

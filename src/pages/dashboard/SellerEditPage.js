@@ -15,18 +15,19 @@ import SellerNewEditForm from '../../sections/@dashboard/seller/SellerNewEditFor
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import {  getSeller} from '../../redux/slices/user';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
 export default function UserEditPage() {
   const { themeStretch } = useSettingsContext();
-
+  const {user} = useAuthContext();
   const { name } = useParams();
   const dispatch = useDispatch();
   const {seller} = useSelector((state) => state.user);
 
 useEffect(() => {
-  dispatch(getSeller(name));
+  dispatch(getSeller(name, user?.role));
 }, [dispatch, name]);
 
   return (

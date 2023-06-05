@@ -8,6 +8,8 @@ const ROOTS_AUTH = '/auth';
 const ROOTS_DASHBOARD = '/dashboard';
 const ROOTS_Dealer = '/dealer';
 const ROOTS_INSPECTOR = '/inspector';
+const ROOTS_CLOSER = '/closer';
+const ROOTS_SALES = '/sales';
 const ROOTS_HOME = '/';
 
 // ----------------------------------------------------------------------

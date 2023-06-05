@@ -42,6 +42,7 @@ import { getUsers } from '../../redux/slices/user';
 import { useDispatch, useSelector } from '../../redux/store';
 // axios
 import axiosInstance from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -51,14 +52,18 @@ const STATUS_OPTIONS = [
   'all',
   'Admin',
   'Inspector',
-  'Dealer'
+  'Dealer',
+  'Closer',
+  'Sales'
 ];
 
 const ROLE_OPTIONS = [
   'all',
   'Admin',
   'Inspector',
-  'Dealer'
+  'Dealer',
+  'Closer',
+  'Sales'
 ];
 
 const TABLE_HEAD = [
@@ -100,12 +105,14 @@ export default function UserListPage() {
 
   const { themeStretch } = useSettingsContext();
 
+  const {user} = useAuthContext();
+
   const { users, isLoading } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers());
+    dispatch(getUsers(user?.role));
   }, [dispatch]);
 
   useEffect(() => {

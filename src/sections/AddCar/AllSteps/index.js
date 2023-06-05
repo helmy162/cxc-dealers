@@ -126,7 +126,7 @@ export const AllSchema = Yup.object().shape({
 export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   // General
   seller_id: 
-    isEdit? carData?.seller_id || ''
+    isEdit? carData?.seller?.id || ''
     : savedData?.seller_id || '',
   seller_price: 
     isEdit? carData?.details?.seller_price || 0

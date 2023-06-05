@@ -16,14 +16,16 @@ import Iconify from '../../components/iconify';
 import ProductDetailsCarousel from './ProductDetailsCarousel';
 
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct } from '../../redux/slices/product';
+import { getProductDetails } from '../../redux/slices/product';
 
 import Logo from '../../components/logo';
 import CarSkeletonColored from './CarSkeletonColored';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 export default function CarDetails({withImages = true, noLoading=false}) {
     const { themeStretch } = useSettingsContext();
     const { name } = useParams();
+    const {user} = useAuthContext();
     const dispatch = useDispatch();
 
     const { product, isLoading } = useSelector((state) => state.product);
@@ -32,7 +34,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
     const [allAccordions, setAllAccordions]= useState([]);
 
     useEffect(() => {
-        dispatch(getProduct(name));
+        dispatch(getProductDetails(name, user?.role));
       }, [dispatch, name]);
 
     const [defectImages, setDefectImages] = useState([]);

@@ -23,6 +23,12 @@ export default function GuestGuard({ children }) {
   else if (isAuthenticated && user.role === 'inspector') {
     return <Navigate to="/inspector" />;
   }
+  else if (isAuthenticated && user.role === 'closer') {
+    return <Navigate to="/dashboard/seller/list" />;
+  }
+  else if (isAuthenticated && user.role === 'sales') {
+    return <Navigate to="/dashboard" />;
+  }
   if (!isInitialized) {
     return <LoadingScreen />;
   }

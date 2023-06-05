@@ -10,7 +10,8 @@ import { Box, Tab, Tabs, Card, Grid, Divider, Container, Typography,
   Tooltip,
   TableBody,
   IconButton,
-  TableContainer,} from '@mui/material';
+  TableContainer,
+  Stack,} from '@mui/material';
 import {
   useTable,
   getComparator,
@@ -66,7 +67,7 @@ const TABLE_HEAD2 = [
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceProductDetailsPage() {
+export default function EcommerceProductDetailsPage({isCloser = false}) {
 
 
   const {
@@ -123,7 +124,7 @@ export default function EcommerceProductDetailsPage() {
 
   useEffect(() => {
     if (name) {
-      dispatch(getProductAsAdmin(name));
+      dispatch(getProductAsAdmin(name, user?.role));
       dispatch(getStatus(productAsAdmin));
     }
   }, [dispatch, name]);
@@ -169,7 +170,7 @@ export default function EcommerceProductDetailsPage() {
   useEffect(() => {
     const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
     channel.bind("NewBid", (data) => {
-        dispatch(getProductAsAdmin(name));
+        dispatch(getProductAsAdmin(name, user?.role));
     });
   
     return () => {
@@ -215,7 +216,8 @@ export default function EcommerceProductDetailsPage() {
 
   
 
-  const TABS = [
+  const TABS = user?.role == 'admin' || user?.role == 'closer' ? 
+  [
     {
       value: 'inspection',
       label: 'Inspection Details',
@@ -249,7 +251,27 @@ export default function EcommerceProductDetailsPage() {
       label: 'VIN Images',
       component: productAsAdmin ? <ProductDetailsCarousel product={productAsAdmin} type="vin_images" /> : null,
     },
-  ];
+  ]
+  :
+  [
+    {
+      value: 'inspection',
+      label: 'Inspection Details',
+      component: productAsAdmin ? <Markdown children={`
+      \n<p><strong> Inspection Status:</strong> <small> Inspected </small> </p>
+      \n<p><strong> Seller Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>
+      \n<p><strong> Inspector Name:</strong> <small> ${productAsAdmin?.inspector?.name} </small> </p>
+      `} /> : null,
+    },
+    {
+      value: 'seller',
+      label: `Seller's Details`,
+      component: productAsAdmin ? <Markdown children={`
+      \n<p><strong> Seller's Name:</strong> <small> ${productAsAdmin?.seller?.name} </small> </p>
+      `} /> : null,
+    }
+  ]
+  ;
 
   
 
@@ -355,168 +377,179 @@ export default function EcommerceProductDetailsPage() {
                   )
               )}
             </Card>
+            {
+              user?.role == 'admin' || user?.role == 'sales'?
+              <>
+              <div style={{zIndex:'10000', marginBottom:'50px'}}>
+                <ProductAuction productAsAdmin={productAsAdmin}/>
+              </div>
+            
+              <Typography variant="h4" sx={{ mb: 5 }}>
+                Bids
+              </Typography>
+              <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+                <TableSelectedAction
+                  dense={dense}
+                  numSelected={0}
+                  rowCount={tableData?.length}
+                  onSelectAllRows={(checked) =>
+                    onSelectAllRows(
+                      checked,
+                      tableData?.map((row) => row.id)
+                    )
+                  }
+                  action={
+                    <Tooltip title="Delete">
+                      <IconButton color="primary" >
+                        <Iconify icon="eva:trash-2-outline" />
+                      </IconButton>
+                    </Tooltip>
+                  }
+                />
 
-            <div style={{zIndex:'10000', marginBottom:'50px'}}>
-              <ProductAuction productAsAdmin={productAsAdmin}/>
-            </div>
-            <Typography variant="h4" sx={{ mb: 5 }}>
-              Bids
-            </Typography>
-            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-              <TableSelectedAction
+                <Scrollbar>
+                  <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+                    <TableHeadCustom
+                      selectBox={false}
+                      order={order}
+                      orderBy={orderBy}
+                      headLabel={TABLE_HEAD}
+                      rowCount={tableData?.length}
+                      numSelected={0}
+                      onSort={onSort}
+                      onSelectAllRows={(checked) =>
+                        onSelectAllRows(
+                          checked,
+                          tableData?.map((row) => row.id)
+                        )
+                      }
+                    />
+
+                    <TableBody>
+                      {(isLoading ? [...Array(rowsPerPage)] : dataFiltered)
+                        ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        ?.map((row, index) =>
+                          row ? (
+                            <BidTableRow
+                              key={row.id}
+                              row={row}
+                              hasWinner={productAsAdmin?.auction?.winner_bid ? true : false}
+                              selected={row.id === productAsAdmin?.auction?.winner_bid}
+                              onSelectRow={() => onSelectRow(row.id)}
+                              onSelectAccount={() => handleAccountClick(row?.dealer?.id)}
+                            />
+                          ) : (
+                            !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />
+                          )
+                        )}
+
+                      <TableEmptyRows
+                        height={denseHeight}
+                        emptyRows={emptyRows(page, rowsPerPage, tableData?.length)}
+                      />
+
+                      <TableNoData isNotFound={isNotFound} />
+                    </TableBody>
+                  </Table>
+                </Scrollbar>
+              </TableContainer>
+              <TablePaginationCustom
+                count={dataFiltered?.length}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                onPageChange={onChangePage}
+                onRowsPerPageChange={onChangeRowsPerPage}
+                //
                 dense={dense}
-                numSelected={0}
-                rowCount={tableData?.length}
-                onSelectAllRows={(checked) =>
-                  onSelectAllRows(
-                    checked,
-                    tableData?.map((row) => row.id)
-                  )
-                }
-                action={
-                  <Tooltip title="Delete">
-                    <IconButton color="primary" >
-                      <Iconify icon="eva:trash-2-outline" />
-                    </IconButton>
-                  </Tooltip>
-                }
+                onChangeDense={onChangeDense}
               />
 
-              <Scrollbar>
-                <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                  <TableHeadCustom
-                    selectBox={false}
-                    order={order}
-                    orderBy={orderBy}
-                    headLabel={TABLE_HEAD}
-                    rowCount={tableData?.length}
-                    numSelected={0}
-                    onSort={onSort}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        tableData?.map((row) => row.id)
-                      )
-                    }
-                  />
+              <Typography variant="h4" sx={{ mb: 5 }}>
+                Offers
+              </Typography>
 
-                  <TableBody>
-                    {(isLoading ? [...Array(rowsPerPage)] : dataFiltered)
-                      ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      ?.map((row, index) =>
-                        row ? (
-                          <BidTableRow
-                            key={row.id}
-                            row={row}
-                            hasWinner={productAsAdmin?.auction?.winner_bid ? true : false}
-                            selected={row.id === productAsAdmin?.auction?.winner_bid}
-                            onSelectRow={() => onSelectRow(row.id)}
-                            onSelectAccount={() => handleAccountClick(row?.dealer?.id)}
-                          />
-                        ) : (
-                          !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />
+              <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+                <TableSelectedAction
+                  dense={dense2}
+                  numSelected={0}
+                  rowCount={tableData2?.length}
+                  onSelectAllRows={(checked) =>
+                    onSelectAllRows(
+                      checked,
+                      tableData2?.map((row) => row.id)
+                    )
+                  }
+                  action={
+                    <Tooltip title="Delete">
+                      <IconButton color="primary" >
+                        <Iconify icon="eva:trash-2-outline" />
+                      </IconButton>
+                    </Tooltip>
+                  }
+                />
+
+                <Scrollbar>
+                  <Table size={dense2 ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+                    <TableHeadCustom
+                      selectBox={false}
+                      order={order2}
+                      orderBy={orderBy2}
+                      headLabel={TABLE_HEAD2}
+                      rowCount={tableData2?.length}
+                      numSelected={0}
+                      onSort={onSort2}
+                      onSelectAllRows={(checked) =>
+                        onSelectAllRows2(
+                          checked,
+                          tableData2?.map((row) => row.id)
                         )
-                      )}
-
-                    <TableEmptyRows
-                      height={denseHeight}
-                      emptyRows={emptyRows(page, rowsPerPage, tableData?.length)}
+                      }
                     />
 
-                    <TableNoData isNotFound={isNotFound} />
-                  </TableBody>
-                </Table>
-              </Scrollbar>
-            </TableContainer>
-            <TablePaginationCustom
-              count={dataFiltered?.length}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              onPageChange={onChangePage}
-              onRowsPerPageChange={onChangeRowsPerPage}
-              //
-              dense={dense}
-              onChangeDense={onChangeDense}
-            />
+                    <TableBody>
+                      {(isLoading ? [...Array(rowsPerPage2)] : dataFiltered2)
+                        ?.slice(page2 * rowsPerPage2, page2 * rowsPerPage2 + rowsPerPage2)
+                        ?.map((row, index) =>
+                          row ? (
+                            <OfferTableRow
+                              key={row.id}
+                              row={row}
+                              selected={row.id === productAsAdmin?.auction?.winner_bid}
+                              onSelectAccount={() => handleAccountClick(row?.dealer?.id)}
+                            />
+                          ) : (
+                            !isNotFound2 && <TableSkeleton key={index} sx={{ height: denseHeight2 }} />
+                          )
+                        )}
 
-            <Typography variant="h4" sx={{ mb: 5 }}>
-              Offers
-            </Typography>
+                      <TableEmptyRows
+                        height={denseHeight2}
+                        emptyRows={emptyRows(page2, rowsPerPage2, tableData2?.length)}
+                      />
 
-            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-              <TableSelectedAction
+                      <TableNoData isNotFound={isNotFound2} />
+                    </TableBody>
+                  </Table>
+                </Scrollbar>
+              </TableContainer>
+              <TablePaginationCustom
+                count={dataFiltered2?.length}
+                page={page2}
+                rowsPerPage={rowsPerPage2}
+                onPageChange={onChangePage2}
+                onRowsPerPageChange={onChangeRowsPerPage2}
+                //
                 dense={dense2}
-                numSelected={0}
-                rowCount={tableData2?.length}
-                onSelectAllRows={(checked) =>
-                  onSelectAllRows(
-                    checked,
-                    tableData2?.map((row) => row.id)
-                  )
-                }
-                action={
-                  <Tooltip title="Delete">
-                    <IconButton color="primary" >
-                      <Iconify icon="eva:trash-2-outline" />
-                    </IconButton>
-                  </Tooltip>
-                }
+                onChangeDense={onChangeDense2}
               />
+            </>
+            :
+              <Typography variant="h4" sx={{ mb: 5 }}>
+                Highest Bid: {productAsAdmin?.auction?.latest_bid?.bid ? productAsAdmin?.auction?.latest_bid?.bid.toLocaleString('en-US') + ' AED' : 'No bids yet'}
+              </Typography>
 
-              <Scrollbar>
-                <Table size={dense2 ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                  <TableHeadCustom
-                    selectBox={false}
-                    order={order2}
-                    orderBy={orderBy2}
-                    headLabel={TABLE_HEAD2}
-                    rowCount={tableData2?.length}
-                    numSelected={0}
-                    onSort={onSort2}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows2(
-                        checked,
-                        tableData2?.map((row) => row.id)
-                      )
-                    }
-                  />
-
-                  <TableBody>
-                    {(isLoading ? [...Array(rowsPerPage2)] : dataFiltered2)
-                      ?.slice(page2 * rowsPerPage2, page2 * rowsPerPage2 + rowsPerPage2)
-                      ?.map((row, index) =>
-                        row ? (
-                          <OfferTableRow
-                            key={row.id}
-                            row={row}
-                            selected={row.id === productAsAdmin?.auction?.winner_bid}
-                            onSelectAccount={() => handleAccountClick(row?.dealer?.id)}
-                          />
-                        ) : (
-                          !isNotFound2 && <TableSkeleton key={index} sx={{ height: denseHeight2 }} />
-                        )
-                      )}
-
-                    <TableEmptyRows
-                      height={denseHeight2}
-                      emptyRows={emptyRows(page2, rowsPerPage2, tableData2?.length)}
-                    />
-
-                    <TableNoData isNotFound={isNotFound2} />
-                  </TableBody>
-                </Table>
-              </Scrollbar>
-            </TableContainer>
-            <TablePaginationCustom
-              count={dataFiltered2?.length}
-              page={page2}
-              rowsPerPage={rowsPerPage2}
-              onPageChange={onChangePage2}
-              onRowsPerPageChange={onChangeRowsPerPage2}
-              //
-              dense={dense2}
-              onChangeDense={onChangeDense2}
-            />
+          }
+          
           </>
         )}
         {isLoading && <LoadingScreen />}

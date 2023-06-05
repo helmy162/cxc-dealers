@@ -6,6 +6,7 @@ import { Stack } from '@mui/material';
 import { hideScrollbarY } from '../../../utils/cssStyles';
 //
 import NavList from './NavList';
+import RoleBasedGuard from 'src/auth/RoleBasedGuard';
 
 // ----------------------------------------------------------------------
 
@@ -16,20 +17,22 @@ NavSectionHorizontal.propTypes = {
 
 function NavSectionHorizontal({ data, sx, ...other }) {
   return (
-    <Stack
-      direction="row"
-      spacing={1}
-      sx={{
-        mx: 'auto',
-        ...hideScrollbarY,
-        ...sx,
-      }}
-      {...other}
-    >
-      {data.map((group) => (
-        <Items key={group.subheader} items={group.items} />
-      ))}
-    </Stack>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          mx: 'auto',
+          ...hideScrollbarY,
+          ...sx,
+        }}
+        {...other}
+      >
+        {data.map((group) => (
+          <RoleBasedGuard roles={group.roles}>
+            <Items key={group.subheader} items={group.items} />
+          </RoleBasedGuard>
+        ))}
+      </Stack>
   );
 }
 

@@ -6,6 +6,7 @@ import { useLocales } from '../../../locales';
 //
 import { StyledSubheader } from './styles';
 import NavList from './NavList';
+import RoleBasedGuard from 'src/auth/RoleBasedGuard';
 
 // ----------------------------------------------------------------------
 
@@ -21,22 +22,23 @@ export default function NavSectionVertical({ data, sx, ...other }) {
     <Stack sx={sx} {...other}>
       {data.map((group) => {
         const key = group.subheader || group.items[0].title;
-
         return (
-          <List key={key} disablePadding sx={{ px: 2 }}>
-            {group.subheader && (
-              <StyledSubheader disableSticky>{`${translate(group.subheader)}`}</StyledSubheader>
-            )}
+          <RoleBasedGuard roles={group.roles}>
+            <List key={key} disablePadding sx={{ px: 2 }}>
+              {group.subheader && (
+                <StyledSubheader disableSticky>{`${translate(group.subheader)}`}</StyledSubheader>
+              )}
 
-            {group.items.map((list) => (
-              <NavList
-                key={list.title + list.path}
-                data={list}
-                depth={1}
-                hasChild={!!list.children}
-              />
-            ))}
-          </List>
+              {group.items.map((list) => (
+                <NavList
+                  key={list.title + list.path}
+                  data={list}
+                  depth={1}
+                  hasChild={!!list.children}
+                />
+              ))}
+            </List>
+          </RoleBasedGuard>
         );
       })}
     </Stack>

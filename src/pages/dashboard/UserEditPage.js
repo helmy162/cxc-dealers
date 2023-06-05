@@ -15,19 +15,20 @@ import UserNewEditForm from '../../sections/@dashboard/user/UserNewEditForm';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUsers } from '../../redux/slices/user';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
 export default function UserEditPage() {
   const { themeStretch } = useSettingsContext();
-
+  const {user} = useAuthContext();
   const { name } = useParams();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) =>
   state.user.users.find((user) => user.id == name));
 
 useEffect(() => {
-  dispatch(getUsers());
+  dispatch(getUsers(user?.role));
 }, [dispatch]);
 
   return (

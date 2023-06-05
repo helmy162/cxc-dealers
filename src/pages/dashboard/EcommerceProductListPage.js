@@ -41,6 +41,7 @@ import { ProductTableRow, ProductTableToolbar } from '../../sections/@dashboard/
 
 //car status
 import { carStatus, carTimer } from '../../utils/status';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -89,6 +90,8 @@ export default function EcommerceProductListPage() {
 
   const { themeStretch } = useSettingsContext();
 
+  const {user} = useAuthContext();
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -105,7 +108,7 @@ export default function EcommerceProductListPage() {
 
   
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts(user?.role));
   }, [dispatch]);
 
   useEffect(() => {

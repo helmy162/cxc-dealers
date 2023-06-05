@@ -38,6 +38,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { getSellers, resetSeller } from '../../redux/slices/user';
 import { useDispatch, useSelector } from '../../redux/store';
+import { useAuthContext } from 'src/auth/useAuthContext';
 // ----------------------------------------------------------------------
 const typeList = [
   'Original',
@@ -52,6 +53,8 @@ export default function AddCar({isEdit, car}) {
 
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+
+    const {user} = useAuthContext();
     
     const [currentTab, setCurrentTab] = useState('general');
     const [currentStep, setCurrentStep] = useState(0);
@@ -159,7 +162,7 @@ export default function AddCar({isEdit, car}) {
     const dispatch = useDispatch();
     
     useEffect(() => {
-      dispatch(getSellers());
+      dispatch(getSellers(user?.role));
       dispatch(resetSeller());
     }, [dispatch]);
   

@@ -39,10 +39,14 @@ import {
   OffersPage,
 } from './elements';
 import { PATH_AUTH } from './paths';
+import RoleBasedGuard from 'src/auth/RoleBasedGuard';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const {user} = useAuthContext();
+
   return useRoutes([
     {
       path: '/',
@@ -80,7 +84,9 @@ export default function Router() {
       path: 'dealer',
       element: (
         <AuthGuard>
-          <DashboardLayout type='dealer'/>
+          <RoleBasedGuard hasContent roles={['dealer', 'admin', 'sales']}>
+            <DashboardLayout/>
+          </RoleBasedGuard>
         </AuthGuard>
       ),
       children: [
@@ -89,19 +95,16 @@ export default function Router() {
         { path: 'cars/:name', element: <SingleCar />}, // this is the single car details page
         { path: 'completed-auctions', element: <CarsListingPage expired={true}/> }, // this is the completed auctions listing page
         { path: 'completed-auctions/:name', element: <SoldCar />}, // this is the single completed auction page
-        { path: 'profile', element: <UserAccountPage isProfile={true} /> },
         { path: 'bids', element: <BidsPage /> },
         { path: 'offers', element: <OffersPage /> },
         // other dealer pages...
       ],
-    },    
+    },
     {
       path: '/dashboard',
       element: (
         <AuthGuard>
-          <AdminGuard>
-            <DashboardLayout type='admin'/>
-          </AdminGuard>
+            <DashboardLayout />
         </AuthGuard>
       ),
       children: [
@@ -110,20 +113,20 @@ export default function Router() {
           path: 'car',
           children: [
             { element: <Navigate to="/dashboard/car/list" replace />, index: true },
-            { path: 'list', element: <EcommerceProductListPage /> },
-            { path: 'new', element: <AddCarPage /> },
-            { path: ':name/edit', element: <EcommerceProductEditPage /> },
-            { path: ':name', element: <EcommerceProductDetailsPage /> },
-            { path: ':name/details', element: <CarDetails /> },
+            { path: 'list', element: <RoleBasedGuard hasContent roles={['admin','closer', 'sales']}> <EcommerceProductListPage /> </RoleBasedGuard> },
+            { path: 'new', element: <RoleBasedGuard hasContent roles={['admin']}> <AddCarPage/> </RoleBasedGuard> },
+            { path: ':name/edit', element: <RoleBasedGuard hasContent roles={['admin']}> <EcommerceProductEditPage/> </RoleBasedGuard> },
+            { path: ':name', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales']}> <EcommerceProductDetailsPage/> </RoleBasedGuard> },
+            { path: ':name/details', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales']}> <CarDetails/> </RoleBasedGuard>},
           ],
         },
         {
           path: 'user',
           children: [
             { element: <Navigate to="/dashboard/user/list" replace />, index: true },
-            { path: 'new', element: <UserCreatePage /> },
-            { path: ':name/edit', element: <UserEditPage /> },
-            { path: 'list', element: <UserListPage /> },
+            { path: 'new', element: <RoleBasedGuard hasContent roles={['admin']}> <UserCreatePage/> </RoleBasedGuard> },
+            { path: ':name/edit', element: <RoleBasedGuard hasContent roles={['admin']}> <UserEditPage/> </RoleBasedGuard> },
+            { path: 'list', element: <RoleBasedGuard hasContent roles={['admin', 'sales']}> <UserListPage/> </RoleBasedGuard> },
             // { path: ':name/account', element: <UserAccountPage /> },
           ],
         },
@@ -131,19 +134,33 @@ export default function Router() {
           path: 'seller',
           children: [
             { element: <Navigate to="/dashboard/seller/list" replace />, index: true },
-            { path: 'new', element: <SellerCreatePage /> },
-            { path: ':name/edit', element: <SellerEditPage /> },
-            { path: 'list', element: <SellerListPage /> },
+            { path: 'new', element: <RoleBasedGuard hasContent roles={['admin', 'closer']}> <SellerCreatePage /> </RoleBasedGuard>},
+            { path: ':name/edit', element: <RoleBasedGuard hasContent roles={['admin', 'closer']}> <SellerEditPage /> </RoleBasedGuard> },
+            { path: 'list', element: <RoleBasedGuard hasContent roles={['admin', 'closer']}> <SellerListPage /> </RoleBasedGuard> },
             // { path: ':name/account', element: <UserAccountPage /> },
           ],
         }
       ],
     },
     {
+      path: '/',
+      element: (
+        <AuthGuard>
+          <DashboardLayout />
+        </AuthGuard>
+      ),
+      children: [
+        { element: <Navigate to={'/profile'} replace />, index: true },
+        { path: 'profile', element: <UserAccountPage isProfile={true} /> },
+      ],
+    },
+    {
       path: '/inspector',
       element: (
         <AuthGuard>
-          <DashboardLayout type='inspector'/>
+          <RoleBasedGuard hasContent roles={['inspector']}>
+            <DashboardLayout />
+          </RoleBasedGuard>
         </AuthGuard>
       ),
       children: [
