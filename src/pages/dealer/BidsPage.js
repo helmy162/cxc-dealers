@@ -133,8 +133,8 @@ export default function BidsPage() {
                 ...bid,
                 car: {
                 ...bid?.car,
-                livestatus: bid.car.status == 'pending'? 'pending' : carStatus(bid),
-                timeRemaining: bid.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
+                livestatus: bid?.car?.status == 'pending'? 'pending' : carStatus(bid),
+                timeRemaining: bid?.car?.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
                 }
               };
             })
