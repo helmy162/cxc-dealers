@@ -245,7 +245,7 @@ export default function BidsPage() {
   };
 
   const handleViewRow = (id) => {
-    navigate(PATH_DEALER.car(getCarFromBid(id)?.id));
+    navigate(PATH_DEALER.car(id));
   };
 
   const handleResetFilter = () => {

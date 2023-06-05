@@ -102,53 +102,17 @@ export default function BidsPage() {
     dispatch(getUserOffers());
   }, [dispatch, user]);
 
+  console.log(tableData);
+
   useEffect(() => {
-    if (products && products.length) {
-      setTableData(products);
+    if (userOffers) {
+      setTableData(userOffers);
     }
-  }, [products]);
+  }, [userOffers]);
 
 
-
-
-  useEffect(() => {
-    
-      const intervalId = setInterval(() => {
-        if(tableData.length > 0){
-          setTableData(
-            tableData.map((product) => {
-              const endAt = new Date(product?.auction?.end_at);
-              const startAt = new Date(product?.auction?.start_at);
-              const now = new Date();
-              return {
-                ...product,
-                livestatus: product.status == 'pending'? 'pending' : carStatus(product),
-                timeRemaining: product.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
-              };
-            })
-          )
-          
-        }
-      }, 1000);
-  
-      return () => clearInterval(intervalId);
-    
-  }, [productStatus, products,  dispatch, tableData]);
-  
   const dataFiltered = applyFilter({
-    inputData: userOffers.reduce((acc, currentBid) => {
-      const existingBidIndex = acc.findIndex(offer => offer.car_id === currentBid.car_id);
-      if (existingBidIndex !== -1) {
-        const existingBid = acc[existingBidIndex];
-        if (existingBid.amount < currentBid.amount) {
-          const updatedBid = {...existingBid, amount: currentBid.amount}; // create a new object with the updated bid property
-          acc.splice(existingBidIndex, 1, updatedBid); // replace the existing object with the updated one
-        }
-        return acc;
-      }
-      acc.push(currentBid);
-      return acc;
-    }, []),
+    inputData: tableData,
     comparator: getComparator(order, orderBy),
     filterName,
     filterStatus,
@@ -316,13 +280,11 @@ export default function BidsPage() {
                   {(isLoading ? [...Array(rowsPerPage)] : dataFiltered)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) =>
-                        row && getCarFromBid(row.car_id) ? (            
+                        row ? (            
                         <DealerOffersTableRow
                           key={row.id}
                           row={row.car}
                           amount={row.amount}
-                          user={user}
-                          isOffers={true}
                           onViewRow={() => handleViewRow(getCarFromBid(row.car_id).id)}
                         />
                       ) : (

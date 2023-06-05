@@ -24,7 +24,7 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
 
-DealerBidsTableRow.propTypes = {
+DealerOffersTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -34,13 +34,13 @@ DealerBidsTableRow.propTypes = {
   bid: PropTypes.number
 };
 
-export default function DealerBidsTableRow({
+export default function DealerOffersTableRow({
   row,
   onViewRow,
   amount,
-  user,
-  isOffers = false,
 }) {
+
+  console.log('row');
  
   const { id, details, images} = row;
 
