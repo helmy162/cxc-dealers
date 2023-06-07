@@ -187,7 +187,7 @@ export default function SoldCar(){
                               </div>
                               <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[45%]">
                                   <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/engine.svg"/> Engine Size</div>
-                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product?.details?.engine_size} CC</div>
+                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product?.details?.engine_size} L</div>
                               </div>
                               <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[45%]">
                                   <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/specs.svg"/> Registered Emirates</div>

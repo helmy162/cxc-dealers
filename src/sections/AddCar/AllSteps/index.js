@@ -10,7 +10,7 @@ export const AllSchema = Yup.object().shape({
   model: Yup.string().nullable().required('General: Model is required'),
   trim: Yup.string().nullable().required('General: Trim is required'),
   mileage: Yup.number('General: Should be a number').nullable().required('General: Mileage is required'),
-  engine_size : Yup.number('General: Should be a number').nullable().required('General: Engine size is required'),
+  engine_size : Yup.number('General: Should be a number').nullable().required('General: Engine size is required').min(0, 'General: Engine size should be less than 0').max(10, 'General: Engine size should be less greater 10 L'),
   number_of_cylinders : Yup.number('General: Should be a number').nullable().required('General: Number of Cylinders is required'),
   registered_emirates: Yup.string().nullable().required('General: Registered emirates is required'),
   body_type: Yup.string(),

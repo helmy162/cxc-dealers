@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 // add bid form
 import { RHFTextField } from "src/components/hook-form";
-import { InputAdornment, Box, Button, Stack} from "@mui/material";
+import { InputAdornment, Box, Button, Stack, Accordion, AccordionSummary, AccordionDetails} from "@mui/material";
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -20,6 +20,10 @@ import { Navigate, useParams, useNavigate  } from "react-router";
 import LoadingScreen from '../../components/loading-screen';
 import ConfirmDialog from '../../components/confirm-dialog';
 import { useSnackbar } from '../../components/snackbar';
+import Iconify from '../../components/iconify';
+import EcommerceProductDetailsPage from "../dashboard/EcommerceProductDetailsPage";
+
+
 // import bidPlacedSound from '../../assets/sounds/cash_register.mp3';
 // import errorSound from '../../assets/sounds/error.mp3';
 
@@ -238,13 +242,13 @@ export default function SingleCar(){
                                 }}
                               />
                               <Stack direction="row" spacing={2}>
-                                <Button variant="outlined" onClick={() => setValue('bid', watch('bid') + 500)} className="max-h-[48px] !rounded">
+                                <Button variant="outlined" onClick={() => setValue('bid', (watch('bid')> 0 ? watch('bid') : highestBid?? product?.auction?.start_price) + 500)} className="max-h-[48px] !rounded">
                                   +500
                                 </Button>
-                                <Button variant="outlined" onClick={() => setValue('bid', watch('bid') + 1000) } className="max-h-[48px] !rounded">  
+                                <Button variant="outlined" onClick={() => setValue('bid', (watch('bid')> 0 ? watch('bid') : highestBid?? product?.auction?.start_price) + 1000) } className="max-h-[48px] !rounded">  
                                   +1000
                                 </Button>
-                                <Button variant="outlined" onClick={() => setValue('bid', watch('bid') + 2000)} className="max-h-[48px] !rounded">
+                                <Button variant="outlined" onClick={() => setValue('bid', (watch('bid')> 0 ? watch('bid') : highestBid?? product?.auction?.start_price) + 2000)} className="max-h-[48px] !rounded">
                                   +2000
                                 </Button>
                               </Stack>
@@ -276,7 +280,7 @@ export default function SingleCar(){
                               </div>
                               <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[45%]">
                                   <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/engine.svg"/> Engine Size</div>
-                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product?.details?.engine_size} CC</div>
+                                  <div className="bg-[#E8F2F8] w-full text-[#8184A3] py-2 px-3 rounded">{product?.details?.engine_size} L</div>
                               </div>
                               <div className="text-[14px] font-medium flex flex-col gap-[12px] basis-[45%] lg:basis-[45%]">
                                   <div className=" text-[#141414] text-[12px] font-semibold flex gap-2 items-center"> <img src="/assets/icons/cars/specs.svg"/> Registered Emirates</div>
@@ -291,6 +295,22 @@ export default function SingleCar(){
                           
                       </div>
                     </div>
+                    {
+                      user?.role === 'admin' &&
+                      <div className="max-w-[1000px] p-[12px] m-auto">
+                        <Accordion style={{boxShadow:'0 0px 13px rgb(0 0 0 / 8%)', borderRadius:'8px', marginTop:'10px'}} defaultExpanded>
+                          <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                              <h2 className="text-[20px] font-semibold capitalize mb-3">
+                                  Admin Section
+                              </h2>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <EcommerceProductDetailsPage onAuctionPage={true} />
+                          </AccordionDetails>
+                        </Accordion>
+                        
+                      </div>
+                    }
                     <div className="max-w-[1000px] p-[12px] m-auto">
                         <CarDetails withImages={false} noLoading={true}/>
                     </div>

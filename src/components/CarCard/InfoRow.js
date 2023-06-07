@@ -25,7 +25,7 @@ export default function InfoRow({ data, mobile=false}) {
             {data.details?.mileage} KM
           </SpecItem>
           <SpecItem>
-            {data.details?.engine_size} CC
+            {data.details?.engine_size} L
           </SpecItem>
           <SpecItem>
             {data.details?.exterior_color}
@@ -61,7 +61,7 @@ export default function InfoRow({ data, mobile=false}) {
           <div className="flex items-center text-[#919EAB] text-[8px] gap-[2px]">
             <img src="/assets/icons/cars/engine.svg" width={10}/>
             <p>
-              {data.details?.engine_size} CC
+              {data.details?.engine_size} L
             </p>
           </div>
         </Box>

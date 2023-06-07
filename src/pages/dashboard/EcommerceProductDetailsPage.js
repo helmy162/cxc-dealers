@@ -67,7 +67,7 @@ const TABLE_HEAD2 = [
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceProductDetailsPage({isCloser = false}) {
+export default function EcommerceProductDetailsPage({onAuctionPage = false}) {
 
 
   const {
@@ -298,7 +298,7 @@ export default function EcommerceProductDetailsPage({isCloser = false}) {
     )}
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
+        {!onAuctionPage && <CustomBreadcrumbs
           heading="Car Details"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
@@ -308,9 +308,11 @@ export default function EcommerceProductDetailsPage({isCloser = false}) {
             },
             (productAsAdmin && productAsAdmin.id == name)? { name: '#' + productAsAdmin?.id } : { name: '#' },
           ]}
-        />
+        />}
         {productAsAdmin && productAsAdmin.id == name && livestatus && (
           <>
+          {
+            !onAuctionPage && 
             <div style={{fontSize:'36px', fontWeight:'700', marginBottom:'50px', display:'flex', alignItems:'center', gap:'20px', flexWrap: 'wrap'}}>
               #{productAsAdmin?.id}
 
@@ -348,6 +350,7 @@ export default function EcommerceProductDetailsPage({isCloser = false}) {
               
               
             </div>
+          }
             <Card style={{marginBottom:'50px'}}>
               <Tabs
                 value={currentTab}
@@ -380,9 +383,13 @@ export default function EcommerceProductDetailsPage({isCloser = false}) {
             {
               user?.role == 'admin' || user?.role == 'sales'?
               <>
-              <div style={{zIndex:'10000', marginBottom:'50px'}}>
-                <ProductAuction productAsAdmin={productAsAdmin}/>
-              </div>
+              {
+                !onAuctionPage &&
+                <div style={{zIndex:'10000', marginBottom:'50px'}}>
+                  <ProductAuction productAsAdmin={productAsAdmin}/>
+                </div>
+              }
+              
             
               <Typography variant="h4" sx={{ mb: 5 }}>
                 Bids
