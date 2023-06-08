@@ -34,6 +34,10 @@ export default function SingleCar(){
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
 
+    const [loadingBid, setLoadingBid] = useState(false);
+
+    const [highestBid, setHighestBid] = useState(0);
+
     // const playbidPlacedSound = new Audio(bidPlacedSound);
     // const playErrorSound = new Audio(errorSound);
 
@@ -47,7 +51,7 @@ export default function SingleCar(){
 
   useEffect(() => {
     if (name) { 
-      dispatch(getProduct(name));
+      dispatch(getProduct(name, 'dealer'));
       dispatch(getStatus(product));
     }
   }, [dispatch, name]);
@@ -65,10 +69,10 @@ export default function SingleCar(){
 
   const defaultValues = useMemo(
     () => ({
-      bid: product?.auction?.latest_bid?.bid + 500 || 0,
+      bid: highestBid > 0 ? highestBid + 500 : 0,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [product]
+    [highestBid]
   );
 
   useEffect(() => {
@@ -91,25 +95,24 @@ export default function SingleCar(){
   } = methods;
 
   const [auctionID, setAuctionID] = useState(null);
-  const [highestBid, setHighestBid] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [canBid, setCanBid] = useState(true);
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [highestUserBidsOnThisCar, setHighestUserBidsOnThisCar] = useState(null);
 
+  let showOutbid = false;
+
   useEffect(() => {
     if (product?.auction?.id) {
       setAuctionID(product?.auction?.id);
       setHighestBid(product?.auction?.latest_bid?.bid);
-      setHighestUserBidsOnThisCar( userBids.length &&  userBids.filter((element) => {return element.car_id == product?.id}).length ?
-        userBids
-        ?.filter((element) => {return element.car_id == product?.id})
-        ?.reduce((prev, current) => {return prev.bid > current.bid ? prev : current})
-        : null
-      )
+      setHighestUserBidsOnThisCar( product?.my_bid?.bid?? null)
+      showOutbid = product?.auction?.latest_bid?.bid == product?.my_bid?.bid;
     }
   }, [product]);
+
+
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -134,27 +137,24 @@ export default function SingleCar(){
 
   useEffect(() => {
     if(auctionID && user){
-      const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
+      const channel =  pusher.channels.channels[`private-car.auction.${auctionID}`] ??  pusher.subscribe(`private-car.auction.${auctionID}`);
       channel.bind("NewBid", (data) => {
-          setHighestBid(data.auction.last_bid);
-          dispatch(getProduct(name));
+        setHighestBid(data.auction.last_bid);
+        setValue('bid', data.auction.next_min_bid);
+        if(data.auction.last_bid_dealer == user?.id) {
+          setHighestUserBidsOnThisCar(data.auction.last_bid);
+          enqueueSnackbar('Your bid has been placed successfully', {variant: 'success'});
+          setLoadingBid(false);
+          showOutbid = true;
+        }
+        else if(showOutbid){
+          showOutbid = false;
+          enqueueSnackbar('You have been outbidden', {variant: 'error'})
+        }
+          
       });
-    
-      return () => {
-        channel.unbind("NewBid");
-        pusher.unsubscribe();
-      };
     }
   }, [auctionID]);
-
-
-  useEffect(() => {
-    if(highestUserBidsOnThisCar?.bid < highestBid)
-    {
-      // playErrorSound.play();
-      enqueueSnackbar('You have been outbidden', {variant: 'error'})
-    }
-  }, [highestBid && highestUserBidsOnThisCar])
 
   const onSubmit = async (data) => {
     try {
@@ -163,9 +163,8 @@ export default function SingleCar(){
         if(productStatus <= 60000) dispatch(extendEndtime(product.auction.id));
         const mergedDate = {bid: data.bid, auction_id: product.auction.id, car_id: product.id};
         const res = await axiosInstance.post('dealer/bid', mergedDate);
-        setHighestUserBidsOnThisCar(data);
+        setLoadingBid(true);
         // playbidPlacedSound.play();
-        enqueueSnackbar('Your bid has been placed successfully', {variant: 'success'});
         
     } catch (error) {
       console.error(error);
@@ -214,7 +213,7 @@ export default function SingleCar(){
                           <div className="min-h-[60px] bg-[#DFDFDF] flex  gap-[1px] rounded-lg border border-solid border-[#DFDFDF]">
                             <div className="flex flex-col items-center justify-center basis-full bg-white py-[12px] ">
                                 <h1 className="text-[#8184A3] text-[14px] lg:text-[16px]">Your Last Bid</h1>
-                                <h1 className={`text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold ${highestUserBidsOnThisCar?.bid >= highestBid ? 'text-[#36B37E]' : highestUserBidsOnThisCar?.bid?  'text-[#FF5630]' : ''}`}>{highestUserBidsOnThisCar?.bid?.toLocaleString('en-US')?? 0} AED</h1>
+                                <h1 className={`text-[#1E1E1E] text-[14px] lg:text-[16px] font-semibold ${highestUserBidsOnThisCar >= highestBid ? 'text-[#36B37E]' : highestUserBidsOnThisCar?  'text-[#FF5630]' : ''}`}>{highestUserBidsOnThisCar?.toLocaleString('en-US')?? 0} AED</h1>
                             </div>
                           </div>
                           </div>
@@ -305,14 +304,14 @@ export default function SingleCar(){
                               </h2>
                           </AccordionSummary>
                           <AccordionDetails>
-                            <EcommerceProductDetailsPage onAuctionPage={true} />
+                            <EcommerceProductDetailsPage onAuctionPage={true} noLoading={true} />
                           </AccordionDetails>
                         </Accordion>
                         
                       </div>
                     }
                     <div className="max-w-[1000px] p-[12px] m-auto">
-                        <CarDetails withImages={false} noLoading={true}/>
+                        <CarDetails withImages={false} noLoading={true} parentProduct={product}/>
                     </div>
                     
                 </div>

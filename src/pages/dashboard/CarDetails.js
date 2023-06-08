@@ -22,7 +22,7 @@ import Logo from '../../components/logo';
 import CarSkeletonColored from './CarSkeletonColored';
 import { useAuthContext } from 'src/auth/useAuthContext';
 
-export default function CarDetails({withImages = true, noLoading=false}) {
+export default function CarDetails({withImages = true, noLoading=false, parentProduct}) {
     const { themeStretch } = useSettingsContext();
     const { name } = useParams();
     const {user} = useAuthContext();
@@ -34,7 +34,7 @@ export default function CarDetails({withImages = true, noLoading=false}) {
     const [allAccordions, setAllAccordions]= useState([]);
 
     useEffect(() => {
-        dispatch(getProductDetails(name, user?.role));
+        if(!parentProduct) dispatch(getProductDetails(name, user?.role));
       }, [dispatch, name]);
 
     const [defectImages, setDefectImages] = useState([]);

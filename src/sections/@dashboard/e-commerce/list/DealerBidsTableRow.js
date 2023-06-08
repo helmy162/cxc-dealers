@@ -69,15 +69,11 @@ export default function DealerBidsTableRow({
   const [highestBid, setHighestBid] = useState( auction?.latest_bid?.bid || bid);
 
   useEffect(() => {
-    const channel = pusher.subscribe(`private-car.auction.${auction?.id}`);
+    if(!auction) return;
+    const channel =  pusher.channels.channels[`private-car.auction.${auction?.id}`] ??  pusher.subscribe(`private-car.auction.${auction?.id}`);
     channel.bind("NewBid", (data) => {
       setHighestBid(data.auction.last_bid)
     });
-  
-    return () => {
-      channel.unbind("NewBid");
-      pusher.unsubscribe();
-    };
   }, []);
 
   const mainImages = images?.map((img) => ('https://api.carsxchange.com/storage/car_images/'+ img));

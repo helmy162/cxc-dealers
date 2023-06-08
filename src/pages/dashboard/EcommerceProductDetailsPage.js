@@ -67,7 +67,7 @@ const TABLE_HEAD2 = [
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceProductDetailsPage({onAuctionPage = false}) {
+export default function EcommerceProductDetailsPage({onAuctionPage = false, noLoading = false}) {
 
 
   const {
@@ -168,15 +168,12 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false}) {
   }, [productAsAdmin]);
   
   useEffect(() => {
-    const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
-    channel.bind("NewBid", (data) => {
-        dispatch(getProductAsAdmin(name, user?.role));
-    });
-  
-    return () => {
-      channel.unbind("NewBid");
-      pusher.unsubscribe();
-    };
+    if(auctionID) {
+      const channel =  pusher.channels.channels[`private-car.auction.${auctionID}`] ??  pusher.subscribe(`private-car.auction.${auctionID}`);
+      channel.bind("NewBid", (data) => {
+          dispatch(getProductAsAdmin(name, user?.role));
+      });
+    }
   }, [auctionID, user, productAsAdmin]);
 
 
@@ -559,7 +556,7 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false}) {
           
           </>
         )}
-        {isLoading && <LoadingScreen />}
+        {isLoading && !noLoading && <LoadingScreen />}
       </Container>
     </>
   );

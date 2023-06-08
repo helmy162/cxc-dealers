@@ -14,19 +14,18 @@ export default function CarHighestBid({ data, expired, mobile=false}) {
   const [highestBid, setHighestBid] = useState(0);
   const { user, pusher} = useAuthContext();
   useEffect(() => {
-    if(!expired)
+    if(!expired && auctionID)
     {
       data?.auction?.latest_bid ? setHighestBid(data?.auction?.latest_bid?.bid) : setHighestBid(data?.auction?.start_price);
       const auctionID = data?.auction?.id;
       setAuctionID(auctionID);
-      const channel = pusher.subscribe(`private-car.auction.${auctionID}`);
+      const channel =  pusher.channels.channels[`private-car.auction.${auctionID}`] ??  pusher.subscribe(`private-car.auction.${auctionID}`);
       channel.bind("NewBid", (data) => {
           setHighestBid(data.auction.last_bid);
       });
 
       return () => {
-        channel.unbind("NewBid");
-        pusher.disconnect();
+        pusher.disconnect(`private-car.auction.${auctionID}`);
       };
     }
     else {

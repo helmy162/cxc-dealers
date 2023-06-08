@@ -246,7 +246,7 @@ export function getProduct(name, role) {
     // dispatch(slice.actions.startLoading());
     try {
         const response = role ? await axios.get(`${role}/cars/${name}`) : await axios.get(`cars/${name}`);
-        dispatch(slice.actions.getProductSuccess(response.data.car));
+        dispatch(slice.actions.getProductSuccess({...response.data.car, my_bid: {...response.data.my_bid}}));
         getStatus(response.data.car)(dispatch);
     } catch (error) {
       console.error(error);
