@@ -254,7 +254,7 @@ export default function AddCar({isEdit, car}) {
       const mergedData = CarApi.mapFormDataToApiRequest(data);
       try {
         let res;
-        isEdit?  res = await axiosInstance.post(`admin/car/${car.id}`, mergedData) :  res = await axiosInstance.post('inspector/car', mergedData);
+        isEdit?  res = await axiosInstance.post(`admin/cars/${car.id}`, mergedData) :  res = await axiosInstance.post('inspector/car', mergedData);
         enqueueSnackbar( isEdit? 'Car updated successfully' : 'Car added successfully', { variant: 'success' })
         navigate(PATH_DASHBOARD.car.list);
       } catch (error) {
