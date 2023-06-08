@@ -136,10 +136,9 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
           name="engine_size"
           label="Engine Size ( L )"
           type="number"
-          // inputProps={{ inputMode: 'numeric', pattern: '[0-6]*' }}
           InputProps={{
             inputProps: { 
-                inputMode: 'numeric', pattern: '[0-6]*' 
+                inputMode: 'decimal' 
             }
         }}
         />
