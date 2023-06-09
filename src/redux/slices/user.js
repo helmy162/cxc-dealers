@@ -121,7 +121,7 @@ export function getSeller(name, role) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`${role}/sellers/${name}`);
-      dispatch(slice.actions.getSellerSuccess(response.data));
+      dispatch(slice.actions.getSellerSuccess(response.data.seller));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
