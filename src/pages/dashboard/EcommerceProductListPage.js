@@ -108,16 +108,34 @@ export default function EcommerceProductListPage() {
 
   const [isColumnFiltersOpen, setIsColumnFiltersOpen] = useState(false);
 
-  const [columnVisibility, setColumnVisibility] = useState({
-    id: true,
-    make: true,
-    model: true,
-    year: true,
-    seller_name: true,
-    inspection_date: true,
-    status: true,
-    '' : true,
+  const COLUMN_VISIBILITY_STORAGE_KEY = 'columnVisibility';
+
+  const saveColumnVisibilityToLocalStorage = (visibility) => {
+    localStorage.setItem(COLUMN_VISIBILITY_STORAGE_KEY, JSON.stringify(visibility));
+  };
+
+  const getColumnVisibilityFromLocalStorage = () => {
+    const visibility = localStorage.getItem(COLUMN_VISIBILITY_STORAGE_KEY);
+    return visibility ? JSON.parse(visibility) : {};
+  };
+
+  const [columnVisibility, setColumnVisibility] = useState(() => {
+    const savedColumnVisibility = getColumnVisibilityFromLocalStorage();
+    return Object.keys(savedColumnVisibility).length !== 0 ? savedColumnVisibility : {
+      id: true,
+      make: true,
+      model: true,
+      year: true,
+      seller_name: true,
+      inspection_date: true,
+      status: true,
+      '': true,
+    };
   });
+
+  useEffect(() => {
+    saveColumnVisibilityToLocalStorage(columnVisibility);
+  }, [columnVisibility]);
   
   useEffect(() => {
     dispatch(getProducts(user?.role));
