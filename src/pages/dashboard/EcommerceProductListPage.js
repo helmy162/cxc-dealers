@@ -63,6 +63,8 @@ const STATUS_OPTIONS = [
   { value: 'expired', label: 'Expired' },
 ];
 
+const COLUMN_VISIBILITY_STORAGE_KEY = 'columnVisibility';
+
 // ----------------------------------------------------------------------
 
 export default function EcommerceProductListPage() {
@@ -107,8 +109,6 @@ export default function EcommerceProductListPage() {
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [isColumnFiltersOpen, setIsColumnFiltersOpen] = useState(false);
-
-  const COLUMN_VISIBILITY_STORAGE_KEY = 'columnVisibility';
 
   const saveColumnVisibilityToLocalStorage = (visibility) => {
     localStorage.setItem(COLUMN_VISIBILITY_STORAGE_KEY, JSON.stringify(visibility));
