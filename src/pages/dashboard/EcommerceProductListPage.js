@@ -46,14 +46,14 @@ import { useAuthContext } from 'src/auth/useAuthContext';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'Car ID', align: 'left', visible: true },
-  { id: 'make', label: 'Make', align: 'left', visible: true },
-  { id: 'model', label: 'Model', align: 'left', visible: true },
-  { id: 'year', label: 'Year', align: 'left', visible: true },
-  { id: 'seller_name', label: 'Seller Name', align: 'left', visible: true },
-  { id: 'inspection_date', label: 'Inspection Date', align: 'left', visible: true },
-  { id: 'status', label: 'Auction', align: 'center', width: 180, visible: true },
-  { id: '', visible: true },
+  { id: 'id', label: 'Car ID', align: 'left' },
+  { id: 'make', label: 'Make', align: 'left' },
+  { id: 'model', label: 'Model', align: 'left' },
+  { id: 'year', label: 'Year', align: 'left' },
+  { id: 'seller_name', label: 'Seller Name', align: 'left' },
+  { id: 'inspection_date', label: 'Inspection Date', align: 'left' },
+  { id: 'status', label: 'Auction', align: 'center', width: 180 },
+  { id: '' },
 ];
 
 const STATUS_OPTIONS = [
