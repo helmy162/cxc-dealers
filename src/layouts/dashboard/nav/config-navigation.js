@@ -99,7 +99,7 @@ const navConfig = [
     items: [
       {
         title: 'My Account',
-        path: PATH_DEALER.account,
+        path: '/profile',
         icon: ICONS.profile,
       },
     ],
