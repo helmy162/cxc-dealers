@@ -80,22 +80,20 @@ export default function ProductTableRow({
             <Checkbox checked={selected} onClick={onSelectRow} />
           </TableCell>
 
-          {columnVisibility['id'] && (
-              <TableCell>
-                <Stack direction="row" alignItems="center" spacing={2}>
+          <TableCell>
+            <Stack direction="row" alignItems="center" spacing={2}>
 
-                  <Link
-                    noWrap
-                    color="inherit"
-                    variant="subtitle2"
-                    onClick={onViewRow}
-                    sx={{ cursor: 'pointer' }}
-                  >
-                    #{id}
-                  </Link>
-                </Stack>
-              </TableCell>
-              )}
+              <Link
+                noWrap
+                color="inherit"
+                variant="subtitle2"
+                onClick={onViewRow}
+                sx={{ cursor: 'pointer' }}
+              >
+                #{id}
+              </Link>
+            </Stack>
+          </TableCell>
 
           {columnVisibility['make'] && <TableCell>{details.make}</TableCell>}
           {columnVisibility['model'] && <TableCell>{details.model}</TableCell>}

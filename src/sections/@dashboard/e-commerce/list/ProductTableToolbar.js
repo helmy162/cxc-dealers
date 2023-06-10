@@ -107,12 +107,12 @@ export default function ProductTableToolbar({
                 <InputLabel sx={{'&.Mui-focused': {color: 'text.primary'}}}>Filters</InputLabel>
                 <Select
                     multiple
-                    value={columnOptions.filter((column) => columnVisibility[column.id]).map((column) => column.label)}
+                    value={columnOptions.filter((column) => columnVisibility[column.id] && column.id !== "id" && column.id !== "").map((column) => column.label)}
                     onChange={onOpenColumnFilters}
                     input={<OutlinedInput label="Filters"/>}
                     renderValue={(selected) => selected.join(', ')}
                 >
-                    {columnOptions.filter((column) => column.id !== '').map((column) => (
+                    {columnOptions.filter((column) => column.id !== '' && column.id !== 'id').map((column) => (
                         <MenuItem key={column.id}>
                             <FormControlLabel
                                 control={

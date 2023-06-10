@@ -105,6 +105,19 @@ export default function EcommerceProductListPage() {
   const [filterStatus, setFilterStatus] = useState([]);
 
   const [openConfirm, setOpenConfirm] = useState(false);
+
+  const [isColumnFiltersOpen, setIsColumnFiltersOpen] = useState(false);
+
+  const [columnVisibility, setColumnVisibility] = useState({
+    id: true,
+    make: true,
+    model: true,
+    year: true,
+    seller_name: true,
+    inspection_date: true,
+    status: true,
+    '' : true,
+  });
   
   useEffect(() => {
     dispatch(getProducts(user?.role));
@@ -231,19 +244,6 @@ export default function EcommerceProductListPage() {
     setFilterName('');
     setFilterStatus([]);
   };
-
-  const [columnVisibility, setColumnVisibility] = useState({
-    id: true,
-    make: true,
-    model: true,
-    year: true,
-    seller_name: true,
-    inspection_date: true,
-    status: true,
-    '' : true,
-  });
-
-  const [isColumnFiltersOpen, setIsColumnFiltersOpen] = useState(false);
 
   const handleOpenColumnFilters = () => {
     setIsColumnFiltersOpen(true);
