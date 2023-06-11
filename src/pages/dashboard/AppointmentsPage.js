@@ -183,17 +183,17 @@ export default function AppointmentsPage() {
   };
 
   const handleDeleteRow = async (id) => {
-    try {
-        const response = await axiosInstance.delete(`admin/cars/${id}`);
-        // check if the DELETE request was successful
-        if (response.data.success) {
-            const deleteRow = tableData.filter((row) => row.id !== id);
-            setSelected([]);
-            setTableData(deleteRow);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
+    // try {
+    //     const response = await axiosInstance.delete(`admin/cars/${id}`);
+    //     // check if the DELETE request was successful
+    //     if (response.data.success) {
+    //         const deleteRow = tableData.filter((row) => row.id !== id);
+    //         setSelected([]);
+    //         setTableData(deleteRow);
+    //     }
+    // } catch (error) {
+    //     console.error('Error:', error);
+    // }
 
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -205,16 +205,16 @@ export default function AppointmentsPage() {
   const handleDeleteRows = async (selectedRows) => {
     const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
     selectedRows.forEach(async row => {
-      try {
-        const response = await axiosInstance.delete(`admin/cars/${row}`);
-        // check if the DELETE request was successful
-        if (response.data.success) {
-          setSelected([]);
-          setTableData(deleteRows);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      // try {
+      //   const response = await axiosInstance.delete(`admin/cars/${row}`);
+      //   // check if the DELETE request was successful
+      //   if (response.data.success) {
+      //     setSelected([]);
+      //     setTableData(deleteRows);
+      //   }
+      // } catch (error) {
+      //   console.error('Error:', error);
+      // }
     });
 
     if (page > 0) {
@@ -258,31 +258,17 @@ export default function AppointmentsPage() {
       }
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Cars List"
+          heading="Appointments List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'Cars',
-              href: PATH_DASHBOARD.car.list, // need to edit
+              name: 'Appointments',
             },
-            { name: 'List' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              to={PATH_DASHBOARD.car.new} // need to edit
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-              className="!basis-full"
-              sx={{ flexBasis: '100%'}}
-            >
-              Inspect &amp; Add Car
-            </Button>
-          }
         />
 
         <Card>
-          <ProductTableToolbar
+          {/* <ProductTableToolbar
             filterName={filterName}
             filterStatus={filterStatus}
             onFilterName={handleFilterName}
@@ -290,7 +276,7 @@ export default function AppointmentsPage() {
             statusOptions={STATUS_OPTIONS}
             isFiltered={isFiltered}
             onResetFilter={handleResetFilter}
-          />
+          /> */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
