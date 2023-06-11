@@ -20,6 +20,7 @@ const ICONS = {
   garage: icon('ic_garage'),
   soldCar: icon('ic_complete'),
   cashback: icon('ic_cashback'),
+  appointment: icon('ic_appointment'),
 };
 
 const navConfig = [
@@ -46,6 +47,12 @@ const navConfig = [
         path: PATH_DASHBOARD.car.list,
         icon: ICONS.garage,
         roles: ['admin', 'closer', 'sales'],
+      },
+      {
+        title: 'appointments',
+        path: '/dashboard/appointment',
+        icon: ICONS.appointment,
+        roles: ['admin'],
       },
       {
         title: 'Add Car',
