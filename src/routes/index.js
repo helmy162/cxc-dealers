@@ -125,7 +125,7 @@ export default function Router() {
           path: 'appointment',
           children: [
             { element: <Navigate to="/dashboard/appointment/list" replace />, index: true },
-            { path: 'list', element: <RoleBasedGuard hasContent roles={['admin','closer', 'sales']}> <AppointmentsPage /> </RoleBasedGuard> },
+            { path: 'list', element: <RoleBasedGuard hasContent roles={['admin']}> <AppointmentsPage /> </RoleBasedGuard> },
           ],
         },
         {
