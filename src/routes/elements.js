@@ -42,6 +42,7 @@ export const SellerCreatePage = Loadable(lazy(() => import('../pages/dashboard/S
 export const SellerEditPage = Loadable(lazy(() => import('../pages/dashboard/SellerEditPage')));
 export const AddCarPage = Loadable(lazy(() => import('../pages/dashboard/AddCarPage')));
 export const AppointmentsPage = Loadable(lazy(() => import('../pages/dashboard/AppointmentsPage')));
+export const CalendarPage = Loadable(lazy(() => import('../pages/dashboard/CalendarPage')));
 
 export const EcommerceProductListPage = Loadable(
   lazy(() => import('../pages/dashboard/EcommerceProductListPage'))
