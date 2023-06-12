@@ -46,15 +46,14 @@ import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
-
-
 const STATUS_OPTIONS = [
   'all',
   'Admin',
   'Inspector',
   'Dealer',
   'Closer',
-  'Sales'
+  'Sales',
+  'Inactive'
 ];
 
 const ROLE_OPTIONS = [
@@ -177,50 +176,66 @@ export default function UserListPage() {
 
   const handleDeleteRow = async (id) => {
     try {
-        const response = await axiosInstance.delete(`admin/users/${id}`);
-        // check if the DELETE request was successful
-        if (response.data.success) {
-            const deleteRow = tableData.filter((row) => row.id !== id);
-            setSelected([]);
-            setTableData(deleteRow);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-};
-
-const handleDeleteRows = async (selectedRows) => {
-  const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-  selectedRows.forEach(async row => {
-    try {
-      const response = await axiosInstance.delete(`admin/users/${row}`);
+      const response = await axiosInstance.delete(`admin/users/${id}`);
       // check if the DELETE request was successful
       if (response.data.success) {
+        const updatedData = tableData.map((row) => {
+          if (row.id === id) {
+            return { ...row, status: 'inactive' };
+          }
+          return row;
+        });
         setSelected([]);
-        setTableData(deleteRows);
+        setTableData(updatedData);
       }
     } catch (error) {
       console.error('Error:', error);
     }
-  });
 
-  if (page > 0) {
-    if (selectedRows.length === dataInPage.length) {
-      setPage(page - 1);
-    } else if (selectedRows.length === dataFiltered.length) {
-      setPage(0);
-    } else if (selectedRows.length > dataInPage.length) {
-      const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-      setPage(newPage);
+    // Update the dataFiltered state based on the applied filters
+    const dataFiltered = applyFilter({
+      inputData: tableData,
+      comparator: getComparator(order, orderBy),
+      filterName,
+      filterRole,
+      filterStatus,
+    });
+
+    // If the current page is greater than the available pages after filtering,
+    // set the page to the last available page
+    const lastPage = Math.max(0, Math.ceil(dataFiltered.length / rowsPerPage) - 1);
+    if (page > lastPage) {
+      setPage(lastPage);
     }
-  }
-};
+  };
+
+  const handleDeleteRows = async (selectedRows) => {
+    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+    selectedRows.forEach(async row => {
+      try {
+        const response = await axiosInstance.delete(`admin/users/${row}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+          setSelected([]);
+          setTableData(deleteRows);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+
+    if (page > 0) {
+      if (selectedRows.length === dataInPage.length) {
+        setPage(page - 1);
+      } else if (selectedRows.length === dataFiltered.length) {
+        setPage(0);
+      } else if (selectedRows.length > dataInPage.length) {
+        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
+        setPage(newPage);
+      }
+    }
+  };
+
   const handleAccountClick = (id) => {
     navigate(PATH_DASHBOARD.user.edit(id)); // change edit to account
   }
@@ -404,13 +419,13 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter( function(user){
+    inputData = inputData.filter(function (user) {
       if (
-        user.name?.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 || 
-        (user.phone && user.phone.indexOf(filterName.toLowerCase()) !== -1 )|| 
-        user.email?.indexOf(filterName.toLowerCase()) !== -1 ||
-        '#' + user.id ==  filterName
-        )
+          user.name?.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+          (user.phone && user.phone.indexOf(filterName.toLowerCase()) !== -1) ||
+          user.email?.indexOf(filterName.toLowerCase()) !== -1 ||
+          '#' + user.id == filterName
+      )
         return true;
       return false;
     });
@@ -421,9 +436,12 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   }
 
   if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => filterStatus.toLowerCase().includes(user.type));
+    if (filterStatus.toLowerCase() === 'inactive') {
+      inputData = inputData.filter((user) => user.status.toLowerCase() === 'inactive');
+    } else {
+      inputData = inputData.filter((user) => filterStatus.toLowerCase().includes(user.type) && user.status.toLowerCase() === 'active');
+    }
   }
-
 
   return inputData;
 }

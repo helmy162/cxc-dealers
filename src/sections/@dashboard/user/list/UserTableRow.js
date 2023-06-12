@@ -37,7 +37,6 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
   const { id, name, phone, email, type, bid_limit} = row;
 
-
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState(null);
@@ -139,7 +138,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
             sx={{ color: 'error.main' }}
           >
             <Iconify icon="eva:trash-2-outline" />
-            Delete
+            Deactivate
           </MenuItem>
 
           <MenuItem
@@ -157,10 +156,13 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           open={openConfirm}
           onClose={handleCloseConfirm}
           title="Delete"
-          content="Are you sure want to delete?"
+          content="Are you sure you want to deactivate this user's account?"
           action={
-            <Button variant="contained" color="error" onClick={onDeleteRow}>
-              Delete
+            <Button variant="contained" color="error" onClick={() => {
+              onDeleteRow();
+              handleCloseConfirm();
+            }}>
+              Deactivate
             </Button>
           }
         />
