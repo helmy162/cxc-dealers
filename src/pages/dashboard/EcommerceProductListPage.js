@@ -63,6 +63,8 @@ const STATUS_OPTIONS = [
   { value: 'expired', label: 'Expired' },
 ];
 
+const COLUMN_VISIBILITY_STORAGE_KEY = 'columnVisibility';
+
 // ----------------------------------------------------------------------
 
 export default function EcommerceProductListPage() {
@@ -106,6 +108,34 @@ export default function EcommerceProductListPage() {
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
+  const [isColumnFiltersOpen, setIsColumnFiltersOpen] = useState(false);
+
+  const saveColumnVisibilityToLocalStorage = (visibility) => {
+    localStorage.setItem(COLUMN_VISIBILITY_STORAGE_KEY, JSON.stringify(visibility));
+  };
+
+  const getColumnVisibilityFromLocalStorage = () => {
+    const visibility = localStorage.getItem(COLUMN_VISIBILITY_STORAGE_KEY);
+    return visibility ? JSON.parse(visibility) : {};
+  };
+
+  const [columnVisibility, setColumnVisibility] = useState(() => {
+    const savedColumnVisibility = getColumnVisibilityFromLocalStorage();
+    return Object.keys(savedColumnVisibility).length !== 0 ? savedColumnVisibility : {
+      id: true,
+      make: true,
+      model: true,
+      year: true,
+      seller_name: true,
+      inspection_date: true,
+      status: true,
+      '': true,
+    };
+  });
+
+  useEffect(() => {
+    saveColumnVisibilityToLocalStorage(columnVisibility);
+  }, [columnVisibility]);
   
   useEffect(() => {
     dispatch(getProducts(user?.role));
@@ -117,11 +147,7 @@ export default function EcommerceProductListPage() {
     }
   }, [products]);
 
-
-
-
   useEffect(() => {
-    
       const intervalId = setInterval(() => {
         if(tableData.length > 0){
           setTableData(
@@ -237,6 +263,21 @@ export default function EcommerceProductListPage() {
     setFilterStatus([]);
   };
 
+  const handleOpenColumnFilters = () => {
+    setIsColumnFiltersOpen(true);
+  };
+
+  const handleCloseColumnFilters = () => {
+    setIsColumnFiltersOpen(false);
+  };
+
+  const handleToggleColumnVisiblity = (columnId) => {
+    setColumnVisibility((prevVisibility) => ({
+      ...prevVisibility,
+      [columnId]: !prevVisibility[columnId],
+    }));
+  };
+
   return (
     <>
       <Helmet>
@@ -275,8 +316,13 @@ export default function EcommerceProductListPage() {
             onFilterName={handleFilterName}
             onFilterStatus={handleFilterStatus}
             statusOptions={STATUS_OPTIONS}
+            columnOptions={TABLE_HEAD}
             isFiltered={isFiltered}
             onResetFilter={handleResetFilter}
+            onOpenColumnFilters={handleOpenColumnFilters}
+            onCloseColumnFilters={handleCloseColumnFilters}
+            columnVisibility={columnVisibility}
+            onToggleColumnVisibility={handleToggleColumnVisiblity}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -304,7 +350,7 @@ export default function EcommerceProductListPage() {
                 <TableHeadCustom
                   order={order}
                   orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
+                  headLabel={TABLE_HEAD.filter((column) => columnVisibility[column.id])}
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
@@ -329,6 +375,7 @@ export default function EcommerceProductListPage() {
                           onDeleteRow={() => handleDeleteRow(row.id)}
                           onEditRow={() => handleEditRow(row.id)}
                           onViewRow={() => handleViewRow(row.id)}
+                          columnVisibility={columnVisibility}
                         />
                       ) : (
                         !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />

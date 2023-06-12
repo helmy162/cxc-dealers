@@ -40,6 +40,7 @@ export default function ProductTableRow({
   onDeleteRow,
   onEditRow,
   onViewRow,
+  columnVisibility,
 }) {
   const { id, details, livestatus, timeRemaining, seller, created_at } = row;
 
@@ -78,10 +79,10 @@ export default function ProductTableRow({
           <TableCell padding="checkbox">
             <Checkbox checked={selected} onClick={onSelectRow} />
           </TableCell>
-  
+
           <TableCell>
             <Stack direction="row" alignItems="center" spacing={2}>
-  
+
               <Link
                 noWrap
                 color="inherit"
@@ -93,26 +94,30 @@ export default function ProductTableRow({
               </Link>
             </Stack>
           </TableCell>
-          <TableCell>{details.make}</TableCell>
-          <TableCell>{details.model}</TableCell>
-          <TableCell>{details.year}</TableCell>
-          <TableCell>{seller?.name}</TableCell>
-          <TableCell>{inspection_date}</TableCell>
-  
-          <TableCell align="center">
-            <Label
-              variant="soft"
-              color={
-                (livestatus === 'expired' && 'error') ||
-                (livestatus === 'pending' && 'warning') ||
-                (livestatus === 'upcoming' && 'secondary') ||
-                (livestatus === 'live' && 'success') || 'warning'
-              }
-              sx={{ textTransform: 'capitalize', minWidth:'100px'}}
-            >
-              {timeRemaining ? timeRemaining : livestatus? sentenceCase(livestatus) : null }
-            </Label>
-          </TableCell>
+
+          {columnVisibility['make'] && <TableCell>{details.make}</TableCell>}
+          {columnVisibility['model'] && <TableCell>{details.model}</TableCell>}
+          {columnVisibility['year'] && <TableCell>{details.year}</TableCell>}
+          {columnVisibility['seller_name'] && <TableCell>{seller?.name}</TableCell>}
+          {columnVisibility['inspection_date'] && <TableCell>{inspection_date}</TableCell>}
+
+          {columnVisibility['status'] && (
+              <TableCell align="center">
+                <Label
+                    variant="soft"
+                    color={
+                        (livestatus === 'expired' && 'error') ||
+                        (livestatus === 'pending' && 'warning') ||
+                        (livestatus === 'upcoming' && 'secondary') ||
+                        (livestatus === 'live' && 'success') ||
+                        'warning'
+                    }
+                    sx={{ textTransform: 'capitalize', minWidth: '100px' }}
+                >
+                  {timeRemaining ? timeRemaining : livestatus ? sentenceCase(livestatus) : null}
+                </Label>
+              </TableCell>
+          )}
   
           <TableCell align="right">
             <IconButton color={openPopover ? 'primary' : 'default'} onClick={handleOpenPopover}>
