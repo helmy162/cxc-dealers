@@ -52,7 +52,7 @@ export default function AppointmentsPage() {
                         }}
                     >
                         <iframe
-                            src="https://calendar.google.com/calendar/embed?src=c_5e7e3b236308de435d62bbd0a1114383cb21b37779f5535a4a4d40239b6e1315%40group.calendar.google.com&ctz=Asia%2FDubai&showTitle=0"
+                            src="https://calendar.google.com/calendar/embed?src=c_3acf3ac8ad168024162710d9fe120a2007df18bae7224590cc47569485026ff6%40group.calendar.google.com&ctz=Asia%2FDubai&showTitle=0"
                             style={{ border: 0, width: '100%', height: '100%' }}
                         ></iframe>
                     </div>
