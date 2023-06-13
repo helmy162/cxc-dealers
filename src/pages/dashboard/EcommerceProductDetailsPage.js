@@ -68,8 +68,6 @@ const TABLE_HEAD2 = [
 // ----------------------------------------------------------------------
 
 export default function EcommerceProductDetailsPage({onAuctionPage = false, noLoading = false}) {
-
-
   const {
     dense,
     page,
@@ -180,7 +178,6 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
   const [currentTab, setCurrentTab] = useState('inspection');
   const [tableData, setTableData] = useState([]);
 
-
   const [tableData2, setTableData2] = useState([]);
   
   const dataFiltered = applyFilter({
@@ -196,81 +193,73 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
   const denseHeight = dense ? 60 : 80;
   const denseHeight2 = dense2 ? 60 : 80;
 
-
   const isNotFound = (!dataFiltered?.length ) || (!isLoading && !dataFiltered?.length);
   const isNotFound2 = (!dataFiltered2?.length) || (!isLoading && !dataFiltered2?.length);
-
-
 
   const handleAccountClick = (id) => {
     navigate(PATH_DASHBOARD.user.edit(id)); // change edit to account
   }
 
-
-
-
-
-
-  
-
-  const TABS = user?.role == 'admin' || user?.role == 'closer' ? 
-  [
+  const TABS = [
     {
       value: 'inspection',
       label: 'Inspection Details',
-      component: productAsAdmin ? <Markdown children={`
-      \n<p><strong> Inspection Status:</strong> <small> Inspected </small> </p>
-      \n<p><strong> Seller Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>
-      \n<p><strong> Inspector Name:</strong> <small> ${productAsAdmin?.inspector?.name} </small> </p>
-      `} /> : null,
-    },
-    {
-      value: 'seller',
-      label: `Seller's Details`,
-      component: productAsAdmin ? <Markdown children={`
-      \n<p><strong> Seller's Name:</strong> <small> ${productAsAdmin?.seller?.name} </small> </p>
-      \n<p><strong> Seller's Email:</strong> <small> ${productAsAdmin?.seller?.email} </small> </p>
-      \n<p><strong> Seller's Phone:</strong> <small> ${productAsAdmin?.seller?.phone} </small> </p>
-      `} /> : null,
+      component: productAsAdmin ? (
+          <Markdown children={`
+        \n<p><strong> Inspection Status:</strong> <small> Inspected </small> </p>
+        ${user?.role !== 'inspector' ? `\n<p><strong> Seller Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>` : ''}
+        \n<p><strong> Inspector Name:</strong> <small> ${productAsAdmin?.inspector?.name} </small> </p>
+      `} />
+      ) : null,
     },
     {
       value: 'id_images',
       label: 'ID Images',
-      component: productAsAdmin ? <ProductDetailsCarousel product={productAsAdmin} type="id_images" /> : null,
+      component: productAsAdmin ? (
+          <ProductDetailsCarousel product={productAsAdmin} type="id_images" />
+      ) : null,
     },
     {
       value: 'registration_card_images',
       label: 'Registration Card Images',
-      component: productAsAdmin ? <ProductDetailsCarousel product={productAsAdmin} type="registration_card_images" /> : null,
-    },
-    {
-      value: 'vin_images',
-      label: 'VIN Images',
-      component: productAsAdmin ? <ProductDetailsCarousel product={productAsAdmin} type="vin_images" /> : null,
-    },
-  ]
-  :
-  [
-    {
-      value: 'inspection',
-      label: 'Inspection Details',
-      component: productAsAdmin ? <Markdown children={`
-      \n<p><strong> Inspection Status:</strong> <small> Inspected </small> </p>
-      \n<p><strong> Seller Price:</strong> <small> ${productAsAdmin?.details?.seller_price} AED </small> </p>
-      \n<p><strong> Inspector Name:</strong> <small> ${productAsAdmin?.inspector?.name} </small> </p>
-      `} /> : null,
-    },
-    {
+      component: productAsAdmin ? (
+          <ProductDetailsCarousel product={productAsAdmin} type="registration_card_images" />
+      ) : null,
+    }
+  ];
+
+  if (user?.role === 'admin' || user?.role === 'closer') {
+    TABS.push(
+        {
+          value: 'seller',
+          label: `Seller's Details`,
+          component: productAsAdmin ? (
+              <Markdown children={`
+            \n<p><strong> Seller's Name:</strong> <small> ${productAsAdmin?.seller?.name} </small> </p>
+            \n<p><strong> Seller's Email:</strong> <small> ${productAsAdmin?.seller?.email} </small> </p>
+            \n<p><strong> Seller's Phone:</strong> <small> ${productAsAdmin?.seller?.phone} </small> </p>
+          `} />
+          ) : null,
+        },
+        {
+          value: 'vin_images',
+          label: 'VIN Images',
+          component: productAsAdmin ? (
+              <ProductDetailsCarousel product={productAsAdmin} type="vin_images" />
+          ) : null,
+        }
+        );
+  } else if (user?.role === 'seller') {
+    TABS.push({
       value: 'seller',
       label: `Seller's Details`,
-      component: productAsAdmin ? <Markdown children={`
-      \n<p><strong> Seller's Name:</strong> <small> ${productAsAdmin?.seller?.name} </small> </p>
-      `} /> : null,
-    }
-  ]
-  ;
-
-  
+      component: productAsAdmin ? (
+          <Markdown children={`
+        \n<p><strong> Seller's Name:</strong> <small> ${productAsAdmin?.seller?.name} </small> </p>
+      `} />
+      ) : null,
+    });
+  }
 
   const [copySuccess, setCopySuccess] = useState('');
   
@@ -282,8 +271,6 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
       return () => clearTimeout(timer);
     }
   }, [copySuccess]);
-
-  
 
   
   return (
@@ -344,8 +331,6 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
               <span className='text-[14px] ease-in-out'>
                 {copySuccess}
               </span>
-              
-              
             </div>
           }
             <Card style={{marginBottom:'50px'}}>
@@ -378,7 +363,7 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
               )}
             </Card>
             {
-              user?.role == 'admin' || user?.role == 'sales'?
+              user?.role == 'admin' || user?.role == 'sales' ?
               <>
               {
                 !onAuctionPage &&
@@ -549,9 +534,14 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
             </>
             :
               <Typography variant="h4" sx={{ mb: 5 }}>
-                Highest Bid: {productAsAdmin?.auction?.latest_bid?.bid ? productAsAdmin?.auction?.latest_bid?.bid.toLocaleString('en-US') + ' AED' : 'No bids yet'}
+                {user?.role !== 'inspector' && (
+                    <>
+                      Highest Bid: {productAsAdmin?.auction?.latest_bid?.bid
+                        ? productAsAdmin?.auction?.latest_bid?.bid.toLocaleString('en-US') + ' AED'
+                        : 'No bids yet'}
+                    </>
+                )}
               </Typography>
-
           }
           
           </>
@@ -577,7 +567,6 @@ function applyFilter({ inputData, comparator }) {
   });
 
   inputData = stabilizedThis?.map((el) => el[0]);
-
 
   return inputData;
 }

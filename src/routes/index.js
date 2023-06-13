@@ -116,9 +116,9 @@ export default function Router() {
             { element: <Navigate to="/dashboard/car/list" replace />, index: true },
             { path: 'list', element: <RoleBasedGuard hasContent roles={['admin','closer', 'sales']}> <EcommerceProductListPage /> </RoleBasedGuard> },
             { path: 'new', element: <RoleBasedGuard hasContent roles={['admin']}> <AddCarPage/> </RoleBasedGuard> },
-            { path: ':name/edit', element: <RoleBasedGuard hasContent roles={['admin']}> <EcommerceProductEditPage/> </RoleBasedGuard> },
-            { path: ':name', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales']}> <EcommerceProductDetailsPage/> </RoleBasedGuard> },
-            { path: ':name/details', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales']}> <CarDetails/> </RoleBasedGuard>},
+            { path: ':name/edit', element: <RoleBasedGuard hasContent roles={['admin', 'closer']}> <EcommerceProductEditPage/> </RoleBasedGuard> },
+            { path: ':name', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales', 'inspector']}> <EcommerceProductDetailsPage/> </RoleBasedGuard> },
+            { path: ':name/details', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales', 'inspector']}> <CarDetails/> </RoleBasedGuard>},
           ],
         },
         {
@@ -191,7 +191,6 @@ export default function Router() {
           <CarDetailsPage />
         </div>,
     },
-
     {
       element: <CompactLayout />,
       children: [{ path: '404', element: <Page404 /> }],
