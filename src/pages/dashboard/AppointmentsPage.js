@@ -15,8 +15,6 @@ import {
   TableContainer,
 } from '@mui/material';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getProducts, getStatus } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -36,13 +34,7 @@ import Iconify from '../../components/iconify';
 import Scrollbar from '../../components/scrollbar';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import ConfirmDialog from '../../components/confirm-dialog';
-// sections
-import { ProductTableRow, ProductTableToolbar } from '../../sections/@dashboard/e-commerce/list';
-
-//car status
-import { carStatus, carTimer } from '../../utils/status';
 import { useAuthContext } from 'src/auth/useAuthContext';
-
 import axios from 'axios';
 import AppointmentRow from 'src/sections/@dashboard/e-commerce/list/AppointmentRow';
 import LoadingScreen from 'src/components/loading-screen/LoadingScreen';
@@ -121,14 +113,11 @@ export default function AppointmentsPage() {
           start: page * rowsPerPage,
           limit: rowsPerPage,
           done: 1
-          // Add any additional parameters to filter or customize the request
         },
       });
       setTableData( (previousValue) => [...response.data.data, ...previousValue]);
       setHasMoreItems(response.data.additional_data.pagination.more_items_in_collection)
       setIsLoading(false);
-      // Process the response data here, such as storing it in your component state
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
