@@ -128,15 +128,7 @@ export default function AppointmentsPage() {
       setIsLoading(true);
       getActivities();
     }
-    else{
-      console.log(page * rowsPerPage);
-      console.log(tableData.length);
-    }
-
   }, [page]);
-
-  console.log(tableData);
-
   
   const dataFiltered = applyFilter({
     inputData: tableData,
