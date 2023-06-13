@@ -300,18 +300,30 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
             <div style={{fontSize:'36px', fontWeight:'700', marginBottom:'50px', display:'flex', alignItems:'center', gap:'20px', flexWrap: 'wrap'}}>
               #{productAsAdmin?.id}
 
-              <Label
-                variant="soft"
-                color={
-                  (livestatus === 'expired' && 'error') ||
-                  (livestatus === 'pending' && 'warning') ||
-                  (livestatus === 'approved' && 'success') ||
-                  (livestatus === 'upcoming' && 'secondary') || 'success'
-                }
-                sx={{ textTransform: 'capitalize', minWidth:'100px', fontSize:'18px', fontWeight:'600', padding:'6px 16px', minHeight:'fit-content', height:'unset', lineHeight:'unset',}}
-              >
-                {timeRemaining ? timeRemaining : livestatus? sentenceCase(livestatus) : null }
-              </Label>
+              {user?.role !== 'inspector' && (
+                  <Label
+                      variant="soft"
+                      color={
+                          (livestatus === 'expired' && 'error') ||
+                          (livestatus === 'pending' && 'warning') ||
+                          (livestatus === 'approved' && 'success') ||
+                          (livestatus === 'upcoming' && 'secondary') ||
+                          'success'
+                      }
+                      sx={{
+                        textTransform: 'capitalize',
+                        minWidth: '100px',
+                        fontSize: '18px',
+                        fontWeight: '600',
+                        padding: '6px 16px',
+                        minHeight: 'fit-content',
+                        height: 'unset',
+                        lineHeight: 'unset',
+                      }}
+                  >
+                    {timeRemaining ? timeRemaining : livestatus ? sentenceCase(livestatus) : null}
+                  </Label>
+              )}
 
               <Button
               component={RouterLink}
