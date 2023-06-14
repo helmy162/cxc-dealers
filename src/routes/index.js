@@ -37,7 +37,9 @@ import {
   SoldCar,
   BidsPage,
   OffersPage,
-  AppointmentsPage, CalendarPage,
+  AppointmentsPage, 
+  CalendarPage, 
+  Dashboard
 } from './elements';
 import { PATH_AUTH } from './paths';
 import RoleBasedGuard from 'src/auth/RoleBasedGuard';
@@ -110,6 +112,12 @@ export default function Router() {
       ),
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+        {
+          path: 'stats',
+          children: [
+            { element: <RoleBasedGuard hasContent roles={['admin']}> <Dashboard /> </RoleBasedGuard> , index: true },
+          ]
+        },
         {
           path: 'car',
           children: [

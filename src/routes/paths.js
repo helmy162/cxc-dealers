@@ -47,6 +47,7 @@ export const PATH_INSPECTOR = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
+  stats: path(ROOTS_DASHBOARD, '/stats'),
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     four: path(ROOTS_DASHBOARD, '/user/four'),

@@ -32,6 +32,12 @@ const navConfig = [
     subheader: 'management',
     items: [
       {
+        title: 'dashboard',
+        path: PATH_DASHBOARD.stats,
+        icon: ICONS.analytics,
+        roles: ['admin'],
+      },
+      {
         title: 'users',
         path: PATH_DASHBOARD.user.list,
         icon: ICONS.users,

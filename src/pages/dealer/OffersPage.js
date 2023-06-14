@@ -102,8 +102,6 @@ export default function BidsPage() {
     dispatch(getUserOffers());
   }, [dispatch, user]);
 
-  console.log(tableData);
-
   useEffect(() => {
     if (userOffers) {
       setTableData(userOffers);
