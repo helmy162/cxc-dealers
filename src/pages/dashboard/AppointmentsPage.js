@@ -115,7 +115,11 @@ export default function AppointmentsPage() {
             getActivities(done, hasDateFilter, query)
                 .then((data) => {
                     setIsLoading(false);
-                    setTableData((prevTableData) => [...prevTableData, ...data.data]);
+                    if (data.data === null) {
+                        setTableData([]);
+                    } else {
+                        setTableData((prevTableData) => [...prevTableData, ...data.data]);
+                    }
                     setHasMoreItems(data.additional_data.pagination.more_items_in_collection);
                 })
                 .catch((error) => {
@@ -156,7 +160,9 @@ export default function AppointmentsPage() {
     useEffect(() => {
         setIsLoading(true);
         const done = filterStatus.includes('done');
-        const dateFilter = filterStatus.includes('today') || filterStatus.includes('week') || filterStatus.includes('month') || filterStatus.includes('year');
+        const selectedDateFilter = filterStatus.find(status =>
+            STATUS_OPTIONS.some(filter => filter.value === status)
+        );
         const filterStatusHasChanged = filterStatus !== prevFilterStatusRef.current;
         const filterNameHasChanged = filterName !== prevFilterNameRef.current;
 
@@ -166,7 +172,7 @@ export default function AppointmentsPage() {
         }
 
         if (page * rowsPerPage >= tableData.length || filterStatusHasChanged || filterNameHasChanged) {
-            debouncedGetActivities(done, dateFilter, filterName);
+            debouncedGetActivities(done, selectedDateFilter, filterName);
         }
 
         // Update the previous filterStatus after the condition check
