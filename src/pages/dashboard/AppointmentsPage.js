@@ -31,8 +31,6 @@ import Scrollbar from '../../components/scrollbar';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import ConfirmDialog from '../../components/confirm-dialog';
 import AppointmentRow from 'src/sections/@dashboard/e-commerce/list/AppointmentRow';
-import LoadingScreen from 'src/components/loading-screen/LoadingScreen';
-import { debounce } from 'lodash';
 
 const TABLE_HEAD = [
     {id: 'deal_id', label: 'Deal ID', align: 'left'},
@@ -59,8 +57,6 @@ const defaultVisibility = {
     due_date: true,
     '': true,
 };
-
-const DEBOUNCE_DELAY = 500;
 
 const COLUMN_VISIBILITY_STORAGE_KEY = 'appointmentsColumnVisibility';
 
@@ -110,28 +106,7 @@ export default function AppointmentsPage() {
 
     const prevFilterNameRef = useRef(filterName);
 
-    const debouncedGetActivities = useRef(
-        debounce((done, hasDateFilter, query) => {
-            getActivities(done, hasDateFilter, query)
-                .then((data) => {
-                    setIsLoading(false);
-                    if (data.data === null) {
-                        setTableData([]);
-                    } else {
-                        setTableData((prevTableData) => [...prevTableData, ...data.data]);
-                    }
-                    setHasMoreItems(data.additional_data.pagination.more_items_in_collection);
-                })
-                .catch((error) => {
-                    setPage(0);
-                    setTableData([]);
-                    setIsLoading(false);
-                    enqueueSnackbar('Error loading data from Pipedrive', { variant: 'error' });
-                });
-        }, DEBOUNCE_DELAY)
-    ).current;
-
-    const getActivities = useCallback(async (done, hasDateFilter, query = '') => {
+    const getActivities = useCallback(async (done, dateFilter, query = '') => {
         try {
             let params = {
                 start: page * rowsPerPage,
@@ -139,8 +114,8 @@ export default function AppointmentsPage() {
                 done: done,
             };
 
-            if (hasDateFilter) {
-                params.start_date = hasDateFilter;
+            if (dateFilter) {
+                params.filter = dateFilter;
             }
 
             if (query !== '') {
@@ -158,10 +133,9 @@ export default function AppointmentsPage() {
 
 
     useEffect(() => {
-        setIsLoading(true);
         const done = filterStatus.includes('done');
-        const selectedDateFilter = filterStatus.find(status =>
-            STATUS_OPTIONS.some(filter => filter.value === status)
+        const selectedDateFilter = filterStatus.filter(status =>
+            ['today', 'week', 'month', 'year'].includes(status)
         );
         const filterStatusHasChanged = filterStatus !== prevFilterStatusRef.current;
         const filterNameHasChanged = filterName !== prevFilterNameRef.current;
@@ -172,12 +146,30 @@ export default function AppointmentsPage() {
         }
 
         if (page * rowsPerPage >= tableData.length || filterStatusHasChanged || filterNameHasChanged) {
-            debouncedGetActivities(done, selectedDateFilter, filterName);
+            setIsLoading(true);
+            getActivities(done, selectedDateFilter[0], filterName)
+                .then((data) => {
+                    setIsLoading(false);
+                    setTableData((prevTableData) => {
+                        if (data && data.data) {
+                            return [...prevTableData, ...data.data];
+                        } else {
+                            return prevTableData;
+                        }
+                    });
+                    setHasMoreItems(data.additional_data.pagination.more_items_in_collection);
+                })
+                .catch((error) => {
+                    setPage(0);
+                    setTableData([]);
+                    setIsLoading(false);
+                    enqueueSnackbar('Error loading data from Pipedrive', { variant: 'error' });
+                });
         }
 
         // Update the previous filterStatus after the condition check
         prevFilterStatusRef.current = filterStatus;
-    }, [page, filterStatus, filterName, debouncedGetActivities]);
+    }, [page, filterStatus, filterName]);
 
     const dataInPage = tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
