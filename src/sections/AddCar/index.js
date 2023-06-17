@@ -83,8 +83,6 @@ export default function AddCar({isEdit, car}) {
       }
     }, []);
 
-
-
     const [partColor, setPartColor] = useState({
       0: 0,
       1: 0,

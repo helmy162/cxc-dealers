@@ -66,7 +66,7 @@ const ACCIDENT_HISTORY_OPTIONS = [
   { value: 'Salvage Title', label: 'Salvage Title' },
   { value: 'Junk Title', label: 'Junk title' },
   { value: 'Fire Damage', label: 'Fire damage' },
-  { value: 'Fluid Damage', label: 'Fluid Damage' },
+  { value: 'Flood Damage', label: 'Flood Damage' },
   { value: 'Lemon Title', label: 'Lemon title' },
   { value: 'Airbag Deployed', label: 'Airbag Deployed' },
   { value: 'Total Loss', label: 'Total Loss' },
