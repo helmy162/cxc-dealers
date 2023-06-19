@@ -25,7 +25,7 @@ import ConfirmDialog from '../../components/confirm-dialog';
 import { LoadingButton } from '@mui/lab';
 
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import {PATH_DASHBOARD, PATH_INSPECTOR} from '../../routes/paths';
 
 // utils
 import CarApi from '../../utils/api/CarApi';
@@ -82,8 +82,6 @@ export default function AddCar({isEdit, car}) {
         setSavedData(JSON.parse(localStorage.getItem('carForm')));
       }
     }, []);
-
-
 
     const [partColor, setPartColor] = useState({
       0: 0,
@@ -256,11 +254,11 @@ export default function AddCar({isEdit, car}) {
         let res;
         isEdit?  res = await axiosInstance.post(`admin/cars/${car.id}`, mergedData) :  res = await axiosInstance.post('inspector/car', mergedData);
         enqueueSnackbar( isEdit? 'Car updated successfully' : 'Car added successfully', { variant: 'success' })
-        navigate(PATH_DASHBOARD.car.list);
+        navigate(PATH_DASHBOARD.car.view(res.data.car.id));
       } catch (error) {
         console.log(error);
         enqueueSnackbar('Something went wrong', { variant: 'error' })
-        navigate(PATH_DASHBOARD.car.list);
+          isEdit? navigate(PATH_DASHBOARD.car.new) : navigate(PATH_INSPECTOR.new);
       }
     };
   

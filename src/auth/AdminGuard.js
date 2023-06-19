@@ -15,7 +15,6 @@ AdminGuard.propTypes = {
 
 export default function AdminGuard({ children }) {
   const {user} = useAuthContext();
-  console.log('AdminGuard user: ', user);
 
   if (user.role !== 'admin') {
     return <Navigate to={`/${user.role}`} />;

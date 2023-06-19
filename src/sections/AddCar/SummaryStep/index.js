@@ -1,16 +1,18 @@
-import * as Yup from 'yup';
 // @mui
-import { Stack, Alert, Box, MenuItem, Typography, InputAdornment} from '@mui/material';
+import { Stack, Box, MenuItem, Typography, InputAdornment} from '@mui/material';
 
-import { RHFAutocomplete, RHFCheckbox, RHFDatePicker, RHFSelect, RHFSwitch, RHFTextField } from '../../../components/hook-form';
+import {
+    RHFAutocomplete,
+    RHFDatePicker,
+    RHFMultiSelect,
+    RHFSelect,
+    RHFTextField
+} from '../../../components/hook-form';
 import useAddCarAutocompletes from 'src/hooks/useAddCarAutocompletes';
-import { hasSameName, isOptionEqualToValue, renderAddCarSelect } from 'src/utils/forms';
+import {isOptionEqualToValue, renderAddCarSelect } from 'src/utils/forms';
 import { fYear } from 'src/utils/formatTime';
-import EngineCard from './EngineCard';
 import { BODY_TYPES_OPTIONS, SERVICE_HISTORY_OPTIONS, MANUALS_OPTIONS, ACCIDENT_HISTORY_OPTIONS, WARRANTY_OPTIONS, BANK_FINANCE_OPTIONS, BANK_FINANCE_STATUS_OPTIONS } from '../constants';
-
-import { getSellers, resetSeller } from '../../../redux/slices/user';
-import { useDispatch, useSelector } from '../../../redux/store';
+import {useSelector } from '../../../redux/store';
 
 
 // ----------------------------------------------------------------------
@@ -226,7 +228,6 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
         </RHFSelect>
 
         <RHFAutocomplete
-
           name="exterior_color"
           label="Exterior Color"
           options={exteriorColors}
@@ -259,7 +260,7 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
         { renderAddCarSelect({ name: 'service_history', label: 'Service History', options: SERVICE_HISTORY_OPTIONS }) }
         { renderAddCarSelect({ name: 'manuals', label: 'Manuals', options: MANUALS_OPTIONS })}
         { renderAddCarSelect({ name: 'warranty', label: 'Warranty', options: WARRANTY_OPTIONS })}
-        { renderAddCarSelect({ name: 'accident_history', label: 'Accident History', options: ACCIDENT_HISTORY_OPTIONS })}
+        { <RHFMultiSelect checkbox name="accident_history" label="Accident History" options={ACCIDENT_HISTORY_OPTIONS} /> }
         { renderAddCarSelect({ name: 'bank_finance', label: 'Mortgage/Bank Finance', options: BANK_FINANCE_OPTIONS })}
         { renderAddCarSelect({ name: 'bank_finance_status', label: 'Mortgage/Bank Status', options: BANK_FINANCE_STATUS_OPTIONS })}
         {/* <RHFCheckbox name="bank_finance" label="Mortgage/Bank Finance" /> */}

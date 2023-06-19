@@ -30,7 +30,7 @@ export const AllSchema = Yup.object().shape({
   service_history: Yup.string(),
   manuals: Yup.string(),
   warranty: Yup.string(),
-  accident_history: Yup.string(),
+  accident_history: Yup.array(),
   bank_finance: Yup.string(),
   bank_finance_status: Yup.string(),
   car_history_comment: Yup.string(),
@@ -203,8 +203,8 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
     isEdit? carData?.history?.warranty || ''
     : savedData?.warranty || '',
   accident_history: 
-    isEdit? carData?.history?.accident_history || ''
-    : savedData?.accident_history || '',
+    isEdit? carData?.history?.accident_history || []
+    : savedData?.accident_history || [],
   bank_finance: 
     isEdit? carData?.history?.bank_finance || ''
     : savedData?.bank_finance || '',

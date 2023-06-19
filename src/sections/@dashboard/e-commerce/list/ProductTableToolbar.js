@@ -22,27 +22,19 @@ import Iconify from '../../../../components/iconify';
 ProductTableToolbar.propTypes = {
     isFiltered: PropTypes.bool,
     filterName: PropTypes.string,
-    onFilterName: PropTypes.func,
-    onResetFilter: PropTypes.func,
     filterStatus: PropTypes.array,
-    onFilterStatus: PropTypes.func,
+    onFilterName: PropTypes.func,
     statusOptions: PropTypes.array,
+    columnOptions: PropTypes.array,
+    onResetFilter: PropTypes.func,
+    onFilterStatus: PropTypes.func,
+    columnVisibility: PropTypes.object,
+    onToggleColumnVisibility: PropTypes.func,
+    onOpenColumnFilters: PropTypes.func,
+    onCloseColumnFilters: PropTypes.func
 };
 
-export default function ProductTableToolbar({
-    isFiltered,
-    filterName,
-    filterStatus,
-    onFilterName,
-    statusOptions,
-    columnOptions,
-    onResetFilter,
-    onFilterStatus,
-    columnVisibility,
-    onToggleColumnVisibility,
-    onOpenColumnFilters,
-    onCloseColumnFilters,
-}) {
+export default function ProductTableToolbar({ isFiltered, filterName, filterStatus, onFilterName, statusOptions, columnOptions, onResetFilter, onFilterStatus, columnVisibility, onToggleColumnVisibility, onOpenColumnFilters, onCloseColumnFilters,}) {
     return (
         <Stack
             spacing={2}

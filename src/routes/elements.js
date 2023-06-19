@@ -33,6 +33,7 @@ export const OffersPage = Loadable(lazy(() => import('../pages/dealer/OffersPage
 export const CarsListingPage = Loadable(lazy(() => import('../pages/dealer/CarsListingPage')));
 
 // admin
+export const Dashboard = Loadable(lazy(() => import('../pages/dashboard/Dashboard')));
 export const UserListPage = Loadable(lazy(() => import('../pages/dashboard/UserListPage')));
 export const UserCreatePage = Loadable(lazy(() => import('../pages/dashboard/UserCreatePage')));
 export const UserAccountPage = Loadable(lazy(() => import('../pages/dashboard/UserAccountPage')));
@@ -42,6 +43,7 @@ export const SellerCreatePage = Loadable(lazy(() => import('../pages/dashboard/S
 export const SellerEditPage = Loadable(lazy(() => import('../pages/dashboard/SellerEditPage')));
 export const AddCarPage = Loadable(lazy(() => import('../pages/dashboard/AddCarPage')));
 export const AppointmentsPage = Loadable(lazy(() => import('../pages/dashboard/AppointmentsPage')));
+export const CalendarPage = Loadable(lazy(() => import('../pages/dashboard/CalendarPage')));
 
 export const EcommerceProductListPage = Loadable(
   lazy(() => import('../pages/dashboard/EcommerceProductListPage'))

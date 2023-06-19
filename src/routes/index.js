@@ -37,7 +37,9 @@ import {
   SoldCar,
   BidsPage,
   OffersPage,
-  AppointmentsPage,
+  AppointmentsPage, 
+  CalendarPage, 
+  Dashboard
 } from './elements';
 import { PATH_AUTH } from './paths';
 import RoleBasedGuard from 'src/auth/RoleBasedGuard';
@@ -111,14 +113,20 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         {
+          path: 'stats',
+          children: [
+            { element: <RoleBasedGuard hasContent roles={['admin']}> <Dashboard /> </RoleBasedGuard> , index: true },
+          ]
+        },
+        {
           path: 'car',
           children: [
             { element: <Navigate to="/dashboard/car/list" replace />, index: true },
             { path: 'list', element: <RoleBasedGuard hasContent roles={['admin','closer', 'sales']}> <EcommerceProductListPage /> </RoleBasedGuard> },
             { path: 'new', element: <RoleBasedGuard hasContent roles={['admin']}> <AddCarPage/> </RoleBasedGuard> },
-            { path: ':name/edit', element: <RoleBasedGuard hasContent roles={['admin']}> <EcommerceProductEditPage/> </RoleBasedGuard> },
-            { path: ':name', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales']}> <EcommerceProductDetailsPage/> </RoleBasedGuard> },
-            { path: ':name/details', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales']}> <CarDetails/> </RoleBasedGuard>},
+            { path: ':name/edit', element: <RoleBasedGuard hasContent roles={['admin', 'closer']}> <EcommerceProductEditPage/> </RoleBasedGuard> },
+            { path: ':name', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales', 'inspector']}> <EcommerceProductDetailsPage/> </RoleBasedGuard> },
+            { path: ':name/details', element: <RoleBasedGuard hasContent roles={['admin', 'closer', 'sales', 'inspector']}> <CarDetails/> </RoleBasedGuard>},
           ],
         },
         {
@@ -126,6 +134,13 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/appointment/list" replace />, index: true },
             { path: 'list', element: <RoleBasedGuard hasContent roles={['admin']}> <AppointmentsPage /> </RoleBasedGuard> },
+          ],
+        },
+        {
+          path: 'calendar',
+          children: [
+            { element: <Navigate to="/dashboard/calendar/list" replace />, index: true },
+            { path: 'list', element: <RoleBasedGuard hasContent roles={['admin']}> <CalendarPage /> </RoleBasedGuard> },
           ],
         },
         {
@@ -184,7 +199,6 @@ export default function Router() {
           <CarDetailsPage />
         </div>,
     },
-
     {
       element: <CompactLayout />,
       children: [{ path: '404', element: <Page404 /> }],

@@ -21,6 +21,7 @@ const ICONS = {
   soldCar: icon('ic_complete'),
   cashback: icon('ic_cashback'),
   appointment: icon('ic_appointment'),
+  calendar: icon('ic_calendar')
 };
 
 const navConfig = [
@@ -30,6 +31,12 @@ const navConfig = [
   {
     subheader: 'management',
     items: [
+      {
+        title: 'dashboard',
+        path: PATH_DASHBOARD.stats,
+        icon: ICONS.analytics,
+        roles: ['admin'],
+      },
       {
         title: 'users',
         path: PATH_DASHBOARD.user.list,
@@ -52,6 +59,12 @@ const navConfig = [
         title: 'appointments',
         path: '/dashboard/appointment',
         icon: ICONS.appointment,
+        roles: ['admin'],
+      },
+      {
+        title: 'calendar',
+        path: '/dashboard/calendar',
+        icon: ICONS.calendar,
         roles: ['admin'],
       },
       {

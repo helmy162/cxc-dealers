@@ -63,7 +63,18 @@ const STATUS_OPTIONS = [
   { value: 'expired', label: 'Expired' },
 ];
 
-const COLUMN_VISIBILITY_STORAGE_KEY = 'columnVisibility';
+const COLUMN_VISIBILITY_STORAGE_KEY = 'carColumnVisibility';
+
+const defaultVisibility = {
+  id: true,
+  make: true,
+  model: true,
+  year: true,
+  seller_name: true,
+  inspection_date: true,
+  status: true,
+  '': true,
+};
 
 // ----------------------------------------------------------------------
 
@@ -121,16 +132,7 @@ export default function EcommerceProductListPage() {
 
   const [columnVisibility, setColumnVisibility] = useState(() => {
     const savedColumnVisibility = getColumnVisibilityFromLocalStorage();
-    return Object.keys(savedColumnVisibility).length !== 0 ? savedColumnVisibility : {
-      id: true,
-      make: true,
-      model: true,
-      year: true,
-      seller_name: true,
-      inspection_date: true,
-      status: true,
-      '': true,
-    };
+    return Object.keys(savedColumnVisibility).length !== 0 ? savedColumnVisibility : defaultVisibility;
   });
 
   useEffect(() => {
@@ -271,7 +273,7 @@ export default function EcommerceProductListPage() {
     setIsColumnFiltersOpen(false);
   };
 
-  const handleToggleColumnVisiblity = (columnId) => {
+  const handleToggleColumnVisibility = (columnId) => {
     setColumnVisibility((prevVisibility) => ({
       ...prevVisibility,
       [columnId]: !prevVisibility[columnId],
@@ -322,7 +324,7 @@ export default function EcommerceProductListPage() {
             onOpenColumnFilters={handleOpenColumnFilters}
             onCloseColumnFilters={handleCloseColumnFilters}
             columnVisibility={columnVisibility}
-            onToggleColumnVisibility={handleToggleColumnVisiblity}
+            onToggleColumnVisibility={handleToggleColumnVisibility}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>

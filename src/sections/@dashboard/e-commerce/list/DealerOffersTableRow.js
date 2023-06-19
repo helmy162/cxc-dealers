@@ -39,8 +39,6 @@ export default function DealerOffersTableRow({
   onViewRow,
   amount,
 }) {
-
-  console.log('row');
  
   const { id, details, images} = row;
 
