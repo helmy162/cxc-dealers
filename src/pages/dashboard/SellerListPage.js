@@ -39,34 +39,15 @@ import { useDispatch, useSelector } from '../../redux/store';
 import axiosInstance from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/useAuthContext';
 
-// ----------------------------------------------------------------------
-
-
-
-const STATUS_OPTIONS = [
-  'all',
-  'Pending',
-  'Active'
-];
-
-const ROLE_OPTIONS = [
-  'all',
-  'Pending',
-  'Active'
-];
-
 const TABLE_HEAD = [
   { id: 'id', label: 'ID', align: 'left'},
   { id: 'name', label: 'Name', align: 'left' },
   { id: 'email', label: 'Email', align: 'left' },
   { id: 'phone', label: 'Phone Number', align: 'left' },
+  { id: 'source', label: 'Source', align: 'left'},
   { id: 'created_at', label: 'Created At', align: 'left' },
   { id: '' },
 ];
-
-
-
-// ----------------------------------------------------------------------
 
 export default function SellerListPage() {
   const {
@@ -382,9 +363,6 @@ function applyFilter({ inputData, comparator, filterName}) {
       return false;
     });
   }
-
-
-
 
   return inputData;
 }

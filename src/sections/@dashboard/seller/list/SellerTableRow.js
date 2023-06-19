@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
-import { paramCase } from 'change-case';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import {
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -16,11 +13,10 @@ import {
   Typography,
 } from '@mui/material';
 // components
-import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-// import { phoneNumber } from 'src/_mock/assets';
+import Label from "../../../../components/label";
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +31,7 @@ SellerTableRow.propTypes = {
 export default function SellerTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectAccount }) {
   const navigate = useNavigate();
 
-  const { id, name, phone, email, created_at} = row;
+  const { id, name, phone, email, source, created_at} = row;
 
   const created_date = new Date(created_at).toLocaleString('en-US', {
     year: 'numeric',
@@ -94,6 +90,16 @@ export default function SellerTableRow({ row, selected, onEditRow, onSelectRow, 
           <TableCell align="left">{email}</TableCell>
 
           <TableCell align="left">{phone}</TableCell>
+
+          <TableCell align="left">
+            <Label
+                variant="soft"
+                color={( source === 'manual' && 'info') || 'success'}
+                sx={{ textTransform: 'capitalize' }}
+            >
+              {source}
+            </Label>
+          </TableCell>
 
           <TableCell align="left">{created_date}</TableCell>
 
