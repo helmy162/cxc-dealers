@@ -35,7 +35,7 @@ UserTableRow.propTypes = {
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectAccount }) {
   const navigate = useNavigate();
 
-  const { id, name, phone, email, type, bid_limit} = row;
+  const { id, name, phone, email, type, bid_limit, account_status} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -105,17 +105,17 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
                 ...(!isVerified && { color: 'warning.main' }),
               }}
             />
-          </TableCell>
+          </TableCell>*/}
 
           <TableCell align="left">
             <Label
               variant="soft"
-              color={(status === 'banned' && 'error') || 'success'}
+              color={( account_status === 'inactive' && 'error') || 'success'}
               sx={{ textTransform: 'capitalize' }}
             >
-              {status}
+              {account_status}
             </Label>
-          </TableCell> */}
+          </TableCell>
 
           <TableCell align="right">
             <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
@@ -132,17 +132,6 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         >
           <MenuItem
             onClick={() => {
-              handleOpenConfirm();
-              handleClosePopover();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="eva:trash-2-outline" />
-            Deactivate
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
               onEditRow();
               handleClosePopover();
             }}
@@ -150,6 +139,20 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
             <Iconify icon="eva:edit-fill" />
             Edit
           </MenuItem>
+
+          {account_status === 'active' && (
+              <MenuItem
+                  onClick={() => {
+                    handleOpenConfirm();
+                    handleClosePopover();
+                  }}
+                  sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="eva:trash-2-outline" />
+                Deactivate
+              </MenuItem>
+          )}
+
         </MenuPopover>
 
         <ConfirmDialog

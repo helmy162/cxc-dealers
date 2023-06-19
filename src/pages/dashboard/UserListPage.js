@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -18,8 +17,6 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
-// _mock_
-import { _userList } from '../../_mock/arrays';
 // components
 import Iconify from '../../components/iconify';
 import Scrollbar from '../../components/scrollbar';
@@ -72,12 +69,9 @@ const TABLE_HEAD = [
   { id: 'phone_number', label: 'Phone Number', align: 'left' },
   { id: 'bid_limit', label: 'Bid Limit', align: 'left' },
   { id: 'role', label: 'Role', align: 'left' },
+  { id: 'account_status', label: 'Account Status', align: 'left' },
   { id: '' },
 ];
-
-
-
-// ----------------------------------------------------------------------
 
 export default function UserListPage() {
   const {
@@ -177,11 +171,11 @@ export default function UserListPage() {
   const handleDeleteRow = async (id) => {
     try {
       const response = await axiosInstance.delete(`admin/users/${id}`);
-      // check if the DELETE request was successful
+      // Check if the DELETE request was successful
       if (response.data.success) {
         const updatedData = tableData.map((row) => {
           if (row.id === id) {
-            return { ...row, status: 'inactive' };
+            return { ...row, account_status: 'inactive' };
           }
           return row;
         });
@@ -192,17 +186,7 @@ export default function UserListPage() {
       console.error('Error:', error);
     }
 
-    // Update the dataFiltered state based on the applied filters
-    const dataFiltered = applyFilter({
-      inputData: tableData,
-      comparator: getComparator(order, orderBy),
-      filterName,
-      filterRole,
-      filterStatus,
-    });
-
-    // If the current page is greater than the available pages after filtering,
-    // set the page to the last available page
+    // If the current page is greater than the currently available pages after filtering, set the page to the last available page
     const lastPage = Math.max(0, Math.ceil(dataFiltered.length / rowsPerPage) - 1);
     if (page > lastPage) {
       setPage(lastPage);
@@ -210,29 +194,33 @@ export default function UserListPage() {
   };
 
   const handleDeleteRows = async (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    selectedRows.forEach(async row => {
-      try {
-        const response = await axiosInstance.delete(`admin/users/${row}`);
-        // check if the DELETE request was successful
+    try {
+      const deletePromises = selectedRows.map(async (id) => {
+        const response = await axiosInstance.delete(`admin/users/${id}`);
         if (response.data.success) {
-          setSelected([]);
-          setTableData(deleteRows);
+          return { id: id};
         }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    });
+      });
 
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
+      const deletedRows = await Promise.all(deletePromises);
+
+      const updatedData = tableData.map((row) => {
+        const deletedRow = deletedRows.find((deleted) => deleted.id === row.id);
+        if (deletedRow) {
+          return { ...row, account_status: 'inactive' };
+        }
+        return row;
+      });
+
+      setSelected([]);
+      setTableData(updatedData);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+    const lastPage = Math.max(0, Math.ceil(dataFiltered.length / rowsPerPage) - 1);
+    if (page > lastPage) {
+      setPage(lastPage);
     }
   };
 
@@ -314,7 +302,7 @@ export default function UserListPage() {
                 )
               }
               action={
-                <Tooltip title="Delete">
+                <Tooltip title="Deactivate">
                   <IconButton color="primary" onClick={handleOpenConfirm}>
                     <Iconify icon="eva:trash-2-outline" />
                   </IconButton>
@@ -385,7 +373,7 @@ export default function UserListPage() {
         title="Delete"
         content={
           <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
+            Are you sure want to deactivate <strong> {selected.length} </strong> accounts?
           </>
         }
         action={
@@ -431,15 +419,11 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
     });
   }
 
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => filterRole.toLowerCase().includes(user.type));
-  }
-
   if (filterStatus !== 'all') {
     if (filterStatus.toLowerCase() === 'inactive') {
-      inputData = inputData.filter((user) => user.status.toLowerCase() === 'inactive');
+      inputData = inputData.filter((user) => user.account_status.toLowerCase() === 'inactive');
     } else {
-      inputData = inputData.filter((user) => filterStatus.toLowerCase().includes(user.type) && user.status.toLowerCase() === 'active');
+      inputData = inputData.filter((user) => filterStatus.toLowerCase().includes(user.type) && user.account_status.toLowerCase() === 'active');
     }
   }
 
