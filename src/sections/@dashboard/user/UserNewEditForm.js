@@ -8,12 +8,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
-// utils
-import { fData } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// assets
-import { countries } from '../../../assets/data';
 // components
 import Label from '../../../components/label';
 import { useSnackbar } from '../../../components/snackbar';
@@ -21,7 +17,6 @@ import FormProvider, {
   RHFSelect,
   RHFSwitch,
   RHFTextField,
-  RHFUploadAvatar,
 } from '../../../components/hook-form';
 import { MuiTelInput } from 'mui-tel-input'
 
@@ -62,8 +57,8 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       name: currentUser?.name || '',
       email: currentUser?.email || '',
       phoneNumber: currentUser?.phone || '+971',
-      isVerified: currentUser?.is_verified == '1' || false,
-      status: currentUser?.status || (!isEdit && 'active') || 'inactive',
+      isVerified: currentUser?.is_verified === 1 || false,
+      status: currentUser?.account_status || (!isEdit && 'active') || 'inactive',
       company: currentUser?.company || '',
       role: currentUser?.type || 'dealer',
       bidLimit: currentUser?.bid_limit || '0',
@@ -104,7 +99,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     try {
       let res;
       isEdit?  res = await axiosInstance.put(`admin/users/${currentUser.id}`, data) :  res = await axiosInstance.post('admin/users', data);
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+      enqueueSnackbar(!isEdit ? 'User created successfully!' : 'User updated successfully!');
       navigate(PATH_DASHBOARD.user.list);
     } catch (error) {
       console.error(error);
@@ -139,8 +134,6 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 {values.status}
               </Label>
             )}
-
-           
 
             {isEdit && (
               <FormControlLabel
@@ -238,8 +231,6 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 <option value="closer">Closer</option>
                 <option value="sales">Sales</option>
               </RHFSelect>
-
-              
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
