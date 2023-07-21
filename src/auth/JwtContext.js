@@ -195,7 +195,7 @@ export function AuthProvider({ children }) {
 
   // Set New Password
   const newPassword = useCallback(async (data ) => {
-    const response = await axios.post('new-password', data);
+    const response = await axios.post('confirm-reset-password', data);
   }, []);
 
     // Change Password
