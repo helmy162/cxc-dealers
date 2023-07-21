@@ -170,59 +170,50 @@ export default function UserListPage() {
 
   const handleDeleteRow = async (id) => {
     try {
-      const response = await axiosInstance.delete(`admin/users/${id}`);
-      // Check if the DELETE request was successful
+        const response = await axiosInstance.delete(`admin/users/${id}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+            const deleteRow = tableData.filter((row) => row.id !== id);
+            setSelected([]);
+            setTableData(deleteRow);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+    if (page > 0) {
+      if (dataInPage.length < 2) {
+        setPage(page - 1);
+      }
+    }
+};
+
+const handleDeleteRows = async (selectedRows) => {
+  const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+  selectedRows.forEach(async row => {
+    try {
+      const response = await axiosInstance.delete(`admin/users/${row}`);
+      // check if the DELETE request was successful
       if (response.data.success) {
-        const updatedData = tableData.map((row) => {
-          if (row.id === id) {
-            return { ...row, account_status: 'inactive' };
-          }
-          return row;
-        });
         setSelected([]);
-        setTableData(updatedData);
+        setTableData(deleteRows);
       }
     } catch (error) {
       console.error('Error:', error);
     }
+  });
 
-    // If the current page is greater than the currently available pages after filtering, set the page to the last available page
-    const lastPage = Math.max(0, Math.ceil(dataFiltered.length / rowsPerPage) - 1);
-    if (page > lastPage) {
-      setPage(lastPage);
+  if (page > 0) {
+    if (selectedRows.length === dataInPage.length) {
+      setPage(page - 1);
+    } else if (selectedRows.length === dataFiltered.length) {
+      setPage(0);
+    } else if (selectedRows.length > dataInPage.length) {
+      const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
+      setPage(newPage);
     }
-  };
-
-  const handleDeleteRows = async (selectedRows) => {
-    try {
-      const deletePromises = selectedRows.map(async (id) => {
-        const response = await axiosInstance.delete(`admin/users/${id}`);
-        if (response.data.success) {
-          return { id: id};
-        }
-      });
-
-      const deletedRows = await Promise.all(deletePromises);
-
-      const updatedData = tableData.map((row) => {
-        const deletedRow = deletedRows.find((deleted) => deleted.id === row.id);
-        if (deletedRow) {
-          return { ...row, account_status: 'inactive' };
-        }
-        return row;
-      });
-
-      setSelected([]);
-      setTableData(updatedData);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-
-    const lastPage = Math.max(0, Math.ceil(dataFiltered.length / rowsPerPage) - 1);
-    if (page > lastPage) {
-      setPage(lastPage);
-    }
-  };
+  }
+};
 
   const handleAccountClick = (id) => {
     navigate(PATH_DASHBOARD.user.edit(id)); // change edit to account
@@ -302,7 +293,7 @@ export default function UserListPage() {
                 )
               }
               action={
-                <Tooltip title="Deactivate">
+                <Tooltip title="Delete">
                   <IconButton color="primary" onClick={handleOpenConfirm}>
                     <Iconify icon="eva:trash-2-outline" />
                   </IconButton>
@@ -373,7 +364,7 @@ export default function UserListPage() {
         title="Delete"
         content={
           <>
-            Are you sure want to deactivate <strong> {selected.length} </strong> accounts?
+            Are you sure want to delete these <strong> {selected.length} </strong> accounts?
           </>
         }
         action={

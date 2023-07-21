@@ -140,18 +140,16 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
             Edit
           </MenuItem>
 
-          {account_status === 'active' && (
-              <MenuItem
-                  onClick={() => {
-                    handleOpenConfirm();
-                    handleClosePopover();
-                  }}
-                  sx={{ color: 'error.main' }}
-              >
-                <Iconify icon="eva:trash-2-outline" />
-                Deactivate
-              </MenuItem>
-          )}
+          <MenuItem
+              onClick={() => {
+                handleOpenConfirm();
+                handleClosePopover();
+              }}
+              sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="eva:trash-2-outline" />
+            Delete
+          </MenuItem>
 
         </MenuPopover>
 
@@ -159,13 +157,13 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           open={openConfirm}
           onClose={handleCloseConfirm}
           title="Delete"
-          content="Are you sure you want to deactivate this user's account?"
+          content="Are you sure you want to delete this user's account?"
           action={
             <Button variant="contained" color="error" onClick={() => {
               onDeleteRow();
               handleCloseConfirm();
             }}>
-              Deactivate
+              Delete
             </Button>
           }
         />
