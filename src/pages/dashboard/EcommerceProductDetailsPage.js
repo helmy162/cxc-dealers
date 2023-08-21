@@ -212,7 +212,9 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
       `} />
       ) : null,
     },
-    {
+  ];
+  if(user?.role=='admin'){
+    TABS.push( {
       value: 'id_images',
       label: 'ID Images',
       component: productAsAdmin ? (
@@ -225,9 +227,8 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
       component: productAsAdmin ? (
           <ProductDetailsCarousel product={productAsAdmin} type="registration_card_images" />
       ) : null,
-    }
-  ];
-
+    })
+  }
   if (user?.role === 'admin' || user?.role === 'closer') {
     TABS.push(
         {
