@@ -42,7 +42,7 @@ export default function CarDetails({withImages = true, noLoading=false, parentPr
     useEffect(() => {
         if(product && !isLoading || noLoading){
             if (product) {
-                // setDefectImages(product?.exterior?.markers?.map(marker => 'https://api.carsxchange.com/storage/defect_images/'+ marker.photo));
+                // setDefectImages(product?.exterior?.markers?.map(marker => 'https://dealer.phoenixtechs.net/storage/defect_images/'+ marker.photo));
                 Object.keys(product).forEach(key => {
                     if (typeof product[key] === 'object' && key !== 'exterior' && key !== 'images' && key !=='seller_id' && key !=='seller' && key !=='auction' && key !=='bids' && key != 'registration_card_images' && !Object.values(product[key]).every((val) => val == null) ) {
                         let listItems = []

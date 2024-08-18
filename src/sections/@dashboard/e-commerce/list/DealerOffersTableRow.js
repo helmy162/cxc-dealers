@@ -65,7 +65,7 @@ export default function DealerOffersTableRow({
 
 ;
 
-  const mainImages = images?.map((img) => ('https://api.carsxchange.com/storage/car_images/'+ img));
+  const mainImages = images?.map((img) => ('https://dealer.phoenixtechs.net/storage/car_images/'+ img));
 
   if(row && details){
     return (

@@ -18,6 +18,7 @@ import CarImage from './CarImage';
 export default function CarCard({
   expired,
   data,
+  ishotdeal,
   sx
 }) {
   const [livestatus, setLiveStatus] = useState('');
@@ -93,7 +94,7 @@ useEffect(() => {
               </Box>
             </Box>
           </Box>
-          <Status product={data} />
+          <Status product={data} ishotdeal={ishotdeal} />
          </>
          :
          <>
@@ -127,7 +128,7 @@ useEffect(() => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-                <Status product={data} mobile={true}/>
+                <Status product={data} mobile={true} ishotdeal={ishotdeal} />
                 <CarHighestBid data={data} expired={expired} mobile={true}/>
               </Box>
             </Box>

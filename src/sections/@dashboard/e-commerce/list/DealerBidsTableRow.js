@@ -76,7 +76,7 @@ export default function DealerBidsTableRow({
     });
   }, []);
 
-  const mainImages = images?.map((img) => ('https://api.carsxchange.com/storage/car_images/'+ img));
+  const mainImages = images?.map((img) => ('https://dealer.phoenixtechs.net/storage/car_images/'+ img));
 
   if(row && details && livestatus){
     return (
@@ -128,7 +128,8 @@ export default function DealerBidsTableRow({
                 (livestatus === 'expired' && 'error') ||
                 (livestatus === 'pending' && 'warning') ||
                 (livestatus === 'upcoming' && 'secondary') ||
-                (livestatus === 'live' && 'success') || 'warning'
+                (livestatus === 'live' && 'success') ||
+                (livestatus === 'lost' && 'error') || "warning"
               }
               sx={{ textTransform: 'capitalize', minWidth:'100px'}}
             >

@@ -87,7 +87,7 @@ export function AuthProvider({ children }) {
         const access_token = accessToken;
         const PUSHER_APP_KEY = "9d45400630a8fa077501";
         const chanelAuthEndpoint =
-          "https://api.carsxchange.com/api/v1/pusher/auth-channel";
+          "https://dealer.phoenixtechs.net/api/v1/pusher/auth-channel";
         let pusher = new Pusher(PUSHER_APP_KEY, {
           cluster: "eu",
           channelAuthorization: {

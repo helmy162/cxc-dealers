@@ -30,7 +30,7 @@ const auctionDurations = [
     '72 Hours',
   ];
   
-export default function ProductAuction({ productAsAdmin }) {
+export default function ProductAuction({ productAsAdmin, highestbid , userrole }) {
 
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
@@ -46,7 +46,7 @@ export default function ProductAuction({ productAsAdmin }) {
       });
       const defaultValues = useMemo(
         () => ({
-          start_price: productAsAdmin?.auction?.start_price || 0,
+          start_price: productAsAdmin?.auction?.start_price || highestbid,
           start_at: productAsAdmin?.auction?.start_at || new Date(),
           end_at: productAsAdmin?.auction?.end_at || new Date(),
         }),
@@ -70,11 +70,17 @@ export default function ProductAuction({ productAsAdmin }) {
  
     const onSubmit = async (data) => {
         try {
-        const mergedDate = {start_price: data.start_price, start_at: data.start_at.toISOString(), end_at: data.end_at.toISOString(), car_id: productAsAdmin.id};
-        const endpoint = isAuctioned ? `admin/auctions/${productAsAdmin?.auction?.id}` : 'admin/auctions';
+        const mergedDate = {start_price: data.start_price, start_at: data.start_at.toISOString(), end_at: data.end_at.toISOString(), car_id: productAsAdmin.id };
+        var endpoint = isAuctioned ? `admin/auctions/${productAsAdmin?.auction?.id}` : 'admin/auctions';
+        if(userrole == 'closer'){
+          console.log(productAsAdmin.auction.round)
+          endpoint = isAuctioned ? `closer/auctions/${productAsAdmin?.auction?.id}` : 'admin/auctions';
+        }
+
         const method = isAuctioned ? 'put' : 'post';
         const res = await axiosInstance[method](endpoint, mergedDate);
         enqueueSnackbar(!isAuctioned? 'Auction created successfully' : 'Auction updated successfully', { variant: 'success' });
+        console.error('asdasd')
         navigate(PATH_DASHBOARD.car.list);
         } catch (error) {
         console.error(error);

@@ -36,7 +36,7 @@ const mapFormDataToApi = (values) => ( values ? {
 }: {})
 
 
-export default function SummaryStep({ errors, watch, setValue, resetField }) {
+export default function SummaryStep({ errors, watch, setValue, resetField , isEdit }) {
   const values = watch();
   const { sellers } = useSelector((state) => state.user);
   const { makes, models, trims } = useAddCarAutocompletes(mapFormDataToApi(values))
@@ -63,7 +63,8 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
             const thisSeller = sellers.find(seller => seller.id == option)
             return thisSeller? (thisSeller?.name + '  - #' + thisSeller?.id) : ''}}
         />
-        <RHFTextField
+        { isEdit ?  null : (
+          <RHFTextField
           name="seller_price"
           label="Seller Price"
           placeholder="0.00"
@@ -78,6 +79,25 @@ export default function SummaryStep({ errors, watch, setValue, resetField }) {
               ),
               type: 'number',
           }}
+        />
+        )  }
+        
+        <RHFTextField
+          name="starting_price"
+          label="Starting Price"
+          placeholder="0.00"
+          InputLabelProps={{ shrink: true }}
+          InputProps={{
+              endAdornment: (
+              <InputAdornment position="start">
+                  <Box component="span" sx={{ color: 'text.disabled' }}>
+                  AED
+                  </Box>
+              </InputAdornment>
+              ),
+              type: 'number',
+          }}
+          defaultValue={0}
         />
       </Box>
       <Typography variant="h4">Car Info</Typography>

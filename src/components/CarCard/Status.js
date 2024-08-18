@@ -9,7 +9,7 @@ const statusColors = {
   upcoming: '#0077C9',
 }
 
-export default function CarCardStatus({ product, mobile=false }) {
+export default function CarCardStatus({ product, mobile=false , ishotdeal }) {
 
   const [livestatus, setLiveStatus] = useState('');
 
@@ -54,7 +54,8 @@ export default function CarCardStatus({ product, mobile=false }) {
           mr: '6px',
         }}
       ></Box>
-      {livestatus}
+      {ishotdeal? ('Hot') : (livestatus)}
+      
     </Box>
     :
     <Box
@@ -80,7 +81,7 @@ export default function CarCardStatus({ product, mobile=false }) {
           mr: '4px',
         }}
       ></Box>
-      {livestatus}
+      {ishotdeal? ('Hot') : (livestatus)}
     </Box>
   )
 }

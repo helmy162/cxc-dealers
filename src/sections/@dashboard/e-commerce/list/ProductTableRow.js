@@ -11,6 +11,7 @@ import {
   TableCell,
   IconButton,
   Link,
+  TextField
 } from '@mui/material';
 // utils
 import { fDate } from '../../../../utils/formatTime';
@@ -31,6 +32,8 @@ ProductTableRow.propTypes = {
   onViewRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
+  onAddHotDealRow: PropTypes.func,
+  onremoveHotDealRow: PropTypes.func,
 };
 
 export default function ProductTableRow({
@@ -38,11 +41,13 @@ export default function ProductTableRow({
   selected,
   onSelectRow,
   onDeleteRow,
+  onAddHotDealRow,
+  onremoveHotDealRow,
   onEditRow,
   onViewRow,
   columnVisibility,
 }) {
-  const { id, details, livestatus, timeRemaining, seller, created_at } = row;
+  const { id, details, livestatus, timeRemaining, seller, created_at , end_date } = row;
 
   const inspection_date = new Date(created_at).toLocaleString('en-US', {
     year: 'numeric',
@@ -51,17 +56,39 @@ export default function ProductTableRow({
     hour: 'numeric',
     minute: 'numeric',
   });
+  const auction_End_Date = new Date(end_date).toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
 
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [openSellConfirm, setOpenSellConfirm] = useState(false);
+  const [openremovefromhotdeal, setopenremovefromhotdeal] = useState(false);
+  const [hotDealsCount, setHotDealsCount] = useState(7000);
 
   const [openPopover, setOpenPopover] = useState(null);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
+  const handleOpenSellConfirm = () => {
+    setOpenSellConfirm(true);
+  };
+  const handleopenremovefromhotdeal = () => {
+    setopenremovefromhotdeal(true);
+  };
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
+  };
+  const handleSellCloseConfirm = () => {
+    setOpenSellConfirm(false);
+  };
+  const handleremovefromhotdealCloseConfirm = () => {
+    setopenremovefromhotdeal(false);
   };
 
   const handleOpenPopover = (event) => {
@@ -71,6 +98,8 @@ export default function ProductTableRow({
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
+
+  console.log(row.hot_deal)
 
   if(row && details && livestatus){
     return (
@@ -90,8 +119,9 @@ export default function ProductTableRow({
                 onClick={onViewRow}
                 sx={{ cursor: 'pointer' }}
               >
-                #{id}
+                #{id} 
               </Link>
+              {row.hot_deal === 0 ? null:<Iconify icon="mingcute:fire-fill" color={'#f00'} />} 
             </Stack>
           </TableCell>
 
@@ -100,6 +130,8 @@ export default function ProductTableRow({
           {columnVisibility['year'] && <TableCell>{details.year}</TableCell>}
           {columnVisibility['seller_name'] && <TableCell>{seller?.name}</TableCell>}
           {columnVisibility['inspection_date'] && <TableCell>{inspection_date}</TableCell>}
+          {columnVisibility['end_date'] && <TableCell>{auction_End_Date}</TableCell>}
+         
 
           {columnVisibility['status'] && (
               <TableCell align="center">
@@ -110,11 +142,13 @@ export default function ProductTableRow({
                         (livestatus === 'pending' && 'warning') ||
                         (livestatus === 'upcoming' && 'secondary') ||
                         (livestatus === 'live' && 'success') ||
+                        (livestatus === 'winned' && 'success') ||
+                        (livestatus === 'lost' && 'error') ||
                         'warning'
                     }
                     sx={{ textTransform: 'capitalize', minWidth: '100px' }}
                 >
-                  {timeRemaining ? timeRemaining : livestatus ? sentenceCase(livestatus) : null}
+                  {timeRemaining ? timeRemaining : livestatus ? sentenceCase(livestatus) : null} 
                 </Label>
               </TableCell>
           )}
@@ -130,8 +164,31 @@ export default function ProductTableRow({
           open={openPopover}
           onClose={handleClosePopover}
           arrow="right-top"
-          sx={{ width: 140 }}
+          sx={{ width: 230 }}
         >
+         
+          {row.hot_deal === 0 ? ( <MenuItem
+            onClick={() => {
+              handleOpenSellConfirm();
+              handleClosePopover();
+            }}
+            sx={{ color: 'green' }}
+          >
+           
+            <Iconify icon="eva:done-all-outline" />
+            Add to Hot Deals
+          </MenuItem>  ) : ( 
+          <MenuItem
+            onClick={() => {
+              handleopenremovefromhotdeal();
+              handleClosePopover();
+            }}
+            sx={{ color: 'green' }}
+          >
+            <Iconify icon="eva:done-all-outline" />
+            Remove From Hot Deals
+          </MenuItem>)}
+         
           <MenuItem
             onClick={() => {
               handleOpenConfirm();
@@ -162,6 +219,42 @@ export default function ProductTableRow({
           action={
             <Button variant="contained" color="error" onClick={onDeleteRow}>
               Delete
+            </Button>
+          }
+        />
+        <ConfirmDialog
+          open={openSellConfirm}
+          onClose={handleSellCloseConfirm}
+          title="Add This car to hot deals"
+          content="Are you sure want to add This car to hot deals?"
+          action={
+
+            <>
+            <TextField
+              label="Minimum offer starting price"
+              type="number"
+              value={hotDealsCount}
+              onChange={(e) => setHotDealsCount(e.target.value)}
+              style={{ left: '-25px' }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={ () =>(onAddHotDealRow(hotDealsCount)) }
+            >
+              Add
+            </Button>
+          </>
+          }
+        />
+        <ConfirmDialog
+          open={openremovefromhotdeal}
+          onClose={handleremovefromhotdealCloseConfirm}
+          title="Remove this car from hot deals"
+          content="Are you sure want to Remove this car from hot deals?"
+          action={
+            <Button variant="contained" color="error" onClick={onremoveHotDealRow}>
+              Remove
             </Button>
           }
         />

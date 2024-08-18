@@ -34,6 +34,7 @@ export const PATH_DEALER = {
   car: (name) => path(ROOTS_Dealer, `/cars/${name}`),
   soldCars: path(ROOTS_Dealer, '/completed-auctions'),
   soldCar: (name) => path(ROOTS_Dealer, `/completed-auctions/${name}`),
+  hotDeals: path(ROOTS_Dealer, '/hot-Deals'),
   account: path(ROOTS_Dealer, '/profile'),
   bids: path(ROOTS_Dealer, '/bids'),
   offers : path(ROOTS_Dealer, '/offers'),

@@ -102,7 +102,7 @@ export default function SoldCar(){
 
 
   if( new Date (product?.auction?.start_at) > new Date() )  return <Navigate to={`dealer/cars/${product.id}`} />
-
+    
     return(
         <>
           {(!product || product.id != name  || isLoading ) && <LoadingScreen />}
@@ -142,7 +142,65 @@ export default function SoldCar(){
                           </div>
                           </div>
                           <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} className="flex gap-4 items-center flex-wrap justify-center w-full bg-[#D9D9D926]/10 p-[20px] rounded-lg">
-                              <RHFTextField
+                              {/* <RHFTextField
+                                name="offer"
+                                className="!w-2/6 !min-w-[200px] !bg-white rounded-lg"
+                                sx={{ '& .MuiOutlinedInput-root': { borderRadius: '4px', maxHeight: '48px' } }}
+                                label="Offer Price"
+                                placeholder="0.00"
+                                onChange={(event) =>
+                                    setValue('offer', Number(event.target.value), { shouldValidate: true })
+                                }
+                                InputLabelProps={{ shrink: true }}
+                                InputProps={{
+                                    endAdornment: (
+                                    <InputAdornment position="start">
+                                        <Box component="span" sx={{ color: 'text.disabled' }}>
+                                        AED
+                                        </Box>
+                                    </InputAdornment>
+                                    ),
+                                    type: 'number',
+                                }}
+                              /> */}
+                              {highestBid? (
+                                <RHFTextField
+                                name="offer"
+                                className="!w-2/6 !min-w-[200px] !bg-white rounded-lg"
+                                sx={{ '& .MuiOutlinedInput-root': { borderRadius: '4px', maxHeight: '48px' } }}
+                                label="Offer Price"
+                                placeholder={highestBid + 500}
+                                onClick = {()=>{ setValue('offer', highestBid + 500, { shouldValidate: true });}}
+                                onBlur={(event) => {
+                                  const inputValue = Number(event.target.value);
+                                  // Check if the input value is less than 5000, and if so, set it to 5000
+                                  if (inputValue < highestBid) {
+                                    event.target.value = highestBid + 500;
+                                    setValue('offer', highestBid + 500, { shouldValidate: true });
+                                  } else {
+                                    setValue('offer', inputValue, { shouldValidate: true });
+                                  }
+                                }}
+                                onChange={(event) =>
+                                  setValue('offer', Number(event.target.value), { shouldValidate: true })
+                                }
+                                InputLabelProps={{ shrink: true }}
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position="start">
+                                      <Box component="span" sx={{ color: 'text.disabled' }}>
+                                        AED
+                                      </Box>
+                                    </InputAdornment>
+                                  ),
+                                  type: 'number',
+                                  inputProps: {
+                                    min: highestBid + 500, // Set the minimum value
+                                  },
+                                }}
+                              />
+                              ) : (
+                                <RHFTextField
                                 name="offer"
                                 className="!w-2/6 !min-w-[200px] !bg-white rounded-lg"
                                 sx={{ '& .MuiOutlinedInput-root': { borderRadius: '4px', maxHeight: '48px' } }}
@@ -163,6 +221,7 @@ export default function SoldCar(){
                                     type: 'number',
                                 }}
                               />
+                              )}
                               <ConfirmDialog
                               
                                 open={openConfirm}

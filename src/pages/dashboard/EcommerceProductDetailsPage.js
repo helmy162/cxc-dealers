@@ -47,6 +47,8 @@ import { carStatus, carTimer } from '../../utils/status';
 import { useAuthContext } from "src/auth/useAuthContext";
 
 import ProductDetailsCarousel from './ProductDetailsCarousel';
+import axiosInstance from 'src/utils/axios';
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -113,7 +115,7 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
   });
 
   const { themeStretch } = useSettingsContext();
-
+  const [last_bid,setLastBid] = useState(0);
   const { name } = useParams();
   const {user, pusher} = useAuthContext();
   const dispatch = useDispatch();
@@ -164,7 +166,7 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
       setAuctionID(productAsAdmin?.auction?.id);
     }
   }, [productAsAdmin]);
-  
+          
   useEffect(() => {
     if(auctionID) {
       const channel =  pusher.channels.channels[`private-car.auction.${auctionID}`] ??  pusher.subscribe(`private-car.auction.${auctionID}`);
@@ -262,6 +264,51 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
     });
   }
 
+  const winnthedeal = async (id) => {
+    try {
+        const response = await axiosInstance.post(`${user.role}/winthedeal/${productAsAdmin?.auction.car_id}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+            // const deleteRow = tableData.filter((row) => row.id !== id);
+            // setSelected([]);
+            // setTableData(deleteRow);
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+  };
+
+
+  const resetdealstatus = async (id) => {
+    try {
+        const response = await axiosInstance.post(`${user.role}/resetdealstatus/${productAsAdmin?.auction.car_id}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+            // const deleteRow = tableData.filter((row) => row.id !== id);
+            // setSelected([]);
+            // setTableData(deleteRow);
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+  };
+  const loosethedeal = async (id) => {
+    try {
+        const response = await axiosInstance.post(`${user.role}/loosethedeal/${productAsAdmin?.auction.car_id}`);
+        // check if the DELETE request was successful
+        if (response.data.success) {
+            // const deleteRow = tableData.filter((row) => row.id !== id);
+            // setSelected([]);
+            // setTableData(deleteRow);
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+  };
+
   const [copySuccess, setCopySuccess] = useState('');
   
   useEffect(() => {
@@ -273,9 +320,10 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
     }
   }, [copySuccess]);
 
-  
   return (
+    
     <>
+    
     {productAsAdmin && productAsAdmin.id == name && livestatus && (
       <Helmet>
         <title>{`Cars: ${productAsAdmin?.id || ''} | CarsXchange`}</title>
@@ -309,6 +357,7 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
                           (livestatus === 'pending' && 'warning') ||
                           (livestatus === 'approved' && 'success') ||
                           (livestatus === 'upcoming' && 'secondary') ||
+                          (livestatus === 'lost' && 'error') ||
                           'success'
                       }
                       sx={{
@@ -341,6 +390,42 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
               >
                 Copy Link
               </Button>
+              {productAsAdmin?.deal_status === 'pending' && (user.role === 'admin' || user.role ==='closer') ? (
+                <>
+                <Button
+                onClick={() => {
+                  winnthedeal();
+                }}
+                variant="contained"
+                startIcon={<Iconify icon="fa6-solid:sack-dollar" />}
+                >
+                  Win the deal
+                </Button>
+                <Button
+                onClick={() => {loosethedeal();}}
+                variant="contained"
+                startIcon={<Iconify icon="twemoji:money-with-wings" />}
+                style={{background:'#FF5630'}}
+                >
+                  loose the deal
+                </Button>
+                </>
+              ) : null }
+
+              {productAsAdmin?.deal_status !== 'pending' && (user.role === 'admin') ? (
+                <Button
+              onClick={() => {resetdealstatus();}}
+              variant="contained"
+              startIcon={<Iconify icon="radix-icons:reset" />}
+              >
+                Reset Deal Status
+              </Button> 
+              ) : null}
+            
+            <span className='text-[14px] ease-in-out'>
+                Deal Status is: {productAsAdmin?.deal_status}
+              </span>
+
               <span className='text-[14px] ease-in-out'>
                 {copySuccess}
               </span>
@@ -376,17 +461,27 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
               )}
             </Card>
             {
-              user?.role == 'admin' || user?.role == 'sales' ?
+              user?.role == 'admin' || user?.role == 'sales' || user?.role == 'closer' ?
               <>
               {
                 !onAuctionPage &&
                 <div style={{zIndex:'10000', marginBottom:'50px'}}>
-                  <ProductAuction productAsAdmin={productAsAdmin}/>
+                  <ProductAuction productAsAdmin={productAsAdmin} userrole={user.role} highestbid={dataFiltered ? productAsAdmin?.auction?.latest_bid?.bid : productAsAdmin?.auction?.latest_bid?.bid} />
                 </div>
               }
               
-            
-              <Typography variant="h4" sx={{ mb: 5 }}>
+              {user?.role == 'closer' ? (<> 
+                <Typography variant="h4" sx={{ mb: 5 }}>
+                {user?.role !== 'inspector' && (
+                    <>
+                      Highest Bid: {productAsAdmin?.auction?.latest_bid?.bid
+                        ? productAsAdmin?.auction?.latest_bid?.bid.toLocaleString('en-US') + 'AED'
+                        : 'No bids yet'}
+                    </>
+                )}
+              </Typography>
+               </>):(<> 
+                <Typography variant="h4" sx={{ mb: 5 }}>
                 Bids
               </Typography>
               <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -430,8 +525,9 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
                     <TableBody>
                       {(isLoading ? [...Array(rowsPerPage)] : dataFiltered)
                         ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        ?.map((row, index) =>
-                          row ? (
+                        ?.map((row, index) => {
+
+                          return row ? (  
                             <BidTableRow
                               key={row.id}
                               row={row}
@@ -440,9 +536,12 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
                               onSelectRow={() => onSelectRow(row.id)}
                               onSelectAccount={() => handleAccountClick(row?.dealer?.id)}
                             />
+                            
                           ) : (
                             !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />
                           )
+                          }
+                          
                         )}
 
                       <TableEmptyRows
@@ -544,13 +643,14 @@ export default function EcommerceProductDetailsPage({onAuctionPage = false, noLo
                 dense={dense2}
                 onChangeDense={onChangeDense2}
               />
+                </>)}
             </>
             :
               <Typography variant="h4" sx={{ mb: 5 }}>
                 {user?.role !== 'inspector' && (
                     <>
                       Highest Bid: {productAsAdmin?.auction?.latest_bid?.bid
-                        ? productAsAdmin?.auction?.latest_bid?.bid.toLocaleString('en-US') + ' AED'
+                        ? productAsAdmin?.auction?.latest_bid?.bid.toLocaleString('en-US') + 'AED'
                         : 'No bids yet'}
                     </>
                 )}

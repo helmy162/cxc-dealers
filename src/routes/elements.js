@@ -31,6 +31,7 @@ export const SoldCar = Loadable(lazy(() => import('../pages/dealer/SoldCar')));
 export const BidsPage = Loadable(lazy(() => import('../pages/dealer/BidsPage')));
 export const OffersPage = Loadable(lazy(() => import('../pages/dealer/OffersPage')));
 export const CarsListingPage = Loadable(lazy(() => import('../pages/dealer/CarsListingPage')));
+export const HotDealsPage = Loadable(lazy(() => import('../pages/dealer/HotDealsPage')));
 
 // admin
 export const Dashboard = Loadable(lazy(() => import('../pages/dashboard/Dashboard')));

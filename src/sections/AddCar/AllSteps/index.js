@@ -218,13 +218,13 @@ export const AllDefaultValues = (carData, isEdit, savedData) => ( {
   
   // Documents
   id_images: carData?.id_images?.map((image) => ({
-    preview: `https://api.carsxchange.com/storage/id_images/${image}`,
+    preview: `https://dealer.phoenixtechs.net/storage/id_images/${image}`,
   })) || [],
   registration_card_images: carData?.registration_card_images? carData?.registration_card_images.map((image) => ({
-    preview: `https://api.carsxchange.com/storage/registration_card_images/${image}`,
+    preview: `https://dealer.phoenixtechs.net/storage/registration_card_images/${image}`,
   })) : [],
   vin_images: carData?.vin_images?.map((image) => ({
-    preview: `https://api.carsxchange.com/storage/vin_images/${image}`,
+    preview: `https://dealer.phoenixtechs.net/storage/vin_images/${image}`,
   })) || [],
   insurance_images: [],
 
@@ -436,7 +436,7 @@ Interior_Comment:
 
   // Images
   images: isEdit?
-    carData?.images?.length > 0 ? carData.images.map((image) => `https://api.carsxchange.com/storage/car_images/${image}`) : []
+    carData?.images?.length > 0 ? carData.images.map((image) => `https://dealer.phoenixtechs.net/storage/car_images/${image}`) : []
     : [],
 
   deletedImages: [],

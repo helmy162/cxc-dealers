@@ -9,7 +9,7 @@ import {
 export default function CarImage({ data}) {
 
   const image = useMemo(() => {
-    return data.images && data?.images[0] ? `https://api.carsxchange.com/storage/car_images/${data.images[0]}` : ''
+    return data.images && data?.images[0] ? `https://dealer.phoenixtechs.net/storage/car_images/${data.images[0]}` : ''
   }, [data])
 
   return (

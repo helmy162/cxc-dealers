@@ -19,6 +19,7 @@ import {
   AccountCreatedSuccessfully,
   VerifyCodePage,
   CarsListingPage,
+  HotDealsPage,
   UserListPage,
   UserCreatePage,
   UserAccountPage,
@@ -100,6 +101,7 @@ export default function Router() {
         { path: 'completed-auctions/:name', element: <SoldCar />}, // this is the single completed auction page
         { path: 'bids', element: <BidsPage /> },
         { path: 'offers', element: <OffersPage /> },
+        { path: 'hot-Deals', element: <HotDealsPage expired={true}/> },
         // other dealer pages...
       ],
     },

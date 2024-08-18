@@ -186,7 +186,7 @@ export default function AddCar({isEdit, car}) {
         value: 'general',
         label: 'General',
         icon: <Iconify icon="ic:round-account-box" />,
-        component: createElement( SummaryStep,{ setValue, watch, values1, resetField }),
+        component: createElement( SummaryStep,{ setValue, watch, values1, resetField,isEdit: isEdit }),
       },
       {
         value: 'documents',
@@ -238,6 +238,8 @@ export default function AddCar({isEdit, car}) {
       },
       
     ];
+
+    
   
     useEffect(() => {
       if (Object.keys(errors).length > 0) {

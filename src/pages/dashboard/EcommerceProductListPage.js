@@ -52,6 +52,7 @@ const TABLE_HEAD = [
   { id: 'year', label: 'Year', align: 'left' },
   { id: 'seller_name', label: 'Seller Name', align: 'left' },
   { id: 'inspection_date', label: 'Inspection Date', align: 'left' },
+  { id: 'end_date', label: 'Auction End Date', align: 'left' }, // Added "Auction End Date" column
   { id: 'status', label: 'Auction', align: 'center', width: 180 },
   { id: '' },
 ];
@@ -72,6 +73,7 @@ const defaultVisibility = {
   year: true,
   seller_name: true,
   inspection_date: true,
+  end_date: true,
   status: true,
   '': true,
 };
@@ -110,6 +112,8 @@ export default function EcommerceProductListPage() {
   const dispatch = useDispatch();
 
   const { products, isLoading, productStatus } = useSelector((state) => state.product);
+
+  console.log("products", products)
 
   const [tableData, setTableData] = useState([]);
 
@@ -161,6 +165,7 @@ export default function EcommerceProductListPage() {
                 ...product,
                 livestatus: product.status == 'pending'? 'pending' : carStatus(product),
                 timeRemaining: product.status == 'pending'? null : startAt > now ? 'starts in ' + carTimer( startAt - now) : endAt < now ? null : 'ends after ' + carTimer(endAt - now),
+                end_date: endAt, // Use "end_date" ,
               };
             })
           )
@@ -224,6 +229,47 @@ export default function EcommerceProductListPage() {
       }
     }
 };
+  const handleAddHotDealRow = async (id,hotDealsCount) => {
+    try {
+        const response = await axiosInstance.post(`${user.role}/addtohotdeals/${id}`, {'minimum_offer_amount':hotDealsCount});
+        // check if the DELETE request was successful
+        if (response.data.success) {
+            // const deleteRow = tableData.filter((row) => row.id !== id);
+            // setSelected([]);
+            // setTableData(deleteRow);
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+    if (page > 0) {
+      if (dataInPage.length < 2) {
+        setPage(page - 1);
+      }
+    }
+};
+
+const handleremoveHotDealRow = async (id) => {
+  try {
+      const response = await axiosInstance.post(`${user.role}/removehotdeals/${id}`);
+      // check if the DELETE request was successful
+      if (response.data.success) {
+          // const deleteRow = tableData.filter((row) => row.id !== id);
+          // setSelected([]);
+          // setTableData(deleteRow);
+          window.location.reload();
+      }
+  } catch (error) {
+      console.error('Error:', error);
+  }
+
+  if (page > 0) {
+    if (dataInPage.length < 2) {
+      setPage(page - 1);
+    }
+  }
+};
 
   const handleDeleteRows = async (selectedRows) => {
     const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
@@ -280,6 +326,7 @@ export default function EcommerceProductListPage() {
     }));
   };
 
+  // console.log(user.role)
   return (
     <>
       <Helmet>
@@ -375,6 +422,8 @@ export default function EcommerceProductListPage() {
                           selected={selected.includes(row.id)}
                           onSelectRow={() => onSelectRow(row.id)}
                           onDeleteRow={() => handleDeleteRow(row.id)}
+                          onAddHotDealRow={(hotDealsCount) => handleAddHotDealRow(row.id, hotDealsCount)}
+                          onremoveHotDealRow={() => handleremoveHotDealRow(row.id)}
                           onEditRow={() => handleEditRow(row.id)}
                           onViewRow={() => handleViewRow(row.id)}
                           columnVisibility={columnVisibility}

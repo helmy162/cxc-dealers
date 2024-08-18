@@ -12,13 +12,14 @@ const ICONS = {
   user: icon('ic_user'),
   users: icon('ic_users'),
   ecommerce: icon('ic_ecommerce'),
-  analytics: icon('ic_analytics'),
+  analytics: icon('ic_analytics'), 
   dashboard: icon('ic_dashboard'),
   car: icon('ic_car'),
   profile: icon('ic_profile'),
   bid: icon('ic_bid'),
   garage: icon('ic_garage'),
   soldCar: icon('ic_complete'),
+  hotDeals: icon('ic_fire'),
   cashback: icon('ic_cashback'),
   appointment: icon('ic_appointment'),
   calendar: icon('ic_calendar')
@@ -94,6 +95,17 @@ const navConfig = [
         title: 'My Bids',
         path: PATH_DEALER.bids,
         icon: ICONS.bid,
+      }
+    ],
+    roles: ['admin', 'dealer', 'sales'],
+  },
+  {
+    subheader: 'Find Hot Deals',
+    items: [
+      {
+        title: 'HOT DEALS',
+        path: PATH_DEALER.hotDeals,
+        icon: ICONS.hotDeals,
       }
     ],
     roles: ['admin', 'dealer', 'sales'],

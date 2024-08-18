@@ -50,7 +50,7 @@ export default function ProductTableToolbar({ isFiltered, filterName, filterStat
                     width: {xs: 1, md: 240},
                 }}
             >
-                <InputLabel sx={{'&.Mui-focused': {color: 'text.primary'}}}>Status</InputLabel>
+                <InputLabel sx={{'&.Mui-focused': {color: 'text.primary'}}}>Auction Status</InputLabel>
                 <Select
                     multiple
                     value={filterStatus}

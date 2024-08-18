@@ -6,8 +6,9 @@ export function carStatus( car ) {
     const startDate = new Date(car?.auction?.start_at);
     const currentTime = new Date();
     const difference = endDate - currentTime;
-    if(car?.status?.toLocaleLowerCase() !== 'approved' && car?.car?.status?.toLocaleLowerCase() !== 'approved'){
-        liveStatus = 'pending';
+    
+    if(car?.deal_status?.toLocaleLowerCase() !== 'pending' && car?.car?.deal_status?.toLocaleLowerCase() !== 'pending'){
+        liveStatus = car?.deal_status;
     }
     else if(currentTime < startDate) {
         liveStatus = 'upcoming';
