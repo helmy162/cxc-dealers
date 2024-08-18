@@ -69,7 +69,7 @@ const TABLE_HEAD = [
   { id: 'phone_number', label: 'Phone Number', align: 'left' },
   { id: 'bid_limit', label: 'Bid Limit', align: 'left' },
   { id: 'role', label: 'Role', align: 'left' },
-  { id: 'account_status', label: 'Account Status', align: 'left' },
+  { id: 'status', label: 'Account Status', align: 'left' },
   { id: '' },
 ];
 
@@ -412,9 +412,9 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
 
   if (filterStatus !== 'all') {
     if (filterStatus.toLowerCase() === 'inactive') {
-      inputData = inputData.filter((user) => user.account_status.toLowerCase() === 'inactive');
+      inputData = inputData.filter((user) => user.status.toLowerCase() === 'inactive');
     } else {
-      inputData = inputData.filter((user) => filterStatus.toLowerCase().includes(user.type) && user.account_status.toLowerCase() === 'active');
+      inputData = inputData.filter((user) => filterStatus.toLowerCase().includes(user.type) && user.status.toLowerCase() === 'active');
     }
   }
 

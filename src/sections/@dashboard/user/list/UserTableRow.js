@@ -35,7 +35,7 @@ UserTableRow.propTypes = {
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectAccount }) {
   const navigate = useNavigate();
 
-  const { id, name, phone, email, type, bid_limit, account_status} = row;
+  const { id, name, phone, email, type, bid_limit, status} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -110,10 +110,10 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           <TableCell align="left">
             <Label
               variant="soft"
-              color={( account_status === 'inactive' && 'error') || 'success'}
+              color={( status === 'inactive' && 'error') || 'success'}
               sx={{ textTransform: 'capitalize' }}
             >
-              {account_status}
+              {status}
             </Label>
           </TableCell>
 

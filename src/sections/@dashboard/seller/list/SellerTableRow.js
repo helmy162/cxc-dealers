@@ -97,7 +97,7 @@ export default function SellerTableRow({ row, selected, onEditRow, onSelectRow, 
                 color={( source === 'manual' && 'info') || 'success'}
                 sx={{ textTransform: 'capitalize' }}
             >
-              {source}
+              {source == 'api' ? 'API' : 'Manual'}
             </Label>
           </TableCell>
 

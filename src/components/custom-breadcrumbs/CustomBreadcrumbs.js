@@ -52,7 +52,7 @@ export default function CustomBreadcrumbs({
           )}
         </Box>
 
-        {action && <Box sx={{ flexShrink: 0 }} className="basis-full md:basis-1/4 "> {action} </Box>}
+        {action && <Box sx={{ flexShrink: 0 }} className="basis-full md:basis-auto "> {action} </Box>}
       </Stack>
 
       {/* MORE LINK */}
